@@ -8,7 +8,7 @@ If you do not give a command, the default is **`/bin/echo`**.
 xargs [OPTIONS] [COMMAND [initial-arguments]]
 ```
 
-This is the other half of [find](05-filesystem-search.md): `find` prints paths, `xargs` turns those lines into arguments.
+This is the other half of [find](../05-filesystem-search/theory.md): `find` prints paths, `xargs` turns those lines into arguments.
 
 **Memory hook:** stdin = a list of words. `xargs` stuffs those words onto the end of a command. No command → just `echo` them.
 

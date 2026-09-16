@@ -7,7 +7,7 @@ Most popular today:
 - **vi / vim**
 - **nano**
 
-The default editor is set with the **`EDITOR`** environment variable (see [02 — Shell programming](02-shell-programming.md)):
+The default editor is set with the **`EDITOR`** environment variable (see [02 — Shell programming](../02-shell-programming/theory.md)):
 
 ```bash
 export EDITOR=vim

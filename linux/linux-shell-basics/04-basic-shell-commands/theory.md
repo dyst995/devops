@@ -253,7 +253,7 @@ removed directory: 'dir'
 
 ## Environment variable commands
 
-[02 — Shell programming](02-shell-programming.md) defined **environment** vs **shell** variables. These commands **list, set, and delete** them.
+[02 — Shell programming](../02-shell-programming/theory.md) defined **environment** vs **shell** variables. These commands **list, set, and delete** them.
 
 | Command | Role |
 | --- | --- |

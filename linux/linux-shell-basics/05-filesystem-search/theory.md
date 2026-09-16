@@ -39,7 +39,7 @@ find /tmp -name core -type f -print | xargs /bin/rm -
 | Form | Idea |
 | --- | --- |
 | `-exec rm {} \;` | For **each** match, run `rm` with that path substituted for `{}`. `\;` ends the `-exec`. |
-| `-print \| xargs rm` | Print paths, then `xargs` batches them as arguments to `rm` (fewer process starts). See [06 — xargs](06-xargs.md). |
+| `-print \| xargs rm` | Print paths, then `xargs` batches them as arguments to `rm` (fewer process starts). See [06 — xargs](../06-xargs/theory.md). |
 
 `find` has many more tests (`-mtime`, `-size`, `-perm`, `-maxdepth`, …). Learn them with `man find`.
 
