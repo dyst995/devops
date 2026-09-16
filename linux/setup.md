@@ -203,11 +203,11 @@ Roll back instead of “fixing” a box you can no longer boot or SSH into.
 
 ## How to run a lab session
 
-1. Open the topic `theory.md` on whichever machine has the git repo (Mac is fine **for reading**; Windows/VM is for **typing**).
-2. On `rocky9-a`, run the matching `commands.md` lines. Change names (`httpd`, users, VG) so you are not only copying.
-3. Close the notes. Answer `questions.md` out loud or on paper, then uncover Answers.
-4. Break it on purpose: wrong zone, SELinux deny, full disk, failed SSH key — then **fix from logs** (`journalctl -u …`, `dmesg -T`, `/var/log/secure`).
-5. Tick the checklist below. If a row needs Disk 2 or VM B, skip it until that hardware exists. If it is “shell only,” WSL is allowed.
+1. Read the topic `theory.md` (Mac is fine for reading; Windows/VM is for typing).
+2. Do `labs/lab.md` on Linux. That file only says **what to do** — no expected output. Peek at `commands.md` only if you are stuck.
+3. Close everything. Answer `questions.md`, then uncover Answers.
+4. If a command fails, that is part of the lab: `man`, `journalctl -xe`, `dmesg -T`.
+5. Tick the checklist below. Skip rows that need Disk 2 or VM B until that hardware exists. Shell-only rows may use WSL.
 
 ## What you cannot practice on Windows itself
 
@@ -319,14 +319,11 @@ Install `sysstat` and `httpd` on the **VM** (first-boot block). WSL is OK for `t
 
 **Memory hook:** WSL = typing. Rocky VM on Windows = real Linux admin. Cloud = if even Windows has no disk.
 
-## Commands.md is the lab sheet
-
-You do not need a separate exercise file per topic. For each folder:
+## Files in each topic
 
 ```text
 theory.md     → what and why
-commands.md   → type these on Linux (VM or WSL as the table says)
-questions.md  → closed-book check
+labs/lab.md   → what to do on the machine (no answers)
+commands.md   → cheat sheet if you forget a flag
+questions.md  → closed-book check (answers at the bottom)
 ```
-
-If a command fails, that **is** the lab: read the error, then `man`, `journalctl -xe`, `dmesg -T`.
