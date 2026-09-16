@@ -203,11 +203,13 @@ Roll back instead of “fixing” a box you can no longer boot or SSH into.
 
 ## How to run a lab session
 
-1. Read the topic `theory.md` (Mac is fine for reading; Windows/VM is for typing).
-2. Do `labs/lab.md` on Linux. That file only says **what to do** — no expected output. Peek at `commands.md` only if you are stuck.
-3. Close everything. Answer `questions.md`, then uncover Answers.
-4. If a command fails, that is part of the lab: `man`, `journalctl -xe`, `dmesg -T`.
-5. Tick the checklist below. Skip rows that need Disk 2 or VM B until that hardware exists. Shell-only rows may use WSL.
+1. Read `theory.md` first (Mac is fine for reading). Then close it.
+2. Open a named folder under that topic’s `labs/` (each folder is one ticket). There are no commands in `lab.md`. If that folder has `setup.sh`, from **inside it** run `sudo ./setup.sh` and **do not open** the script.
+3. On the VM, diagnose and fix (or implement) using whatever tools you choose.
+4. When you think you are done, come back to **this chat** with: the **lab folder name**, what was wrong (or what you implemented), what you changed, and how you proved it. Ask for an evaluation. Do not ask for hints or the solution unless you want to stop the exercise.
+5. After evaluation, use `questions.md` closed-book if you still want a recall check.
+
+Checkpoint the VM before GRUB, firewall, `sshd`, and SELinux enforcing scenarios.
 
 ## What you cannot practice on Windows itself
 
@@ -322,8 +324,10 @@ Install `sysstat` and `httpd` on the **VM** (first-boot block). WSL is OK for `t
 ## Files in each topic
 
 ```text
-theory.md     → what and why
-labs/lab.md   → what to do on the machine (no answers)
-commands.md   → cheat sheet if you forget a flag
-questions.md  → closed-book check (answers at the bottom)
+theory.md                 → study first
+tasks.md                  → many short recall-through-doing items (no commands)
+labs/<lab-name>/lab.md    → larger tickets (no commands, no hints)
+labs/<lab-name>/setup.sh  → only some labs; creates the fault — do not read it
+commands.md               → after practice, if you want a cheat sheet
+questions.md              → closed-book recall (answers at the bottom)
 ```
