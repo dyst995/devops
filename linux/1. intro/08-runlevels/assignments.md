@@ -1,28 +1,37 @@
-# Assignments — Runlevels
+# Assignments — Runlevels and systemd targets
 
-Close `commands.md`. Recite, then type. Throwaway directory. Do not destroy real data.
+Close `commands.md`. Type and run. **`systemctl isolate` and `set-default` change the running system.** Do not `set-default` to `runlevel0.target` / poweroff on any machine you need. Prefer a lab VM. `isolate` can kill your GUI or SSH session — have a console or second way in.
 
-**`set-default runlevel0.target` boots into poweroff — do not use it on a real server. `isolate` switches the live system now (can kill the GUI/SSH-unfriendly states). Prefer a lab VM. Recite dangerous targets; do not demonstrate poweroff/reboot defaults on production.**
+## Default target (`systemctl get-default`, `set-default`)
 
-## `systemctl`
+### Easy
 
-1. [ ] Show which target the machine **boots into** (the default).
-2. [ ] Recite from memory the subcommand that **gets** that default.
-3. [ ] Predict: the answer is a `.target` name (for example `graphical.target` or `multi-user.target`), not a random `.service`.
-4. [ ] Recite: **set** the default to **server** — text + network, no GUI (`multi-user.target`).
-5. [ ] Recite: **set** the default to **desktop GUI** (`graphical.target`).
-6. [ ] Recite: `runlevel0.target` as default means **poweroff**. **Do not apply this on a real server.**
-7. [ ] Predict: `runlevel0.target` is a compatibility name for `poweroff.target`. Write that mapping.
-8. [ ] Recite SysV memory hook: **0** halt, **3** server, **5** GUI, **6** reboot — then name the systemd targets for 3 and 5.
-9. [ ] Privilege: predict `get-default` may work as a user; `set-default` and `isolate` need root.
-10. [ ] What if the operand is missing: `systemctl` with no subcommand. Predict a unit dump/help — not the default target. Then use the get-default form.
-11. [ ] Wrong usage: `set-default` without a unit name. Predict usage error. Do not guess `runlevel0.target` to “try something”.
-12. [ ] Human vs default: `get-default` **reads**; `set-default` **writes** the boot default. Predict only the latter changes the next boot.
-13. [ ] Switch to `multi-user.target` **now** without changing the default (sheet: isolate). **Lab VM only** if you are on a GUI you still need — this can drop the desktop.
-14. [ ] Recite: `isolate` = now, does **not** change default; `set-default` = next boots, does not by itself mean “switch this instant”.
-15. [ ] Combine: `get-default`, then isolate to multi-user (lab), then `get-default` again — predict the default **string is unchanged**.
-16. [ ] Combine: map `runlevel3.target` → `multi-user.target` and `runlevel5.target` → `graphical.target`. Prove with a listing of those names if they exist (`ls` of the systemd unit, read-only).
-17. [ ] Wrong usage: isolating `poweroff.target` / `runlevel0.target` as a “test”. That **halts the machine**. Recite only.
-18. [ ] Wrong usage: `set-default graphical.target` on a headless server you do not intend to boot to a display manager. Recite the safer server default.
-19. [ ] What if the target name is misspelled (`multiuser.target` without the hyphen). Predict unit-not-found; do not keep substituting `runlevel0`.
-20. [ ] Closed-book: write the five cheat-sheet lines as **goals** (get default; default server; default GUI; default poweroff = forbidden on real servers; isolate multi-user now). Then type only the safe ones (`get-default`, and set/isolate on a lab VM).
+1. [ ] Show the default target this machine boots into (`get-default`).
+2. [ ] On a **lab VM**: set the default to `multi-user.target`, then `get-default` again. Set it **back** to whatever it was if you still want a GUI next boot.
+
+### Medium
+
+3. [ ] `get-default` printed `graphical.target` or `multi-user.target`. In SysV language, is that closer to runlevel 5 or 3? Do not change anything for this item.
+4. [ ] Someone ran `systemctl set-default runlevel0.target`. Do **not** run that. What does the course say that default means? How would you set a **server** default instead?
+
+### Hard
+
+5. [ ] Lab VM: record the current default, switch default to `multi-user.target`, confirm with `get-default`. You do **not** need to reboot for this item — default ≠ current state.
+6. [ ] Look at `/etc/systemd/system/default.target` with `ls -li` (symlink). Does it agree with `get-default`? Do not replace it with `ln` unless the lab is disposable and you already know what you are doing.
+
+## Switching state now (`systemctl isolate`)
+
+### Easy
+
+1. [ ] Read the current default again (`get-default`). `isolate` is a **different** command — say in one line what isolate does **not** change (the default).
+2. [ ] Lab VM with a console: `isolate multi-user.target`. Did the GUI go away? `get-default` should be **unchanged**.
+
+### Medium
+
+3. [ ] After an isolate, get back to `graphical.target` with isolate **if** this is a desktop lab and you still need the GUI. Confirm you can open a terminal again.
+4. [ ] Someone used `set-default` when they only wanted to switch **right now**. Which command should they have used? Prove `get-default` vs what you isolated.
+
+### Hard
+
+5. [ ] Lab only, console available: isolate to `multi-user.target`, confirm with whatever you can still run (`get-default`, maybe `ls`). Isolate back. Do not isolate `poweroff.target`.
+6. [ ] Combine: default is X, you isolated to Y. Write both. Which one applies **after reboot**? Use `get-default` as evidence — do not reboot unless the lab asks.

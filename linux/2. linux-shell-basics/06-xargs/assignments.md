@@ -1,26 +1,37 @@
 # Assignments — xargs
 
-Close `commands.md`. Recite, then type. Predict the result **before** you run. Use a throwaway directory under `/tmp`. **Never** pipe random `find /` output into delete commands. `rm` via `xargs` is still `rm` — only names you created.
+Close `commands.md`. Type and run. Build a `names.txt` of **paths you created**. Never pipe `find /` into `xargs rm`. `-P` with `curl` only if the lab allows network; otherwise use `touch` / `echo` as the command.
 
-## `xargs`
+## Basic `xargs` (`echo` default, `-i` / `-I`)
 
-1. [ ] Recite the default command when you omit one. Feed a two-line name list on stdin and prove the lines are **joined into one** echoed line.
-2. [ ] Predict: stdin is split on blanks **and** newlines. Feed `a b` on one line and `c` on the next. How many words does the default command get? Prove it.
-3. [ ] Recite the old `-i` form: one invocation per input item, `{}` placeholder. From a file of names, create **one empty file per line** that way. Prove with `ls`.
-4. [ ] Recite the modern `-I {}` spelling of the same idea. Repeat the one-file-per-line create. Same result as `-i`.
-5. [ ] Recite `-i` with a **custom** placeholder (cheat sheet uses `T`, not `{}`). Create files using `T` as the placeholder. Prove the names match the list.
-6. [ ] Predict: if you forget the placeholder on `-I`/`-i`, `touch` gets no filename (or the wrong args). Prove the failure, then fix it.
-7. [ ] Combine: same `names.txt` → default join-echo → then `-I {}` one `touch` each. Two different shapes of argv.
-8. [ ] Recite `-0`: split on NUL, not spaces. Create a throwaway file whose name contains a **space**. Drive `rm` with NUL-separated `find` (type `-f`, `-print0`, `-0` from memory). Prove the spaced name is deleted and nothing else.
-9. [ ] Predict: **without** `-0`, a name with a space becomes two arguments. Prove with `echo` or a harmless `ls` — do not `rm` the halves. Then the `-0` fix.
-10. [ ] Recite `-P` with a replacement: up to N processes at a time. Use four parallel workers and a placeholder to run a **safe** command per line (e.g. `touch` or `echo`, not a download storm). Prove more than one process can overlap (`ps` while it runs, or a slow `sleep` in a throwaway).
-11. [ ] Recite the cheat-sheet combine: parallel + `-I {}` + `curl -O` on a URL list. **Do not** hit random production URLs. Either skip the network and recite the argv shape, or use a local file URL / lab endpoint. Recite `-O` (output to a file named from the URL).
-12. [ ] Wrong-usage: `xargs rm` on an empty stdin. Predict whether `rm` runs with no args (GNU `xargs` often **skips**; some Unix run `rm` and it errors). Prove on your machine with a dummy command like `echo` first, then say the `rm` risk.
-13. [ ] Wrong-usage: `-i` and `-I` together, or `-I` without a placeholder string. Predict the error. Then one correct form.
-14. [ ] Combine: `find` regular files named `core` under a **throwaway** tree (create two fake `core` files) → `-print0` → `xargs -0 rm`. Prove both gone. Recite `-type f`.
-15. [ ] Privilege: `xargs` as you cannot delete files you do not own. Predict `rm` failing on a root-owned file. Do **not** `sudo xargs rm`. Stay in `/tmp`.
-16. [ ] Predict: default `xargs` batches many args onto **one** command line until it fills. `-I` forces **one item per command**. Prove by wrapping `echo` with both forms on a 5-line list (one line vs five lines of output).
-17. [ ] Recite: `cat list | xargs` vs `xargs < list` — same stdin idea. Prove default echo join both ways.
-18. [ ] Wrong-usage: `xargs -i touch {}` with **no** stdin (you sit at the keyboard). Ctrl-D to finish. Prefer a file. Recite that stdin is the list.
-19. [ ] Combine: custom placeholder `T` + `touch` + a list that includes a name with a dash. Predict `touch` treating dashes as flags — then `--` or a `./` prefix if you hit that snag.
-20. [ ] Combined: default echo-join; `-i` `{}`; `-I {}`; `-iT`; `-0` with spaces; `-P` with `-I`; never `rm` outside the throwaway tree. **Warning:** `xargs rm` / `xargs -0 rm` is destructive. Never against `/`.
+### Easy
+
+1. [ ] Put three words on separate lines in `names.txt`. `cat names.txt | xargs` (default command is `echo`). One line of output?
+2. [ ] `cat names.txt | xargs -I {} touch {}` (or `-i` / `{}` as in the course). `ls` the new files.
+
+### Medium
+
+3. [ ] Same list with `-iT` and placeholder `T` (`touch T`). Prove the files exist. Remove them with `rm -v` **only** those names.
+4. [ ] Someone ran `xargs touch` without `-I`/`-i` and one `touch` got **all** names as arguments (usually fine) vs one file per line. Compare `xargs touch` vs `xargs -I {} touch {}` using `ls -l` timestamps if you `sleep 1` between styles.
+
+### Hard
+
+5. [ ] `find` your throwaway `*.log` files `-print` | `xargs` a safe command (`ls` or `wc` if you know it — otherwise `echo`). Then do the course `touch`/`rm` pattern only on those files.
+6. [ ] Broken: `cat names.txt | xargs -I touch {}` (missing placeholder token). Fix it so each line becomes a file.
+
+## Safe batching and parallel (`xargs -0`, `-P`)
+
+### Easy
+
+1. [ ] Create a file whose name contains a **space**. `find` it `-print0` | `xargs -0 ls -l` (or `echo`). Does the name stay one argument?
+2. [ ] Without `-0`, `find -print | xargs` on that spaced name — what splits wrong? Do **not** `rm` from this broken pipeline.
+
+### Medium
+
+3. [ ] Recreate the course `/tmp` `core` example **in your throwaway dir**: `-print0 | xargs -0 rm` only your `core` files.
+4. [ ] If the lab allows outbound HTTP: `urls.txt` with one or two URLs, `xargs -P 2 -I {}` plus `curl -O {}`. If no network, `xargs -P 2 -I {} echo {}` instead and still use `-P`.
+
+### Hard
+
+5. [ ] Combine `find` + space in names + `-print0` + `xargs -0` + `ls -li`. Then delete those files the same safe way.
+6. [ ] Someone used `find … -print | xargs rm` on photos with spaces. Write what goes wrong, then run the **null-separated** form on a **practice** spaced name only.

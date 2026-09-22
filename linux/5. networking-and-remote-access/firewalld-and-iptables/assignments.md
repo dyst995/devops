@@ -1,28 +1,54 @@
-# Assignments — firewalld and iptables
+# Assignments — firewalld
 
-Close `commands.md`. Recite the flag, then type it. Work on a **lab VM**, not a production host.
+Close `commands.md`. Type and run. **`--panic-on` drops ALL packets** — you can lose SSH. Use a **lab console**. `--add-masquerade` / `--add-forward-port` / `--permanent` / `--reload` change connectivity. Prefer `query` and `get-services` first. Revert what you add.
 
-**Danger:** `--panic-on` drops **all** packets, including your SSH session. Use a console or a recoverable out-of-band session. Do **not** flush iptables/ip6tables on a live SSH-only box (the old service rebuilds by deleting every rule first).
+## Services (`--get-services`, `--info-service`)
 
-## `firewall-cmd`
+### Easy
 
-1. [ ] List every **named service** firewalld can allow. Confirm `ssh`, `http`, and `ftp` appear. Predict two more names before you look.
-2. [ ] Show what the **ftp** service actually opens. Predict port, protocol (`21/tcp`), and whether a helper module is listed — then prove it.
-3. [ ] Predict: allowing a **named service** vs opening a raw port — same effect for ftp? One sentence after you compare the service info to a port rule.
-4. [ ] Privilege: run a services list as a normal user vs root. What fails, and what still works?
-5. [ ] **Console only (not the only SSH session):** turn **panic** on. From another host, prove ping and SSH die (dropped, not a polite reject).
-6. [ ] Leave panic mode. Prove connectivity returns. Predict: does panic persist across reboot?
-7. [ ] Predict out loud: what happens if you panic-on over the **only** SSH session to a VM with no console? Do not do that on a host you cannot recover.
-8. [ ] On zone **external**, **query** whether masquerade is on. Record yes/no before you change anything.
-9. [ ] Enable **masquerade** on external at **runtime** only. Query again. Predict: does this survive reboot? Prove by saying what you would check after a reboot (do not reboot if it would strand you).
-10. [ ] Remove masquerade on external (runtime). Query to prove it is off.
-11. [ ] Add masquerade on external **permanently** (on disk). Predict **before** reload: is live NAT already changed? Prove with a query.
-12. [ ] **Reload** so permanent config becomes runtime. Query masquerade on external. Predict: what happens to existing connections vs an iptables-service flush/rebuild?
-13. [ ] Predict: `--permanent` without reload — is live traffic changed? One sentence; then prove with a harmless permanent add + query + reload + cleanup.
-14. [ ] Recite from memory the **forward-port** pieces: inbound port, protocol, destination port. Add a forward of TCP/22 → 3753 on **external** only if this is a disposable lab and you have a way back in.
-15. [ ] **RHCE trap:** predict whether that forward works **without** masquerade. One sentence from the notes; do not leave a broken SSH remap in place.
-16. [ ] If you added a forward, **remove** it (runtime and permanent if needed) and reload so SSH is not left remapped. Query or list forwards to prove cleanup.
-17. [ ] Combined: runtime masquerade vs permanent vs reload. Three short sentences: what is “now”, what is “on disk”, what is “after reboot”.
-18. [ ] Predict: forwarding **port 22** on a box you use for SSH — what can go wrong for your current session vs new inbound clients?
-19. [ ] Contrast: why a live firewalld change can keep SSH up, while an **iptables flush** / service restart often drops the session. Do **not** flush iptables to test this on an SSH-only host.
-20. [ ] Cleanup: remove any permanent masquerade or forward you added, reload, query so the lab is back to baseline. Confirm panic is **off**.
+1. [ ] `firewall-cmd --get-services`. Spot `ssh`, `http`, `ftp`.
+2. [ ] `--info-service=ftp` (course: ports/modules, ftp → 21/tcp). Try `--info-service=ssh` too.
+
+### Medium
+
+3. [ ] `systemctl is-active firewalld` (or `status`). If firewalld is off, do not enable it on a remote-only host without a console.
+4. [ ] Someone opened a **port number** in their head but the course uses **service names**. Pick `http` and read `--info-service`. What port is that?
+
+### Hard
+
+5. [ ] Combine: `netstat -nlpt` (tools topic) vs `--info-service=ssh`. Same port?
+6. [ ] `firewall-cmd` not found: `apt-cache`/`rpm` only if you know them — or record that this VM uses another stack. Do not install firewalld on a production-like box for fun.
+
+## Panic and masquerade
+
+### Easy
+
+1. [ ] `--zone=external --query-masquerade`. on or off? Do **not** toggle yet.
+2. [ ] Read the cheat sheet: `--panic-on` means drop **all**. Do **not** turn it on over SSH.
+
+### Medium
+
+3. [ ] Lab **console**: `--panic-on`, try `ping` **from another machine** or locally, then `--panic-off` immediately. If you only have SSH, **skip** panic entirely.
+4. [ ] Lab: `--zone=external --add-masquerade`, `--query-masquerade`, then `--remove-masquerade`. Not `--permanent` yet.
+
+### Hard
+
+5. [ ] Permanent masquerade **only** if the lab is a NAT exercise: `--add-masquerade --permanent`, `--reload`, `--query-masquerade`. Remove permanent + reload when done.
+6. [ ] Broken: `--panic-on` then closed the laptop. How do you recover? (console `--panic-off`.) Combine `ping` after off.
+
+## Forward ports and reload
+
+### Easy
+
+1. [ ] `--reload` on a lab **after** you know you have no accidental `--permanent` rules you forgot (or reload is a no-op). `status` firewalld.
+2. [ ] Recite the course trap: forward-port needs **masquerade**. Do not add a forward yet.
+
+### Medium
+
+3. [ ] Lab NAT exercise only: `--add-forward-port` as in the course (`port=22:proto=tcp:toport=3753`) on `external`, with masquerade. Have a console. Remove the forward when done.
+4. [ ] Someone added a runtime rule and rebooted — it vanished. Add `--permanent` + `--reload` **only** for a lab rule you intend to keep, then remove it the same way.
+
+### Hard
+
+5. [ ] Runtime vs permanent: add a **queryable** change (masquerade), reboot **only** if the lab allows, see if it survived. Prefer `--permanent` demonstration without reboot: add runtime, `--reload` (reload **drops** runtime-only). Query after.
+6. [ ] Combine: do not forward SSH away on the NIC you use. Use `netstat`/`sshd` status to see what listens on 22. Revert all lab firewall changes.
