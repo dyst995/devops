@@ -2,19 +2,15 @@
 
 Tick each item when done. Predict before you run. Python has no labs — this file is the practice.
 
-Close `theory.md`. This topic is **what tox is** (course had no `tox.ini` on the slide). Recite first.
+Close `theory.md`. Interview drill: three jobs of tox. Course had no `tox.ini` on the slide — recite the model.
 
-## Warm-up
-
-1. [ ] Automate + standardize. Packaging / testing / release. virtualenv manager + test CLI.
-2. [ ] Three uses: install on many Pythons · tests in each env · CI frontend (boilerplate / merge).
-
-## Do
-
-3. [ ] From memory, draw System Overview: tox → venvs → install package → test tool → same on CI.
-4. [ ] One sentence each: how tox differs from a single `python -m venv` ([pip](../02. pip/theory.md)); from `nosetests` alone ([nose + coverage](../27. nose-coverage/theory.md)); from [pyenv](../03. pyenv/theory.md) (interpreters vs tox envs).
-5. [ ] Explain “merging CI and shell-based testing”: you run **tox** locally; CI runs **tox** — not a second YAML-only script.
-
-## Complete
-
-6. [ ] Recite the three bullet uses without looking. Quality-gate sentence: a tox env that fails install or tests blocks [CD](../25. testing/theory.md).
+1. [ ] tox aims to **automate and standardize testing**. Larger vision: packaging, testing, **release**.
+2. [ ] tox is a generic **virtualenv management** and **test command line** tool. Recite that phrase.
+3. [ ] Use 1: check the package **installs correctly** on **different Python versions and interpreters**.
+4. [ ] Use 2: **run tests in each** environment; configure **test tool of choice** (unittest / nose / …).
+5. [ ] Use 3: **frontend to CI** — less **boilerplate**; **merge CI and shell-based testing**.
+6. [ ] System Overview: tox → venv per env → install package → run tests → report. Same locally and on CI.
+7. [ ] How tox differs from one `python -m venv` ([pip](../02. pip/theory.md)); from `nosetests` alone; from [pyenv](../03. pyenv/theory.md) (interpreters vs tox envs).
+8. [ ] Interview: “CI runs tox, I run tox” — why that beats a YAML-only test script.
+9. [ ] Quality gate: a tox env that fails **install** or **tests** blocks [CD](../25. testing/theory.md).
+10. [ ] Combined: three bullets without looking; draw System Overview; packaging+testing+release; CI === shell.

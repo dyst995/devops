@@ -1,6 +1,6 @@
 # Python — tasks to complete
 
-No labs (that is Linux). For each topic: close `theory.md`, work through `tasks.md`, tick `[ ]` → `[x]`.
+No labs (that is Linux). For each topic: close `theory.md`, work through `tasks.md` (**~10 interview drills** — recite, predict, write, explain), tick `[ ]` → `[x]`.
 
 - [ ] [1. working-with-data](01. working-with-data/tasks.md)
 - [ ] [2. pip](02. pip/tasks.md)

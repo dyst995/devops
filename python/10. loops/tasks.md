@@ -2,34 +2,15 @@
 
 Tick each item when done. Predict before you run. Python has no labs — this file is the practice.
 
+Close `theory.md`. Interview drill: predict **exact** printed lines before you run.
 
-Close `theory.md`. Write the output **before** you run.
-
-## Warm-up
-
-1. [ ] `while` vs `for` vs list comprehension — one sentence each.
-2. [ ] `range(10)` includes 10? First and last printed numbers in the course `for`.
-3. [ ] `break` vs `continue` vs loop-`else` (normal finish vs `break`).
-
-## Usage
-
-4. [ ] Recreate `i = 10` `while i > 0`. Full output.
-5. [ ] Recreate `for i in range(10)`. Full output.
-6. [ ] Recreate the comprehension. Exact list printed.
-
-## break / continue
-
-7. [ ] `"string"` + `break` on `"i"`. Match the notes (including `The end`).
-8. [ ] Same with `continue`. Match the notes.
-9. [ ] Swap only `break`/`continue` in your head: which letters disappear vs which stop the loop?
-
-## else
-
-10. [ ] `i = 10` then the notes’ `while`/`else` (`print("End")`). Does `End` print? Why (`i > 0 == False`)?
-11. [ ] Same `while`, but `break` when `i == 7`. Does `End` print?
-12. [ ] `for i in range(5)` with `else: print("End")`. Full output.
-13. [ ] `for i in range(4)` with `break` after `print`. Full output. Why no `End`?
-
-## Scenario
-
-14. [ ] Walk `"string"`: stop at `"i"` (`break`) in one function; skip `"i"` only (`continue`) in another; a third `for` over `range(5)` must print `End` only if it **never** `break`s. Prove `else` skipped vs run.
+1. [ ] Recite `while i > 0` from 10: when is the condition checked? Final value of `i` after the loop?
+2. [ ] `for i in range(10)` — does **10** print? Inclusive/exclusive?
+3. [ ] List comprehension `[i for i in range(10)]` — exact list. One-line vs `for`.
+4. [ ] `break` on `"string"` at `"i"`: exact output including `The end`. Which letters never print?
+5. [ ] `continue` on `"string"` at `"i"`: exact output. Loop terminated or not?
+6. [ ] Interview: `break` vs `continue` vs falling off the loop — next statement where?
+7. [ ] `while`…`else`: when does `else` run (condition False, normal end)? When does it **not** (`break` / `return`)? Recite the course `End` print.
+8. [ ] `range` stop excluded: `range(10)` vs “print 1 to 10” — how do you write the latter?
+9. [ ] Nested: `for` with `break` only exits **one** loop. Say that to an interviewer, then prove with a tiny example.
+10. [ ] Combined: while countdown; for 0–9; comprehension same list; break vs continue on `"string"` exact prints.

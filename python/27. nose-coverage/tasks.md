@@ -2,20 +2,15 @@
 
 Tick each item when done. Predict before you run. Python has no labs — this file is the practice.
 
-Close `theory.md`. Use a **venv**. Prefer `python -m pip`. You need a small package (e.g. `handlers/` from [packages](../17. packages/theory.md)) and `test_*.py` files ([unit testing](../26. unit-testing/theory.md)).
+Close `theory.md`. Interview drill: recite every flag. venv; need `test_*.py` and a package (course: `handlers/`).
 
-## Warm-up
-
-1. [ ] Recite both `pip install` lines. `nosetests` vs the three coverage flags (`--with-coverage`, `--cover-package=handlers/`, `--cover-erase`).
-2. [ ] `--cover-min-percentage=90` vs `--cover-html` → which file?
-
-## Do
-
-3. [ ] `pip install nose` and `coverage`. From a folder with tests, run **`nosetests`**. Tests run without naming `test_prime.py`.
-4. [ ] `nosetests --with-coverage --cover-package=… --cover-erase` (use **your** package name if it is not `handlers/`). Recite the course package **`handlers/`**.
-5. [ ] Add `--cover-min-percentage=90`. If it fails, say why (gate). Recite the full command.
-6. [ ] Add `--cover-html`. Open **`cover/index.html`**.
-
-## Complete
-
-7. [ ] Recite all four `nosetests` lines without looking. One sentence: coverage % as a [quality gate](../25. testing/theory.md).
+1. [ ] What does **nose** do vs **coverage**? Two `pip install` lines. Quality gate idea ([testing](../25. testing/theory.md))?
+2. [ ] Command to only run tests? How is that different from `python test_prime.py`?
+3. [ ] Recite `--with-coverage --cover-package=handlers/ --cover-erase`. What does erase do? Why `handlers/`?
+4. [ ] `--cover-min-percentage=90` — fail if under 90%. Gate: red means?
+5. [ ] `--cover-html` — report path **`cover/index.html`**.
+6. [ ] Recite the process: install → `nosetests` → coverage+package+erase → min 90 → html.
+7. [ ] Run `nosetests` on a small suite. Then the coverage line with **your** package name; still recite course `handlers/`.
+8. [ ] Add min 90. If it fails, explain the gate. Add html and open the index.
+9. [ ] Interview: coverage % is not the same as “tests passed.” One sentence. `nose` unmaintained — slide command still `nosetests`.
+10. [ ] Combined: four `nosetests` lines from memory; 90% gate; `cover/index.html`; [tox](../28. tox/theory.md) would run this in many envs.

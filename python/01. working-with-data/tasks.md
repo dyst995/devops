@@ -2,33 +2,15 @@
 
 Tick each item when done. Predict before you run. Python has no labs — this file is the practice.
 
+Close `theory.md`. Interview drill: say the answer out loud first, then prove it in the REPL. Use https://pythontutor.com/ on alias examples.
 
-Close `theory.md`. Predict the output (or exception) **before** you run. Use https://pythontutor.com/ on the alias examples.
-
-## Warm-up
-
-1. [ ] Square brackets in a **syntax** line: type them or not? Why are some pieces optional?
-2. [ ] Recite both multiple-assignment lines. After each, print `a`, `b`, `c`.
-3. [ ] Recite identity / type / value. Recite `id`, `is`, `type`.
-4. [ ] Immutable types vs mutable types (two lists from the notes).
-
-## del and conversion
-
-5. [ ] `a, b, c` as in the notes; `del a`; `del b, c`; `print(a)`. Exact error.
-6. [ ] `int` from a whole number, from a float, from a numeric string. Then `int` of a binary string with a **base**.
-7. [ ] `float` from an int and from a string. `str` from an int. `type()` of each result.
-
-## Identity / type / value
-
-8. [ ] After `a = b = c = 1`, is `a is b` true? `id(a)` vs `id(b)`?
-9. [ ] After `a, b, c = 1, 2, "john"`, `type(a)` `type(b)` `type(c)`. Can you change `a`’s type in place, or only convert to a new object?
-
-## Immutable vs mutable (notes’ examples)
-
-10. [ ] Recreate `x = 'foo'`, `y = x`, both prints around `y += 'bar'`. `id(x)` vs `id(y)` after `+=`.
-11. [ ] Recreate `x = [1, 2, 3]`, `y = x`, both prints around `y += [3, 2, 1]`. `id(x)` vs `id(y)` after `+=`. `x is y`?
-12. [ ] Put both snippets in Python Tutor. What is different about the arrows after `+=`?
-
-## Scenario
-
-13. [ ] Two names bound to one list; you must change the list through the second name and see it on the first. Then two names bound to one string; the same kind of `+=` must **not** change the first name. Convert a string `"10"` to int in base 2 and to float. `del` one name and show `NameError`.
+1. [ ] Interview: what do `[ ]` mean in a **syntax description** vs in real Python code? Why are some pieces optional?
+2. [ ] Recite and run both multiple-assignment lines. After `a = b = c = 1`, are they the **same object** (`is` / `id`)? After `a, b, c = 1, 2, "john"`, print all three.
+3. [ ] Recite `del` syntax (notation vs what you type). `del a` then `del b, c` then `print(a)` — exact exception.
+4. [ ] Recite `int(x [,base])`, `float(x)`, `str(x)`. Convert a whole number, a float (`int(3.9)`), a numeric string, and `int("10", 2)`. Is the result a **new** object?
+5. [ ] Every object has three things — name them. Recite `id()`, `is`, `type()`. Can identity or type of **that** object change?
+6. [ ] What makes a value mutable vs immutable? Recite the immutable list and the mutable list from the notes.
+7. [ ] Recreate `x = 'foo'`; `y = x`; `y += 'bar'`. Predict `x`, `y`, and whether `id` of `y` changed. Explain to an interviewer why `x` is still `'foo'`.
+8. [ ] Recreate `x = [1, 2, 3]`; `y = x`; `y += [3, 2, 1]`. Predict `x`. `x is y`? Same `id`?
+9. [ ] Put both snippets in Python Tutor. One sentence: two names, one object vs rebound name.
+10. [ ] Combined: two names on one list (mutate through the second, see it on the first); two names on one string (`+=` must **not** change the first); `int("10", 2)` and `float("1.5")`; `del` a name → `NameError`.

@@ -2,22 +2,15 @@
 
 Tick each item when done. Predict before you run. Python has no labs — this file is the practice.
 
-Close `theory.md`. Build the tree next to where you start Python so `animals` is importable ([modules](../15. modules/theory.md) search order).
+Close `theory.md`. Interview drill: recite tree and imports from memory. Build next to where you start Python ([modules](../15. modules/theory.md) search order).
 
-## Warm-up
-
-1. [ ] Why packages? Dots? `__init__.py`?
-2. [ ] Recite the `animals` tree from memory. Recite the four imports.
-
-## Do
-
-3. [ ] Create the directory tree including **both** `__init__.py` files (can be empty).
-4. [ ] `crocodile.py` — any function or name you can import.
-5. [ ] `monkey.py` — a class `Monkey`.
-6. [ ] `handlers/swim.py` and `handlers/walk.py` with `is_walking` in `walk.py`.
-7. [ ] Run all four course imports and use the names (`crocodile`, `Monkey`, `swim`, `is_walking`).
-8. [ ] Temporarily rename one `__init__.py` (or remove it) and try an import. Then put it back. (Course: required for the directory to be a package.)
-
-## Complete
-
-9. [ ] From a file **outside** `animals`, only dotted imports (no `sys.path` hacks beyond running in the parent directory). Prove `animals.handlers.walk` is the nested module.
+1. [ ] Why packages (many modules, similar names)? What namespace do they structure? Dot notation?
+2. [ ] Packages vs modules for **collisions** (variables vs module names)? OS feature used?
+3. [ ] Recite the `animals` tree (both `__init__.py`, `handlers`, four `.py` files).
+4. [ ] Why `__init__.py` (course: required)? Package vs module in that tree?
+5. [ ] Recite all four imports. Which two use the subpackage `handlers`?
+6. [ ] Create the tree (empty `__init__.py` OK). `crocodile.py`, class `Monkey`, `swim.py`, `is_walking` in `walk.py`.
+7. [ ] Run all four course imports and use the names.
+8. [ ] Temporarily remove one `__init__.py` and try an import. Put it back. What did the course claim?
+9. [ ] Interview: `from animals.handlers.walk import is_walking` — map each dotted piece to a folder or file.
+10. [ ] Combined: draw tree from memory; four imports; prove nested `animals.handlers.walk` from a file **outside** `animals`.

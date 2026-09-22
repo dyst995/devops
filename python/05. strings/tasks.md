@@ -2,31 +2,15 @@
 
 Tick each item when done. Predict before you run. Python has no labs — this file is the practice.
 
+Close `theory.md`. Interview drill: predict the exact string **before** you run. `what = 'This parrot is dead'`.
 
-Close `theory.md`. Use `what = 'This parrot is dead'`. Predict **before** you run.
-
-## Warm-up
-
-1. [ ] First index? Last character’s index form? Slice includes the stop?
-2. [ ] Recite `what[0]` `[3]` `[-1]` `[0:4]` `[5:11]` `[1:]` `[:3]` `[1:-1:2]` `[:]` `[::-1]`.
-
-## Index / slice
-
-3. [ ] Run every course subscript on `what`. Match the REPL lines.
-4. [ ] `what[:100]` — exception or whole rest? `what[100]` as a **single** index?
-5. [ ] Copy with `[:]`. Reverse with `[::-1]`.
-
-## Formatting / raw
-
-6. [ ] Recreate all four formatting prints (`f`, two `%`, `.format` position and keyword, Billi/`{0}e`).
-7. [ ] `'C:\\nowhere'` vs `r'C:\\nowhere'`. When do you want `r`?
-
-## Methods
-
-8. [ ] `upper` / `lower` / `strip` / `split` / `join` round-trip the sentence.
-9. [ ] `replace` parrot → slug; `find` vs `index` on a **missing** substring.
-10. [ ] Assign vs not: `s.upper()` then print `s`. Then `s = s.upper()`.
-
-## Scenario
-
-11. [ ] From `what`, take `'parrot'` by slice (not `split`). Format a line with an f-string that includes that slice. Reverse the whole string. `split` into words and `join` with `-`.
+1. [ ] Indexing: `[ ]` here — notation or real syntax? `what[0]`, `what[3]`, `what[-1]`. First vs fourth vs last character.
+2. [ ] Slicing: stop is **excluded**. Predict `what[0:4]`, `what[5:11]`, `what[1:]`, `what[:3]`. Recite “start plus length” idea.
+3. [ ] Oversized slice index — exception or clip? Single `what[999]` vs slice. Predict `what[1:-1:2]`.
+4. [ ] Copy `what[:]`. Reverse `what[::-1]` — exact reversed sentence.
+5. [ ] Recite three format styles from the notes: f-string `a,b`; `%s`/`%d`; `{0}` `{1}` `.format`; named `{food}`.
+6. [ ] `print('C:\\nowhere')` vs `print(r'C:\\nowhere')` — exact outputs. What does raw do?
+7. [ ] Recite methods: `upper` `lower` `strip` `split` `join` `replace` `find` `startswith` `len`. Run one of each on `what`.
+8. [ ] Interview: strings are immutable — `what[0] = 't'`? How do you “change” a character?
+9. [ ] Write from memory: extract `'parrot'` and `'This'` from `what` using slices only.
+10. [ ] Combined: index 0 and -1; slice half-open; step; reverse; one `%` print and one f-string; raw vs normal backslash.

@@ -2,34 +2,15 @@
 
 Tick each item when done. Predict before you run. Python has no labs — this file is the practice.
 
+Close `theory.md`. Interview drill: say the answer out loud first, then prove it.
 
-Close `theory.md`. Predict the list **before** you run.
-
-## Warm-up
-
-1. [ ] Definition + how to write a list. Ordered? Mutable? Nested? Arbitrary objects?
-2. [ ] Recite `list1` `list2` `list3`. `[1,2,3,4] == [4,1,3,2]`?
-
-## Index / nest / mutate
-
-3. [ ] `a = ['foo', 'bar', 'baz', 'qux', 'quux', 'corge']` — `[0]`, `[-1]`, a slice of three middle names.
-4. [ ] Recreate `x`. Print every course index (`x[1]`, `x[1][0]` … `x[3][1]`).
-5. [ ] `list1[2] = 2001` then `print(list1[2])`. Then a **fresh** `list1` and `del list1[2]`. Match the notes.
-
-## Operations / builtins
-
-6. [ ] `+`, `*`, `in`. `len` `max` `min` `sum` `sorted` on a small int list. Is the original still unsorted after `sorted`?
-
-## Methods (notes’ examples)
-
-7. [ ] `append(3)` on `[1, 2]`. `count(3)` on `[1, 2, 3, 3]`.
-8. [ ] `extend([4, 5, 6])` vs `append([4, 5, 6])` on copies of `[1, 2, 3]`.
-9. [ ] `index(5)` on `[1, 5, 3]`. Then `index` of a missing value.
-10. [ ] `insert(1, 2)` on `[1, 3]`.
-11. [ ] `pop()` then `pop(0)` on `[1, 2, 3, 4, 5]` — returned values and final list.
-12. [ ] `remove('a')` on `[1, 2, 'a', 3, 4]`.
-13. [ ] `reverse()` on `[1, 2, 3, 4, 5]`. `sort()` then `sort(reverse=True)` as in the notes.
-
-## Scenario
-
-14. [ ] Nested list like `x`. Update a year in `list1`, delete one index, `extend` more items, `sort(reverse=True)` a numeric copy. Show `append` did not flatten.
+1. [ ] What is a list (vs array)? Recite `list1` `list2` `list3`. `[ ]` here — notation or literal?
+2. [ ] Ordered: `[1, 2, 3, 4] == [4, 1, 3, 2]`? Mixed types OK? Nested OK? Empty list?
+3. [ ] `a = ['foo', 'bar', 'baz', 'qux', 'quux', 'corge']` — `a[0]`, `a[-1]`, `a[1:4]`. Same slice rules as strings.
+4. [ ] Recite nested `x`. Predict `x[1]`, `x[1][0]`, `x[1][1]`, `x[3]`, `print(x[3][0], x[3][1])`.
+5. [ ] Mutable: `list1[2] = 2001`, `del list1[2]`. In-place vs new object (working-with-data).
+6. [ ] Recite `+`, `*`, `in`, `len`, `max`, `min`, `sum`, `sorted`. Which return a **new** list?
+7. [ ] Recite methods: `append` `count` `extend` `index` (`ValueError`) `insert` `pop` / `pop(0)` `remove` `reverse` `sort` / `sort(reverse=True)`.
+8. [ ] Interview trap: `extend([4,5,6])` vs `append([4,5,6])` — length and last element. Prove it.
+9. [ ] `index` missing vs `remove` missing — which errors? `pop` default vs `pop(0)`.
+10. [ ] Combined: ordered equality; nest `x[1][1][0]`; mutate one index; `extend` not flatten-by-append; `sort` in place vs `sorted` new list.

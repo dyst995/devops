@@ -2,23 +2,15 @@
 
 Tick each item when done. Predict before you run. Python has no labs — this file is the practice.
 
-Close `theory.md`. Use a **venv** ([pip](../02. pip/theory.md)). Prefer `python -m pip` so install matches the interpreter.
+Close `theory.md`. Interview drill: recite `setup.py` and command lines. Use a **venv** ([pip](../02. pip/theory.md)).
 
-## Warm-up
-
-1. [ ] Recite the `zoo-example` tree. What lives in `animals/` vs the project root?
-2. [ ] Recite `setup(...)` fields. `find_packages()`? `"zoo = animals.zoo:main"`?
-3. [ ] Recite create-package commands (egg, wheel, help, universal, sdist) and the three `pip install` forms for *this* project. Uninstall name?
-
-## Do
-
-4. [ ] Layout: `animals/` with `__init__.py`, `zoo.py` (`def main(): print("Welcome to the zoo!")`), `README.md`, `setup.py` as in the notes (`find_packages`, console script, a pin in `install_requires` you actually need or a tiny existing package).
-5. [ ] `python setup.py --help-commands`. Then `pip install wheel` and `python setup.py bdist_wheel`. Confirm `dist/*.whl` and `*.egg-info` (`PKG-INFO`, `SOURCES.txt`, `top_level.txt`, …).
-6. [ ] Optional: `sdist`. Optional: `bdist_egg` if your setuptools still provides it. Recite `--universal` even if you skip building one.
-7. [ ] `pip install .` (or the project path). Run **`zoo`**. Then `python` → `import animals` → `animals.__path__` — site-packages, not only the project folder.
-8. [ ] `pip uninstall` the **distribution** name (`name=` in `setup`). `zoo` gone? `import animals` fail?
-9. [ ] Install from the **wheel** under `dist/`. Same `zoo` / `__path__` idea. Uninstall again.
-
-## Complete
-
-10. [ ] Recite pip install / `--upgrade` / `==` / `>=` / `-U pip` / `search` without looking. Explain why search may not work on a modern pip. Pin vs range vs upgrade in one sentence each.
+1. [ ] Recite the `zoo-example` tree. What lives in `animals/` vs project root (`README`, `setup.py`)? Why structure **before** an install package?
+2. [ ] What is the setup script the centre of (Distutils)? Recite `setup(...)`: `name`, `find_packages()`, `entry_points`, `install_requires`, `version`, author, license.
+3. [ ] Console scripts: `"zoo = animals.zoo:main"` — command name, module, function. `$ zoo` prints? Code after `raise`-style: `main()` in `zoo.py`.
+4. [ ] `find_packages()` return value? Why not list `animals` and `animals.handlers` by hand?
+5. [ ] Recite: `bdist_egg`, `bdist_wheel`, `--help-commands`, `--universal`, `sdist`. Example: `pip install wheel` then `bdist_wheel`.
+6. [ ] After build: `dist/` vs `*.egg-info` (four files). Recite `zoo_example-0.1-py3-none-any.whl` (underscore vs hyphen).
+7. [ ] Recite pip: install, `--upgrade`, `==`, `>=`, `-U pip`, `search` (CLI may be gone). Three ways to install **this** project (`.` / path / `.whl`).
+8. [ ] After install: `import animals`; `animals.__path__` is **site-packages**. Uninstall **`zoo-example`** not `animals`. Why two names?
+9. [ ] Interview: distribution name vs import package vs console script. Map `zoo-example` / `animals` / `zoo`.
+10. [ ] Combined: write a minimal `setup.py` as in the notes; `bdist_wheel`; `pip install .`; run `zoo`; `__path__`; uninstall distribution name.

@@ -2,27 +2,15 @@
 
 Tick each item when done. Predict before you run. Python has no labs — this file is the practice.
 
+Close `theory.md`. Interview drill: predict prints and exceptions **before** you run.
 
-Close `theory.md`. Predict prints or exceptions **before** you run.
-
-## Warm-up
-
-1. [ ] Global vs local in one sentence each.
-2. [ ] `global` needed to **read** or to **assign**? LEGB order?
-3. [ ] Lambda: args vs expressions. Call with `()`?
-
-## Local vs global
-
-4. [ ] Recreate `total` / `sum(10, 20)`. Inside and outside prints.
-5. [ ] Recreate `add_money` **without** `global`. Exception name. Then with `global money`. Both `print(money)` values.
-
-## LEGB / lambda / namespaces
-
-6. [ ] Nested `def` (outer `x = 1`, inner `print(x)`): which LEGB letter is `x`?
-7. [ ] Recreate `sum = lambda a, b: a + b`. Both course prints.
-8. [ ] `q = lambda: locals()` then `q()`. Then `def q` with `qwert = 1` and `print(locals())`.
-9. [ ] At module level, is `locals()` the same idea as `globals()`? Check keys for `total` / `money` after you define them.
-
-## Scenario
-
-10. [ ] A counter at module level. One function only **prints** it (no `global`). One function **increments** it (`global`). One `lambda` adds two numbers. Show `locals()` inside the increment function includes the counter only after `global` / assignment as the notes imply.
+1. [ ] Global vs local (definitions). Recite `total = 0` / `sum` example. Inside print? Outside print? Why not 30 outside?
+2. [ ] When do you need `global`? When not (print / read)? Recite the `money` example with the line commented — exact error.
+3. [ ] Uncomment `global money` — both prints? Recite: assignment inside → local unless `global`.
+4. [ ] Recite **LEGB** in order and one sentence each (Local, Enclosing, Global, Built-in).
+5. [ ] Recite `lambda` notation. `sum = lambda a, b: a + b` — call with `()`. Prints for `(10,20)` and `(20,20)`. Builtin `sum` shadowed?
+6. [ ] `globals()` vs `locals()` — what dicts? Lambda `q = lambda: locals()` → `{}`. `def` with `qwert=1` → `{'qwert': 1}`.
+7. [ ] Interview: `money = money + 1` without `global` — why UnboundLocalError (Python already decided local because of assignment)?
+8. [ ] Nested `def`: name in inner not assigned, exists in outer — which LEGB letter hits? Sketch it.
+9. [ ] Write from memory: global `total` stays 0; `global money` increments; lambda one expression; `locals()` empty in that lambda.
+10. [ ] Combined: two `total` names; `global` only for assign; L→E→G→B; call lambda with `()`; `globals()` is the module dict.

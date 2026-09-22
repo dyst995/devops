@@ -1,22 +1,16 @@
-# Tasks — Input and output from console
+# Tasks — Input and output
 
 Tick each item when done. Predict before you run. Python has no labs — this file is the practice.
 
+Close `theory.md`. Interview drill: predict types and exact prints. `input` always returns **str**.
 
-Close `theory.md`. Type the course lines at the prompt when asked.
-
-## Warm-up
-
-1. [ ] `input` vs `print`. Type of `input(...)`?
-2. [ ] Recite the `map`/`split` one-liner. Recite three `print`s of `l`.
-
-## Do
-
-3. [ ] Run `l = list(map(int, input('--> ').split()))` with `1 2 3 4`. `type(l[0])`?
-4. [ ] Three prints: `join`, `*l`, `l`. Match the notes.
-5. [ ] Same one-liner with `10 20`. `print(*l)` vs `print(l)`.
-6. [ ] `import json` and `json.loads(input('Input dict:'))`. Use **valid JSON** (double quotes). `print(d)` and `type(d)`. If you paste the slide’s `{1: 'one', 2: 'two'}`, record what happens.
-
-## Scenario
-
-7. [ ] Read a line of integers, store a list of ints, print them space-separated **without** brackets, then print the list object. Then read one JSON object and print the resulting dict.
+1. [ ] Recite `input([promt])` (course spelling). Optional prompt — notation `[ ]`? Return type?
+2. [ ] Recite `print`. Contrast with `input`.
+3. [ ] `list(map(int, input('--> ').split()))` — type each step (`split` → `map` → `list`). For `1 2 3 4` exact `l`.
+4. [ ] Three ways to print that list: `' '.join(...)` vs `print(*l)` vs `print(l)` — exact outputs (spaces vs brackets).
+5. [ ] Interview: why does `print(l)` still show brackets? How do you print numbers space-separated without brackets?
+6. [ ] `json.loads(input('Input dict:'))` — what type is `d` if the user types valid JSON? What if they type a Python dict with `'` quotes?
+7. [ ] Write a tiny script: prompt, parse ints from one line, print with `*` unpack and with `join`.
+8. [ ] `input` of `10` then `int(...)` vs using it as a number without conversion — what error?
+9. [ ] Recite from memory: prompt optional; return str; map+split recipe; three print forms.
+10. [ ] Combined: `--> 1 2 3 4` → list of ints → `1 2 3 4` on one line twice (join and `*`) and once as `[1, 2, 3, 4]`.

@@ -2,23 +2,15 @@
 
 Tick each item when done. Predict before you run. Python has no labs — this file is the practice.
 
+Close `theory.md`. Interview drill: say the answer out loud first. Use `python -m pip` in a **venv**.
 
-Close `theory.md`. Use `python -m pip` (or `py -m pip` on Windows). Prefer a **venv** so you do not touch OS Python.
-
-## Warm-up
-
-1. [ ] What is pip? Default index? pip vs pyenv?
-2. [ ] Why `-m pip`? Recite create / activate / deactivate venv for **your** OS.
-3. [ ] `list` vs `show` vs `freeze` vs `-r`?
-
-## Do
-
-4. [ ] New venv. Upgrade pip. `list`. Which pip binary (`python -m pip --version` / `which python` after activate)?
-5. [ ] Install a small package. `show` it (name, version, location). Uninstall it. `list` again.
-6. [ ] Install an **exact** version (`==`). Then `--upgrade`. Did the version change?
-7. [ ] `freeze` to `requirements.txt`. New empty venv. `install -r`. Same names in `list`?
-8. [ ] Recite `--index-url` vs `--extra-index-url` without looking.
-
-## Scenario
-
-9. [ ] A teammate’s `pip install requests` went into a **different** Python than `python myscript.py`. Prove it (`pip --version` vs `python -m pip --version` vs `python -c "import sys; print(sys.executable)"`). Fix the workflow so install and run share one interpreter.
+1. [ ] What is pip? Default index (name + URL)? It installs into **which** Python?
+2. [ ] Why `python -m pip` instead of `pip` / `pip3` on `PATH`? Debian `pip3` vs Windows `py -m pip`? Why not `sudo pip install` on OS Python?
+3. [ ] Recite create / activate / deactivate venv for **your** OS. After activate, prove `which python` (or `where python`) is inside `.venv`.
+4. [ ] Recite `install` / `==` / range / `--upgrade` / `uninstall`. What do `list`, `show`, and `freeze` each print?
+5. [ ] New venv. Upgrade pip. Install a small package. `show` it (name, version, **location**). Uninstall. `list` again.
+6. [ ] Install an **exact** version (`==`). Then `--upgrade`. Did the version change? Recite range syntax `'pkg>=1.2,<2'`.
+7. [ ] `freeze > requirements.txt`. New empty venv. `install -r`. Same names in `list`? What is `-r` for in CI / another machine?
+8. [ ] Recite `--user` vs venv. Recite `--index-url` vs `--extra-index-url`. Default index is still PyPI unless you replace it.
+9. [ ] pip vs pyenv — which job is which? Why is pip not a substitute for `dnf`/`apt` `python3-requests` on distro Python?
+10. [ ] Teammate’s `pip install` went into a **different** interpreter than `python myscript.py`. Prove it (`pip --version` vs `python -m pip --version` vs `sys.executable`). Fix the workflow (venv + `-m pip`). Mention `pip search` is gone.
