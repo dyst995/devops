@@ -1,16 +1,14 @@
 # Tasks — Loops
 
-Tick each item when done. Predict before you run. Python has no labs — this file is the practice.
+Close `theory.md`. Predict **exact** prints, then run.
 
-Close `theory.md`. Interview drill: predict **exact** printed lines before you run.
-
-1. [ ] Recite `while i > 0` from 10: when is the condition checked? Final value of `i` after the loop?
-2. [ ] `for i in range(10)` — does **10** print? Inclusive/exclusive?
-3. [ ] List comprehension `[i for i in range(10)]` — exact list. One-line vs `for`.
-4. [ ] `break` on `"string"` at `"i"`: exact output including `The end`. Which letters never print?
-5. [ ] `continue` on `"string"` at `"i"`: exact output. Loop terminated or not?
-6. [ ] Interview: `break` vs `continue` vs falling off the loop — next statement where?
-7. [ ] `while`…`else`: when does `else` run (condition False, normal end)? When does it **not** (`break` / `return`)? Recite the course `End` print.
-8. [ ] `range` stop excluded: `range(10)` vs “print 1 to 10” — how do you write the latter?
-9. [ ] Nested: `for` with `break` only exits **one** loop. Say that to an interviewer, then prove with a tiny example.
-10. [ ] Combined: while countdown; for 0–9; comprehension same list; break vs continue on `"string"` exact prints.
+1. [ ] **Write:** `while i > 0` from 10. Memorize: condition **before** body; prints 10…1.
+2. [ ] **Write:** `for i in range(10)` — **10 does not print** (0–9).
+3. [ ] **Write:** `[i for i in range(10)]` — exact list. Same 0–9.
+4. [ ] **Write:** `break` on `"string"` at `"i"`. Memorize output + `The end` (`s t r` only).
+5. [ ] **Write:** `continue` on `"string"` at `"i"`. Memorize `s t r n g` + `The end`.
+6. [ ] **Memorize:** `break` = out; `continue` = skip this pass.
+7. [ ] **Write:** `while`…`else` — `else` when condition False (normal end); **not** after `break`. Recite `End`.
+8. [ ] **Learn:** `range` stop excluded. How to print 1 to 10.
+9. [ ] **Learn:** `break` leaves **one** loop. Tiny nested proof optional.
+10. [ ] **Memorize (cover):** while countdown; `range(10)`; break vs continue on `"string"`; loop `else`.

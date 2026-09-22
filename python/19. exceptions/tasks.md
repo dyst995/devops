@@ -1,16 +1,14 @@
 # Tasks — Exceptions
 
-Tick each item when done. Predict before you run. Python has no labs — this file is the practice.
+Close `theory.md`. Recite clauses, then write the course examples.
 
-Close `theory.md`. Interview drill: predict which clause runs and the exact print.
-
-1. [ ] Exception (execution / “exception to the rule”). Handler: save state, interrupt, maybe fix (div by zero, file open). Languages named?
-2. [ ] Recite `try` / `except Exception1` / `except Exception2` / `else` / `finally` — when each runs.
-3. [ ] Tuple `except (A, B) as exc`. Recite course notation extra `]`.
-4. [ ] Recreate `temp_convert`. `"xyz"` exact print (`ValueError` / invalid literal). `"12"` return, no print.
-5. [ ] Recite `raise [Exception [, args [, traceback]]]`. `functionName` when `level < 1`. Lines after `raise`?
-6. [ ] `try` / `except Exception as e` / `else` skeleton. Prove `else` only on success.
-7. [ ] Custom `Networkerror(RuntimeError)`: `__init__` `message`; `raise Networkerror("Bad hostname")`; `print(e.message)` → `Bad hostname`. Course spelling **Networkerror**.
-8. [ ] `finally` on both success and failure — print in each clause.
-9. [ ] Interview: `except` **order** (matching first wins). Two types (`int` vs `1/0`), two `except` blocks.
-10. [ ] Combined: `temp_convert`; `raise` + no code after; `Networkerror`; `else` vs `finally`; one `except (ValueError, ZeroDivisionError) as exc`.
+1. [ ] **Learn:** exception = error during **execution** (“exception to the rule”). Handler saves state, interrupts, may fix.
+2. [ ] **Memorize:** `try` operations; `except` per type; `else` if **no** exception; `finally` **always**.
+3. [ ] **Write:** `except (Exception1, Exception2) as exc`.
+4. [ ] **Write:** `temp_convert`. Memorize `"xyz"` print (ValueError / invalid literal). `"12"` returns, no print.
+5. [ ] **Memorize:** `raise [Exception [, args [, traceback]]]`. `functionName` `level < 1`. Lines after `raise` do not run.
+6. [ ] **Write:** `try` / `except Exception as e` / `else`. Prove `else` only on success.
+7. [ ] **Write:** `class Networkerror(RuntimeError)` — raise `"Bad hostname"`; print `e.message`. Course name **Networkerror**.
+8. [ ] **Write:** `finally` on success and on failure.
+9. [ ] **Learn:** `except` order — first match wins.
+10. [ ] **Memorize (cover):** when each clause runs; `temp_convert` line; `raise`; `Networkerror` / `Bad hostname`; `finally` always.

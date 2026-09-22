@@ -1,16 +1,14 @@
 # Tasks — Dockerizing
 
-Tick each item when done. Predict before you run. Python has no labs — this file is the practice.
+Close `theory.md`. Recite the Dockerfile from memory, then build in a throwaway folder.
 
-Close `theory.md`. Interview drill: recite the Dockerfile and image variants. Docker only needed for the build/run item.
-
-1. [ ] Recite seven packaging options: native **wheel/archive**; **RPM/DEB**; **Conda**; freezers **PyInstaller/PyOxidize**; **Docker**; **VMs**; **hardware** drag-and-plug.
-2. [ ] Recite the Dockerfile with course comments: `FROM python:3.8`, `WORKDIR /code`, copy `requirements.txt`, `RUN pip install -r`, `COPY src/`, `CMD ["python", "./server.py"]`.
-3. [ ] Why copy **requirements.txt before** `src/` (layer cache)?
-4. [ ] Recite `docker build -t my-python-app .` and `docker run -it --rm --name my-running-app my-python-app`. What is `-it`, `--rm`, `--name`?
-5. [ ] docker-compose slide: many containers / file vs a long `docker run` — one sentence.
-6. [ ] `*-slim`: minimal packages; needs **Unix** to extend.
-7. [ ] `*-alpine`: Alpine Linux Project; built for containers; **tiny**; teams leaving (compat, hard to debug); recommended if **space** is a concern.
-8. [ ] Full `python:x.x.x`: stable **Debian**; start of project, quick, size not a worry; **safest** choice. Course uses **3.8** full.
-9. [ ] Interview: Docker image vs [wheel/sdist](../18. packaging/theory.md) vs freezer — when would you pick each (one line each)?
-10. [ ] Combined: seven ship options; six Dockerfile instructions from memory; build/run flags; full vs slim vs alpine table; safest = full Debian.
+1. [ ] **Memorize seven ways to ship:** wheel/archive; RPM/DEB; Conda; PyInstaller/PyOxidize; Docker; VMs; hardware.
+2. [ ] **Write from memory:** six Dockerfile instructions + course comments (`FROM python:3.8` … `CMD python ./server.py`).
+3. [ ] **Learn:** copy **requirements.txt before** `src/` (install layer cache).
+4. [ ] **Memorize:** `docker build -t my-python-app .` and `docker run -it --rm --name my-running-app my-python-app`.
+5. [ ] **Learn:** docker-compose slide = file for one or more containers vs a long `run`.
+6. [ ] **Memorize slim:** minimal packages; needs Unix to extend.
+7. [ ] **Memorize alpine:** Alpine Linux; tiny; space; teams leave (compat, hard to debug).
+8. [ ] **Memorize full `python:x.x.x`:** Debian; quick start; size OK; **safest**. Course uses **3.8** full.
+9. [ ] **Write:** tiny `requirements.txt` + `src/server.py`; `build` then `run` with **course names**.
+10. [ ] **Memorize (cover):** seven ship options; six Dockerfile lines; build/run flags; full vs slim vs alpine.

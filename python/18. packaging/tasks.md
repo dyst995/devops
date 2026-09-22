@@ -1,16 +1,14 @@
 # Tasks — Packaging
 
-Tick each item when done. Predict before you run. Python has no labs — this file is the practice.
+Close `theory.md`. Recite `setup.py`, then write a throwaway `zoo-example`. venv.
 
-Close `theory.md`. Interview drill: recite `setup.py` and command lines. Use a **venv** ([pip](../02. pip/theory.md)).
-
-1. [ ] Recite the `zoo-example` tree. What lives in `animals/` vs project root (`README`, `setup.py`)? Why structure **before** an install package?
-2. [ ] What is the setup script the centre of (Distutils)? Recite `setup(...)`: `name`, `find_packages()`, `entry_points`, `install_requires`, `version`, author, license.
-3. [ ] Console scripts: `"zoo = animals.zoo:main"` — command name, module, function. `$ zoo` prints? Code after `raise`-style: `main()` in `zoo.py`.
-4. [ ] `find_packages()` return value? Why not list `animals` and `animals.handlers` by hand?
-5. [ ] Recite: `bdist_egg`, `bdist_wheel`, `--help-commands`, `--universal`, `sdist`. Example: `pip install wheel` then `bdist_wheel`.
-6. [ ] After build: `dist/` vs `*.egg-info` (four files). Recite `zoo_example-0.1-py3-none-any.whl` (underscore vs hyphen).
-7. [ ] Recite pip: install, `--upgrade`, `==`, `>=`, `-U pip`, `search` (CLI may be gone). Three ways to install **this** project (`.` / path / `.whl`).
-8. [ ] After install: `import animals`; `animals.__path__` is **site-packages**. Uninstall **`zoo-example`** not `animals`. Why two names?
-9. [ ] Interview: distribution name vs import package vs console script. Map `zoo-example` / `animals` / `zoo`.
-10. [ ] Combined: write a minimal `setup.py` as in the notes; `bdist_wheel`; `pip install .`; run `zoo`; `__path__`; uninstall distribution name.
+1. [ ] **Memorize** `zoo-example` tree: code in `animals/`, root `README.md` + `setup.py`.
+2. [ ] **Learn:** setup script = centre of Distutils build/install. Recite `name`, `find_packages()`, console script, `install_requires`, version, author, MIT.
+3. [ ] **Memorize:** `"zoo = animals.zoo:main"` → command `zoo` runs `main()`. `$ zoo` → `Welcome to the zoo!`
+4. [ ] **Learn:** `find_packages()` = list of all packages in the directory.
+5. [ ] **Memorize commands:** `bdist_egg`, `bdist_wheel`, `--help-commands`, `--universal`, `sdist`. `pip install wheel` then `bdist_wheel`.
+6. [ ] **Memorize:** `dist/` distributives; `*.egg-info` four files; `zoo_example-0.1-py3-none-any.whl`.
+7. [ ] **Memorize pip:** install / `--upgrade` / `==` / `>=` / `-U pip` / `search`. Install `.` / path / `.whl`.
+8. [ ] **Write:** `pip install .`; `import animals`; `__path__` is site-packages. Uninstall **`zoo-example`**.
+9. [ ] **Learn:** distribution name vs import `animals` vs console `zoo`.
+10. [ ] **Memorize (cover):** `setup()` fields; four create-package commands; three install forms; uninstall `zoo-example`.

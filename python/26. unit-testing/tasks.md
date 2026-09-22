@@ -1,16 +1,14 @@
 # Tasks — Unit testing
 
-Tick each item when done. Predict before you run. Python has no labs — this file is the practice.
+Close `theory.md`. Recite FIRST and the prime bugs, then type `prime.py` as on the **slide** first.
 
-Close `theory.md`. Interview drill: predict `E`/`F`/`.` before you run. `test_prime.py` next to `prime.py`.
-
-1. [ ] Unit testing = individual **functions**. Recite FIRST (Fast ms, Isolated, Repeatable, Self-checking, Timely ~30%).
-2. [ ] Four rules: class `unittest.TestCase`; `def test_…` (no prefix → not a test); file starts with `test`; import the module.
-3. [ ] Recite `TestPrime`: `setUp`/`tearDown` **each** test; `assertFalse(4)` `assertTrue(13)` `assertEqual(9→11)`. `assertEqual` vs True/False.
-4. [ ] Type **slide** `prime.py` (`number/2`) and `test_prime.py`. `python test_prime.py` → **`EE`**, `TypeError` float. Do not skip.
-5. [ ] Change to `number//2`. **`F`** on 4 (`True is not false`). Why empty `range(2, 2)`? What is the **`11`** in `F11`?
-6. [ ] Change to `number//2 + 1` (`range` excludes stop). **`OK`**. Recite `E` vs `F` vs `.`.
-7. [ ] Mock: substitutes/imitates; control behavior; HTTP flakiness; simulate outages and success. Recite `@patch('requests.get')`.
-8. [ ] `get_mock.return_value.json.return_value`; `iid`→`num`, `web_url`→`link`; `side_effect` vs `return_value` (several values). `from mock import patch` vs `unittest.mock`.
-9. [ ] Write the patch test (no live GitLab). Assert `expected_res`.
-10. [ ] Combined: FIRST; four rules; `/` → `EE` → `//` → `F` → `+1` → `OK`; why mock HTTP ([requests](../24. requests/theory.md)); `setUp` before each.
+1. [ ] **Learn:** unit = **function**. **FIRST:** Fast (ms), Isolated, Repeatable, Self-checking, Timely (~30%).
+2. [ ] **Memorize four rules:** `TestCase`; `def test_…`; file starts with `test`; import the module. `setUp`/`tearDown` **each** test.
+3. [ ] **Write:** `TestPrime` — `assertFalse(4)` `assertTrue(13)` `assertEqual(9, 11)`.
+4. [ ] **Write slide `prime.py`** (`number/2`) + tests. **`EE`** TypeError float. Memorize `/` vs `range`.
+5. [ ] **Write:** `//` then **`F`** on 4 (empty `range(2,2)`). The `11` in `F11` is `print`. Then `//2 + 1` → **OK**.
+6. [ ] **Memorize:** `E` exception, `F` assert, `.` pass.
+7. [ ] **Learn:** mock substitutes the real object; HTTP mocks = predictable; no live GitLab.
+8. [ ] **Write:** `@patch('requests.get')`; `return_value.json.return_value`; `iid`→`num`. Recite `side_effect` vs `return_value`.
+9. [ ] **Memorize:** `assertEqual` expected result; True/False for booleans.
+10. [ ] **Memorize (cover):** FIRST; four rules; `EE`→`F`→`OK`; mock HTTP; `setUp` each test.

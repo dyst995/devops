@@ -1,16 +1,14 @@
 # Tasks — Flask
 
-Tick each item when done. Predict before you run. Python has no labs — this file is the practice.
+Close `theory.md`. Recite the 6 lines, then write `start.py`. venv.
 
-Close `theory.md`. Interview drill: recite the 6 lines. venv; `python -m pip`.
-
-1. [ ] Docs URL? Lightweight? Which [web-application](../22. web-application/theory.md) layer? How many lines in Hello world? File `start.py`?
-2. [ ] Recite the 6 lines from memory. `Flask` instance = **WSGI application**.
-3. [ ] Why `Flask(__name__)` (module/package name, shortcut, templates/static)?
-4. [ ] `@app.route('/')` — what does it tell Flask? `hello` return value? Default content type (HTML rendered in the browser)?
-5. [ ] Last line `app.run()`? Two shell commands? URL and port **5000**?
-6. [ ] Write `start.py` exactly. Install Flask. Open http://127.0.0.1:5000/ — `Hello, World!`.
-7. [ ] Second route (e.g. `/hi`) different text. Hit both URLs. Recite what `route()` is for.
-8. [ ] Return `<h1>Hello, World!</h1>` — browser **renders** HTML (default content type).
-9. [ ] Interview: this `app` is the WSGI app; production would sit behind Gunicorn/uWSGI + Nginx — one sentence.
-10. [ ] Combined: import → `Flask(__name__)` → decorator → return → `app.run()`; 127.0.0.1:5000; HTML default; WSGI layer.
+1. [ ] **Learn:** lightweight framework; docs flask.palletsprojects.com; framework layer. Hello world = **6 lines** in `start.py`.
+2. [ ] **Write from memory:** the 6 lines. Memorize: `Flask` instance = **WSGI app**.
+3. [ ] **Memorize:** `Flask(__name__)` — module/package name; templates and static files.
+4. [ ] **Memorize:** `@app.route('/')` binds URL. Return = browser body. Default content type **HTML**.
+5. [ ] **Memorize:** `app.run()`; `pip install flask`; `python start.py`; **http://127.0.0.1:5000/**
+6. [ ] **Write:** exact `start.py`. Open the URL — `Hello, World!`.
+7. [ ] **Write:** second route `/hi`. Recite what `route()` is for.
+8. [ ] **Write:** return `<h1>…</h1>` — browser **renders** HTML.
+9. [ ] **Learn:** this `app` is WSGI; production sits behind Gunicorn/uWSGI + Nginx.
+10. [ ] **Memorize (cover):** 6 lines; `__name__`; `route`; HTML default; 127.0.0.1:5000.

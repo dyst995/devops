@@ -1,16 +1,14 @@
 # Tasks — Nose + Coverage
 
-Tick each item when done. Predict before you run. Python has no labs — this file is the practice.
+Close `theory.md`. Recite every line, then run in a venv with `test_*.py`.
 
-Close `theory.md`. Interview drill: recite every flag. venv; need `test_*.py` and a package (course: `handlers/`).
-
-1. [ ] What does **nose** do vs **coverage**? Two `pip install` lines. Quality gate idea ([testing](../25. testing/theory.md))?
-2. [ ] Command to only run tests? How is that different from `python test_prime.py`?
-3. [ ] Recite `--with-coverage --cover-package=handlers/ --cover-erase`. What does erase do? Why `handlers/`?
-4. [ ] `--cover-min-percentage=90` — fail if under 90%. Gate: red means?
-5. [ ] `--cover-html` — report path **`cover/index.html`**.
-6. [ ] Recite the process: install → `nosetests` → coverage+package+erase → min 90 → html.
-7. [ ] Run `nosetests` on a small suite. Then the coverage line with **your** package name; still recite course `handlers/`.
-8. [ ] Add min 90. If it fails, explain the gate. Add html and open the index.
-9. [ ] Interview: coverage % is not the same as “tests passed.” One sentence. `nose` unmaintained — slide command still `nosetests`.
-10. [ ] Combined: four `nosetests` lines from memory; 90% gate; `cover/index.html`; [tox](../28. tox/theory.md) would run this in many envs.
+1. [ ] **Learn:** nose **runs** tests; coverage **measures** lines. Two `pip install`s.
+2. [ ] **Memorize:** `nosetests` — suite without naming each file.
+3. [ ] **Memorize:** `--with-coverage --cover-package=handlers/ --cover-erase`. Erase = clean previous data.
+4. [ ] **Memorize:** `--cover-min-percentage=90` — gate; under 90 fails.
+5. [ ] **Memorize:** `--cover-html` → **`cover/index.html`**.
+6. [ ] **Learn:** process install → run → measure → 90 → html. Same as quality gates.
+7. [ ] **Write:** run `nosetests`; then coverage line (your package name; still recite `handlers/`).
+8. [ ] **Write:** min 90; then html; open the index.
+9. [ ] **Learn:** tests passed ≠ coverage %. `nosetests` is the course runner.
+10. [ ] **Memorize (cover):** four `nosetests` lines; 90%; `cover/index.html`; `handlers/`.

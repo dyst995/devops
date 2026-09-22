@@ -1,16 +1,14 @@
 # Tasks — Sets
 
-Tick each item when done. Predict before you run. Python has no labs — this file is the practice.
+Close `theory.md`. `x = {1, 2, 3, 1, 2}` `y = {2, 4, 5}`. Recite ops, then run.
 
-Close `theory.md`. Interview drill: say the answer out loud first. `x = {1, 2, 3, 1, 2}` `y = {2, 4, 5}`.
-
-1. [ ] What is a set (order? dups?)? Two basic uses? Empty `{ }` vs `set()`?
-2. [ ] Print `x` after literals with two `1`s — uniqueness. Can you `x[0]`?
-3. [ ] Predict `x & y`, `x | y`, `x - y`, `x ^ y` and name the methods (`intersection` `union` `difference` `symmetric_difference`).
-4. [ ] Membership: `2 in x`. Convert `list(x)` — why might order differ from `{1,2,3}`?
-5. [ ] Recite `add(4)` (already in) vs `add(6)`. `pop()` — return and remaining; is the popped element guaranteed?
-6. [ ] `discard(4)` then `clear()` → exact empty print `set()`.
-7. [ ] `discard(5)` vs `remove(5)` on `{2,3,4}` — who raises `KeyError`?
-8. [ ] Interview: when do you use a set vs a list vs a dict? (membership, unique, no index / key-value)
-9. [ ] Write from memory: build two sets, print all four operators, `add`, silent `discard`, failing `remove`.
-10. [ ] Combined: dups dropped; unordered; `&` `{2}`; `^` xor; `remove` KeyError; empty is `set()` not `{}`.
+1. [ ] **Learn:** unordered, **no dups**. Uses: membership, unique. Empty is `set()` not `{}`.
+2. [ ] **Write:** print `x` — two `1`s become one. No `x[0]`.
+3. [ ] **Memorize:** `&` intersection `{2}`; `|` union; `-` only x `{1,3}`; `^` xor. Method names too.
+4. [ ] **Write:** `2 in x`. `list(x)` — order may vary.
+5. [ ] **Write:** `add(4)` (already in) vs `add(6)`. `pop()` arbitrary. `clear()` → `set()`.
+6. [ ] **Write:** `discard(5)` silent vs `remove(5)` **KeyError**.
+7. [ ] **Learn:** set vs list vs dict (membership / unique / no index vs key-value).
+8. [ ] **Write from memory:** two sets, four operators, add, discard, failing remove.
+9. [ ] **Memorize:** `&` and, `|` or, `-` only x, `^` one side.
+10. [ ] **Memorize (cover):** dups dropped; four ops; `remove` KeyError; empty `set()`.

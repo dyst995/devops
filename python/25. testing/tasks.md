@@ -1,16 +1,14 @@
 # Tasks — Testing
 
-Tick each item when done. Predict before you run. Python has no labs — this file is the practice.
+Close `theory.md`. Recite definitions. Draw the pyramid. No install.
 
-Close `theory.md`. Interview drill: definitions and diagrams. No install required.
-
-1. [ ] Script → maintainable app: digital companies; deliver **faster** without sacrificing **quality**. Recite **continuous delivery** (releasable to production **at any time**).
-2. [ ] Build pipeline automatically **tests** and **deploys** (test + prod). Four things to automate (build, tests, deployment, infrastructure). Why manual is impossible at scale?
-3. [ ] Traditional testing: deploy to test env; **black-box**; click UI; **test scripts** for consistent checking.
-4. [ ] Manual = time-consuming, repetitive, tedious. Repetitive → boring → **mistakes**. Remedy = **automation**.
-5. [ ] Automated tests vs click protocols. Large refactor **without** a suite (terrifying / click everything) vs **with** (seconds, coffee).
-6. [ ] **Quality gate**: checkpoint; red = do not proceed. Slide name for standard Python CI/CD?
-7. [ ] **Test pyramid**: many unit (fast) / fewer integration / few UI e2e (slow). What is an **inverted** pyramid?
-8. [ ] Code quality tools vs additional tools — automated gates besides “did the feature work”? Not a Friday manual pass.
-9. [ ] Draw the pyramid. Next to it: why “only click the UI” fails a large refactor.
-10. [ ] Combined: CD one sentence; four automate items; traditional vs automated; gate; pyramid; quality tools in the same pipeline. See [unit testing](../26. unit-testing/theory.md) for the base.
+1. [ ] **Learn:** deliver faster **without** losing quality. **CD** = releasable to production **at any time**. Pipeline tests + deploys.
+2. [ ] **Memorize four to automate:** build, tests, deployment, infrastructure.
+3. [ ] **Learn:** traditional testing — deploy, black-box UI clicks, test scripts for consistent checking.
+4. [ ] **Memorize:** manual = time-consuming, repetitive, tedious → boring → mistakes. Remedy = **automation**.
+5. [ ] **Learn:** automated suite vs click protocols. Large refactor: seconds + coffee vs click everything.
+6. [ ] **Memorize:** quality gate = checkpoint; red = stop. Slide: Quality gates.
+7. [ ] **Draw:** test pyramid — many unit / fewer integration / few UI. Inverted = only clicks.
+8. [ ] **Learn:** code quality tools + additional tools = more automated gates, not a Friday click-through.
+9. [ ] **Write (paper):** CD one sentence; four automate items; pyramid; gate.
+10. [ ] **Memorize (cover):** CD; four automate; traditional vs auto; gate; pyramid; unit tests = base ([unit testing](../26. unit-testing/theory.md)).

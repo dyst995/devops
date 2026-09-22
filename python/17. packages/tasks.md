@@ -1,16 +1,14 @@
 # Tasks — Packages
 
-Tick each item when done. Predict before you run. Python has no labs — this file is the practice.
+Close `theory.md`. Recite the tree, then create it next to where you start Python.
 
-Close `theory.md`. Interview drill: recite tree and imports from memory. Build next to where you start Python ([modules](../15. modules/theory.md) search order).
-
-1. [ ] Why packages (many modules, similar names)? What namespace do they structure? Dot notation?
-2. [ ] Packages vs modules for **collisions** (variables vs module names)? OS feature used?
-3. [ ] Recite the `animals` tree (both `__init__.py`, `handlers`, four `.py` files).
-4. [ ] Why `__init__.py` (course: required)? Package vs module in that tree?
-5. [ ] Recite all four imports. Which two use the subpackage `handlers`?
-6. [ ] Create the tree (empty `__init__.py` OK). `crocodile.py`, class `Monkey`, `swim.py`, `is_walking` in `walk.py`.
-7. [ ] Run all four course imports and use the names.
-8. [ ] Temporarily remove one `__init__.py` and try an import. Put it back. What did the course claim?
-9. [ ] Interview: `from animals.handlers.walk import is_walking` — map each dotted piece to a folder or file.
-10. [ ] Combined: draw tree from memory; four imports; prove nested `animals.handlers.walk` from a file **outside** `animals`.
+1. [ ] **Learn:** packages = hierarchical **module** namespace with **dots**. Avoid module-name collisions (modules avoid variable collisions).
+2. [ ] **Memorize** the `animals` tree: both `__init__.py`, `handlers/` (`walk` `swim`), `crocodile` `monkey`.
+3. [ ] **Learn:** `__init__.py` **required** (course) so the directory is a package. OS folders = the hierarchy.
+4. [ ] **Memorize four imports:** `from animals import crocodile`; `from animals.monkey import Monkey`; `from animals.handlers import swim`; `from animals.handlers.walk import is_walking`.
+5. [ ] **Write:** create the tree. Empty `__init__.py` OK. Names you can import.
+6. [ ] **Write:** run all four imports. Use `Monkey` and `is_walking`.
+7. [ ] **Learn:** map each dotted piece to folder or file.
+8. [ ] **Write:** remove one `__init__.py`, try import, put it back. Course claim: required.
+9. [ ] **Write:** from a file **outside** `animals`, only dotted imports.
+10. [ ] **Memorize (cover):** tree from memory; four imports; folder+`__init__.py`=package.
