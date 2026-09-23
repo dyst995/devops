@@ -32,7 +32,7 @@ echo hello  # this is ignored
 # a whole line of comment
 ```
 
-`#!` on the **first** line is the **sha-bang**, not a comment (see [script development](../script-development-and-invocation/theory.md)).
+`#!` on the **first** line is the **sha-bang**, not a comment (see [script development](../01. script-development-and-invocation/theory.md)).
 
 **Memory hook:** `#` = human only. Exception: `#!` first line.
 
