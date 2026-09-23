@@ -30,7 +30,7 @@ Close `theory.md`. Work in `/tmp/sh-tasks`.
 ## Script
 
 14. Write a script: shebang, a variable, `if` on an argument, a loop. Make it executable. Run with and without an argument.
-15. Run it so each command is printed as it executes (debug mode from the notes).
+15. Run it so each command is printed as it executes: once with `bash -x`, once with `set -x` / `set +x` around one block only.
 
 ## Scenario
 

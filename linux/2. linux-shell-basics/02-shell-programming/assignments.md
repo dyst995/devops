@@ -36,7 +36,7 @@ Close `commands.md`. Type and run. Do not put secrets in variables you will scre
 5. [ ] `env VAR=tmp` plus a tiny script that `echo`s `VAR`. After it exits, is `VAR` set in **your** shell? Course: your shell unchanged.
 6. [ ] Combine with startup files: `export EDITOR=nano` in this session, `env` to prove it, `unset EDITOR` when done. Do not leave a broken `EDITOR` if you already had one — restore or unset.
 
-## Debugging a script (`bash -x`)
+## Debugging a script (`bash -x`, `set -x`)
 
 ### Easy
 
@@ -52,3 +52,20 @@ Close `commands.md`. Type and run. Do not put secrets in variables you will scre
 
 5. [ ] Script that `echo`s `$PATH` and `$HOME`. `bash -x` it. Then `source` a line that changes `PATH` **in a nested shell only**, `bash -x` again, `exit`. Do not wreck this session’s `PATH`.
 6. [ ] A script “does nothing.” Add `bash -x` and decide: it never ran, it ran but `echo` was quoted wrong, or a command failed. Fix the script, not the kernel.
+
+## Trace from inside the script (`set -x`, `set +x`)
+
+### Easy
+
+1. [ ] Same two-`echo` script. Put `set -x` after the shebang. Run `./script.sh` **without** `bash -x` on the command line. Do you still get `+` lines?
+2. [ ] Run it once with `bash -x` (no `set -x` in the file) and once with only `set -x` in the file. Same kind of trace?
+
+### Medium
+
+3. [ ] `set -x` around one `echo` / `ls` only, then `set +x`. Confirm the lines **before** and **after** the pair are quiet.
+4. [ ] Under `set -x`, `VAR=hello` then `echo "$VAR"`. Read the `+` line — do you see `hello` after expansion?
+
+### Hard
+
+5. [ ] A script you must run as `./script.sh` (no editing the shebang invocation). Use **only** an in-file `set -x` / `set +x` pair around the suspect block. Fix whatever the trace shows, then remove or disable the pair.
+6. [ ] Broken: `set +x` **before** `set -x` so nothing is traced. Swap them, prove the middle is traced, then `set +x` again.

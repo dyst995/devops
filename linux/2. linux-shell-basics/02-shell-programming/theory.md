@@ -12,9 +12,38 @@ A **compiler** is the opposite idea: it turns a program into a machine-readable 
 
 - Syntax is **simple and straightforward**
 - Most **short** scripts work the first time
-- **Debugging** is straightforward (add `echo`, run the line by hand, `bash -x script.sh`)
+- **Debugging** is straightforward (add `echo`, run the line by hand, `bash -x` / `set -x`)
 
 Deeper syntax lives in a later Bash-scripting course. This page is the mental model: interpreted vs compiled, and **variables**.
+
+## Seeing each command: `bash -x` and `set -x`
+
+**xtrace** prints each command to **stderr** just before it runs, after expansions. The usual prefix is `+ ` (that is `PS4`). You see what the shell actually ran, not only what you typed in the file.
+
+**`bash -x script.sh`** turns xtrace **on for the whole run** without editing the file. Same idea: `bash -x ./script.sh` or `bash -x -c 'echo "$HOME"'`. The script can still have a shebang; you are launching Bash with `-x` yourself.
+
+**`set -x` inside the script** turns xtrace **on from that line**. Use it when you only want a section, or when the script is already running (`./script.sh`) and you do not want to remember `bash -x` on the command line.
+
+**`set +x`** turns xtrace **off** (the `-` / `+` pair: minus = option on, plus = option off). Wrap a block:
+
+```bash
+#!/bin/bash
+echo "quiet"
+set -x
+echo "this line is traced"
+ls "$HOME"
+set +x
+echo "quiet again"
+```
+
+| | `bash -x script.sh` | `set -x` in the file |
+| --- | --- | --- |
+| Job | Run this script **with** xtrace | Turn xtrace **on** from here |
+| Edit the file? | No | Yes (or type it at a prompt) |
+| Scope | Whole process | From `set -x` until `set +x` or the end |
+| Same option | `-x` on the Bash command line | `set -o xtrace` is the long name |
+
+The trace is not a substitute for `echo` of values you care about, but it shows failed lines and expanded arguments. Remove `set -x` (or leave `set +x`) before you treat the script as finished.
 
 ## Environment variables and shell variables
 

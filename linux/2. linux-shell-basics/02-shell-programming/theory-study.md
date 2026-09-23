@@ -4,7 +4,17 @@ The shell is also a **programming language**. The same commands you type go in a
 
 A **compiler** is the opposite: it turns a program into a machine-readable **executable** first. That binary can later be called *from* a script. The script itself is still text the shell reads at run time.
 
-People like short scripts because the syntax is simple, most short scripts work the first time, and debugging is straightforward (`echo`, run the line by hand, `bash -x script.sh`). Deeper syntax lives in a later Bash course. This page is the mental model: interpreted vs compiled, and **variables**.
+People like short scripts because the syntax is simple, most short scripts work the first time, and debugging is straightforward (`echo`, run the line by hand, `bash -x` / `set -x`). Deeper syntax lives in a later Bash course. This page is the mental model: interpreted vs compiled, and **variables**.
+
+## `bash -x` and `set -x`
+
+**xtrace** prints each command to **stderr** just before it runs, **after** expansions (prefix `+ `). You see the real command.
+
+- **`bash -x script.sh`** — xtrace for the **whole** run. Do not have to edit the file.
+- **`set -x`** inside the script (or at a prompt) — xtrace **from that line**.
+- **`set +x`** — turn it **off** (`-` = on, `+` = off). Wrap only the block you care about.
+
+`set -o xtrace` is the long name for `-x`. Take `set -x` out (or close with `set +x`) when you are done debugging.
 
 ## Environment vs shell variables
 

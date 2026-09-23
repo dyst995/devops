@@ -7,6 +7,7 @@ Cover the Answers section. Answer first, then check.
 3. Shell scripts are interpreted, not compiled. What does the shell do with each line? What does a compiler produce instead?
 4. Can a compiled executable still be used from a shell script?
 5. Three reasons the notes give for liking **short** shell scripts.
+5b. What does xtrace print, and where? `bash -x script.sh` vs `set -x` vs `set +x`?
 6. What is an environment variable, in simple words?
 7. Name three kinds of information environment variables often store.
 8. Write three valid assignments: a simple value, a value with spaces, and multiple values in one variable.
@@ -32,6 +33,7 @@ Cover the Answers section. Answer first, then check.
 3. It reads line by line and searches for each command on the system. A compiler converts a program into a machine-readable executable.
 4. Yes. The script can call that executable like any other command.
 5. Simple syntax; most short scripts work the first time; debugging is straightforward.
+5b. Each command, **after** expansions, to **stderr**, prefixed with `+ `. `bash -x script.sh` = whole run, no edit. `set -x` = on from that line in the file (or prompt). `set +x` = off. Long name: `set -o xtrace`.
 6. A named value (name + associated value) stored in the environment and used by apps and scripts in shells or subshells.
 7. Default editor or browser; path to executables; locale and keyboard layout (also any values your scripts read).
 8. `KEY=value` · `ANOTHER_KEY="Some other value"` · `KEY_MULTI=value1:value2`
