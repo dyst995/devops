@@ -24,7 +24,7 @@ Close `theory.md`. Prefer an SSH login plus a nested shell.
 
 ## Repeat the map
 
-12. Fill from memory: SSH / `su -` / desktop terminal icon — interactive? login? files?
+12. Fill from memory: SSH vs `bash --login` vs desktop terminal — interactive? login? files? Then: what is `su` for, and what does `su -` add?
 13. Predict: aliases only in the interactive file — does a pure login SSH see them **without** sourcing? PATH only in the login file — does a desktop terminal see it?
 
 ## Scenario
