@@ -11,6 +11,8 @@ const DOC_FILES = {
   "questions.md": "questions",
   "assignments.md": "assignments",
   "tasks.md": "tasks",
+  "hands-on-practice.md": "practice",
+  "recall.md": "recall",
 };
 const SKIP = new Set([".git", "website", "node_modules", "__pycache__", ".cursor"]);
 
@@ -163,6 +165,32 @@ export function buildCatalog() {
       }
     } catch {
       /* no track-level tasks */
+    }
+
+    const rootRecall = join(root, "recall.md");
+    try {
+      if (statSync(rootRecall).isFile()) {
+        const topic = {
+          id: "recall",
+          name: "Daily recall",
+          title: firstHeading(rootRecall) || `${trackId} daily recall`,
+          dir: `${trackId}/recall`,
+          files: {
+            recall: relative(REPO, rootRecall).split(sep).join("/"),
+          },
+          labs: [],
+        };
+        if (!modules.has("")) {
+          modules.set("", {
+            id: trackId,
+            name: "Topics",
+            topics: [],
+          });
+        }
+        modules.get("").topics.unshift(topic);
+      }
+    } catch {
+      /* no track-level recall */
     }
 
     tracks.push({

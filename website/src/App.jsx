@@ -241,9 +241,9 @@ function Page({
         <div className="md">
           <h1>Study pack</h1>
           <p>
-            Notes, commands, questions, assignments, tasks, and labs — parsed
-            from the repo. Checkboxes on assignments and tasks are saved in this
-            browser.
+            Notes, daily recall, commands, questions, assignments, tasks,
+            hands-on practice, and labs — parsed from the repo. Checkboxes on
+            recall, assignments, tasks, and hands-on are saved in this browser.
           </p>
         </div>
         <div className="home-grid">
@@ -349,7 +349,14 @@ function Page({
   return (
     <MarkdownView
       text={note.text}
-      storageKey={tab === "assignments" || tab === "tasks" ? note.path : null}
+      storageKey={
+        tab === "assignments" ||
+        tab === "tasks" ||
+        tab === "practice" ||
+        tab === "recall"
+          ? note.path
+          : null
+      }
     />
   );
 }

@@ -1,10 +1,12 @@
 export const TAB_META = [
   { id: "study", label: "Notes" },
+  { id: "recall", label: "Recall" },
   { id: "theory", label: "Original theory" },
   { id: "commands", label: "Commands" },
   { id: "questions", label: "Questions" },
   { id: "assignments", label: "Assignments" },
   { id: "tasks", label: "Tasks" },
+  { id: "practice", label: "Hands-on" },
   { id: "labs", label: "Labs" },
 ];
 
@@ -29,6 +31,7 @@ export function findTopic(catalog, dir) {
 
 export function defaultTab(topic) {
   if (topic.files.study) return "study";
+  if (topic.files.recall) return "recall";
   if (topic.files.theory) return "theory";
   if (topic.files.assignments) return "assignments";
   return Object.keys(topic.files)[0] || "labs";
