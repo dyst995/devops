@@ -44,7 +44,7 @@ function listDir(dir) {
 }
 
 function isTopicDir(dir) {
-  return listDir(dir).some((name) => name in DOC_FILES);
+  return listDir(dir).some((name) => name in DOC_FILES && name !== "recall.md");
 }
 
 function collectLabs(topicDir) {
@@ -167,30 +167,40 @@ export function buildCatalog() {
       /* no track-level tasks */
     }
 
+    const recallFiles = [];
     const rootRecall = join(root, "recall.md");
     try {
-      if (statSync(rootRecall).isFile()) {
-        const topic = {
-          id: "recall",
-          name: "Daily recall",
-          title: firstHeading(rootRecall) || `${trackId} daily recall`,
-          dir: `${trackId}/recall`,
-          files: {
-            recall: relative(REPO, rootRecall).split(sep).join("/"),
-          },
-          labs: [],
-        };
-        if (!modules.has("")) {
-          modules.set("", {
-            id: trackId,
-            name: "Topics",
-            topics: [],
-          });
-        }
-        modules.get("").topics.unshift(topic);
-      }
+      if (statSync(rootRecall).isFile()) recallFiles.push(rootRecall);
     } catch {
       /* no track-level recall */
+    }
+    for (const name of listDir(root)) {
+      const nested = join(root, name, "recall.md");
+      try {
+        if (statSync(nested).isFile()) recallFiles.push(nested);
+      } catch {
+        /* no nested recall */
+      }
+    }
+    for (const recallPath of recallFiles.reverse()) {
+      const rel = relative(REPO, recallPath).split(sep).join("/");
+      const parent = relative(root, join(recallPath, "..")).split(sep).join("/");
+      const topic = {
+        id: parent && parent !== "." ? `recall-${parent}` : "recall",
+        name: "Daily recall",
+        title: firstHeading(recallPath) || `${trackId} daily recall`,
+        dir: parent && parent !== "." ? `${trackId}/${parent}/recall` : `${trackId}/recall`,
+        files: { recall: rel },
+        labs: [],
+      };
+      if (!modules.has("")) {
+        modules.set("", {
+          id: trackId,
+          name: "Topics",
+          topics: [],
+        });
+      }
+      modules.get("").topics.unshift(topic);
     }
 
     tracks.push({
