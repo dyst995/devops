@@ -1,6 +1,6 @@
 # Linux recall — memorize this
 
-Everything from the Linux notes that you need in your head: the **rule**, then the **command**. One idea once. Review one module a day; Sunday do the whole file or the weak module.
+Everything from the Linux notes that you need in your head. For each command: a **plain English** line first, then a **compact recall** line (flags and rules only). One idea once. Review one module a day; Sunday do the whole file or the weak module.
 
 | Day | Module |
 | --- | --- |
@@ -213,14 +213,17 @@ set -x                     # xtrace on from here
 set +x                     # xtrace off
 ```
 
-**Editors** — `vi`/`vim` always there; `nano` easier. `$EDITOR` / `$VISUAL` for `visudo`, `crontab -e`, `git commit`.
+**Editors** — Terminal text editors. `vi`/`vim` are always there; `nano` is easier for quick edits. Set `$EDITOR` / `$VISUAL` so tools like `visudo`, `crontab -e`, and `git commit` open your preferred editor.  
+*Recall:* `vi`/`vim` always there; `nano` easier. `$EDITOR` / `$VISUAL` for `visudo`, `crontab -e`, `git commit`.
 
-**Vim** — Command (`Esc`): motions. Insert (`i` `a` `o` `O`): type. Last-line (`:`): `:w` `:q` `:wq`/`:x` `:q!`.  
-Motion: `h j k l` · `w`/`b` · `0`/`$` · `gg`/`G`. Edit: `x` `dd` `dw` `yy` `p`/`P` `u` `Ctrl-r`. Search: `/` `?` `n`/`N`.
+**Vim** — Modal editor: Command mode for motions and edits, Insert mode to type, last-line (`:`) for save/quit.  
+*Recall:* Command (`Esc`): motions. Insert (`i` `a` `o` `O`): type. Last-line (`:`): `:w` `:q` `:wq`/`:x` `:q!`. Motion: `h j k l` · `w`/`b` · `0`/`$` · `gg`/`G`. Edit: `x` `dd` `dw` `yy` `p`/`P` `u` `Ctrl-r`. Search: `/` `?` `n`/`N`.
 
-**nano** — `^K` cut · `^U` paste · `M-6` copy · `^O` save · `^X` quit · `^W` search.
+**nano** — Simple editor; shortcuts shown in the footer. Always available as a fallback when you do not want Vim.  
+*Recall:* `^K` cut · `^U` paste · `M-6` copy · `^O` save · `^X` quit · `^W` search.
 
-**`visudo`** — Only safe edit of `/etc/sudoers` (syntax check).
+**`visudo`** — The only safe way to edit `/etc/sudoers`: it checks syntax before saving, so a typo does not lock you out of sudo.  
+*Recall:* Only safe edit of `/etc/sudoers` (syntax check).
 
 ```bash
 export EDITOR=vim        # default for visudo, crontab -e, git commit
@@ -230,7 +233,8 @@ nano file                # modeless editor
 sudo visudo              # edit sudoers with syntax check
 ```
 
-**`man`** — Optional section. `-k` = `apropos`. `-f` = `whatis`.  
+**`man`** — Opens the manual page for a command or topic. Optional section number picks which page when names collide.  
+*Recall:* Optional section. `-k` = `apropos`. `-f` = `whatis`.  
 Sections: `1` user cmds · `2` syscalls · `3` library · `5` formats · `8` admin.  
 `info` = GNU hyperlinked; try `man` first.
 
@@ -242,23 +246,32 @@ man -f ls                # one-line whatis
 info cat                 # GNU info page
 ```
 
-**`ls`** — `-la` long+dots · `-lh` human · `-lt` newest · `-lSh` largest. `.` names hidden from plain `ls`.
+**`ls`** — Lists directory contents. Dotfiles are hidden unless you ask for them.  
+*Recall:* `-la` long+dots · `-lh` human · `-lt` newest · `-lSh` largest. `.` names hidden from plain `ls`.
 
-**`pwd` / `cd`** — Bare `cd` or `cd ~` → `$HOME`. `cd /` · `cd ..` · `cd -` previous (prints it). `$CDPATH` like `PATH` for `cd`; ignored if dest starts with `/`.
+**`pwd` / `cd`** — Print the current directory, or change into another one. Bare `cd` goes home.  
+*Recall:* Bare `cd` or `cd ~` → `$HOME`. `cd /` · `cd ..` · `cd -` previous (prints it). `$CDPATH` like `PATH` for `cd`; ignored if dest starts with `/`.
 
-**`touch`** — Create empty or update mtime. `-d` parsed time.
+**`touch`** — Creates an empty file if missing, or updates its modification time if it exists.  
+*Recall:* Create empty or update mtime. `-d` parsed time.
 
-**`mkdir`** — `-p` parents, no error if exist · `-m` mode. `mkdir -p dir/test{1..3}/empty`
+**`mkdir`** — Creates directories. Use `-p` so missing parents are created and “already exists” is not an error.  
+*Recall:* `-p` parents, no error if exist · `-m` mode. `mkdir -p dir/test{1..3}/empty`
 
-**`cp`** — `-r` dirs · `-p` preserve mode/owner/time · `-i` prompt.
+**`cp`** — Copies files or trees. Directories need `-r`.  
+*Recall:* `-r` dirs · `-p` preserve mode/owner/time · `-i` prompt.
 
-**`mv`** — Move/rename. `-i` · `--backup` · `-S` suffix (default `~`) · `-u` if source newer or dest missing.
+**`mv`** — Moves or renames. Destination can be a new name or another directory.  
+*Recall:* Move/rename. `-i` · `--backup` · `-S` suffix (default `~`) · `-u` if source newer or dest missing.
 
-**`cat`** — Show or concatenate. `rmdir` = empty dir only. `rm -r` trees · `-f` no prompt. `shred` = overwrite.
+**`cat`** — Prints file contents (or concatenates several files) to stdout.  
+*Recall:* Show or concatenate. `rmdir` = empty dir only. `rm -r` trees · `-f` no prompt. `shred` = overwrite.
 
-**Pagers** — `more` forward only. `less` both ways.
+**Pagers** — Tools that show long output one screen at a time.  
+*Recall:* `more` forward only. `less` both ways.
 
-**`head`/`tail`** — Default 10. `head -n K` · `head -n -K` drop last K. `tail -n K` · `tail -n +K` from line K. `tail -f` follow.
+**`head`/`tail`** — Show the start or end of a file. Default is 10 lines. `tail -f` keeps reading as the file grows.  
+*Recall:* Default 10. `head -n K` · `head -n -K` drop last K. `tail -n K` · `tail -n +K` from line K. `tail -f` follow.
 
 ```bash
 ls -la                               # long listing + hidden (dot) files
@@ -287,13 +300,17 @@ tail -n +20 file.txt                 # from line 20 to end
 tail -f /var/log/syslog              # follow as it grows
 ```
 
-**`find`** — Live tree. `-name` (quote globs) · `-user` · `-type f`/`d` · `-exec cmd {} \;` · also `-mtime` `-size` `-perm` `-maxdepth`.
+**`find`** — Walks the live filesystem tree and prints paths that match your tests. Quote globs so the shell does not expand them first.  
+*Recall:* Live tree. `-name` (quote globs) · `-user` · `-type f`/`d` · `-exec cmd {} \;` · also `-mtime` `-size` `-perm` `-maxdepth`.
 
-**`locate`** — DB `/var/lib/mlocate/mlocate.db`. Stale until `updatedb`.
+**`locate`** — Fast name search against a database, not a live walk. Results can be stale until you rebuild the DB.  
+*Recall:* DB `/var/lib/mlocate/mlocate.db`. Stale until `updatedb`.
 
-**`grep`** — `-r` recursive · `-i` case · `-n` line numbers.
+**`grep`** — Searches file contents (or stdin) for lines that match a pattern.  
+*Recall:* `-r` recursive · `-i` case · `-n` line numbers.
 
-**`xargs`** — Stdin → args. Default command `/bin/echo`. Default **one** invocation with all args. `-I {}` once per item · `-0` NUL (with `find -print0`) · `-P N` parallel (`0` = as many as possible).
+**`xargs`** — Reads words from stdin and appends them as arguments to a command. With no command, it runs `/bin/echo` (many lines become one echoed line). By default it runs the command **once** with **all** args; `-I {}` runs once per item instead.  
+*Recall:* Stdin → args. Default `/bin/echo`. One invocation with all args. `-I {}` once per item · `-0` NUL (with `find -print0`) · `-P N` parallel (`0` = as many as possible).
 
 ```bash
 find / -name hosts                                    # live tree: basename hosts
@@ -310,11 +327,14 @@ cat names.txt | xargs -I {} touch {}                  # one command per item
 cat urls.txt | xargs -P 4 -I {} curl -O {}            # up to 4 in parallel
 ```
 
-**`zip`** — `-r` recursive · `-p` store given relative paths.
+**`zip`** — Creates a ZIP archive. Use `-r` for directories.  
+*Recall:* `-r` recursive · `-p` store given relative paths.
 
-**`tar`** — `-c` create · `-x` extract · `-t` list · `-v` names · `-f` archive (**last** in the flag cluster) · `-z` gzip. `-` as archive = stdout/stdin.
+**`tar`** — Packs or unpacks a tape archive (often with gzip). Put `-f` and the archive name last in the flag cluster. `-` as the archive means stdout/stdin (useful for pipe copies).  
+*Recall:* `-c` create · `-x` extract · `-t` list · `-v` names · `-f` archive (**last** in the flag cluster) · `-z` gzip. `-` as archive = stdout/stdin.
 
-**`gzip`** — Default **replaces** with `.gz` (`-k` keep). `-c` stdout. `zcat` / `gunzip -c` print. `zgrep` search `.gz`.
+**`gzip`** — Compresses a file to `.gz`. By default it **replaces** the original (`-k` keeps it).  
+*Recall:* Default **replaces** with `.gz` (`-k` keep). `-c` stdout. `zcat` / `gunzip -c` print. `zgrep` search `.gz`.
 
 ```bash
 zip -rp archive.zip /path/to/               # ZIP a tree; keep relative paths
@@ -333,17 +353,20 @@ zgrep pattern foo.gz                        # grep inside gzip
 
 ## 3. Packages, services, cron
 
-**Package** — Archived software a manager can install.
+**Package** — Archived software a manager can install, upgrade, or remove with dependency handling.
 
-**Red Hat** — `*.rpm` · low `rpm` · high `yum` / `dnf`.  
-**Debian** — `*.deb` · low `dpkg` · high `apt` (`apt-get`, `apt-cache`).  
+**Red Hat** — Uses `*.rpm` packages. Low-level tool is `rpm`; high-level is `yum` / `dnf`.  
+**Debian** — Uses `*.deb` packages. Low-level tool is `dpkg`; high-level is `apt` (`apt-get`, `apt-cache`).  
 *yum is to rpm as apt is to dpkg.*
 
-**`apt-get`** — `update` lists · `upgrade` installed · `install` **name** not `.deb` · `remove` keep conf · `purge` drop conf · `check` broken deps.
+**`apt-get`** — High-level Debian package manager: refresh lists, install by name, upgrade, remove.  
+*Recall:* `update` lists · `upgrade` installed · `install` **name** not `.deb` · `remove` keep conf · `purge` drop conf · `check` broken deps.
 
-**`apt-cache`** — `search` · `show` · `showpkg` · `depends`.
+**`apt-cache`** — Queries the local package cache without changing the system.  
+*Recall:* `search` · `show` · `showpkg` · `depends`.
 
-**APT sources** — `/etc/apt/sources.list` + `/etc/apt/sources.list.d/*.list`. `deb` binaries / `deb-src` source.
+**APT sources** — Where apt looks for packages: `/etc/apt/sources.list` plus drop-ins in `/etc/apt/sources.list.d/`.  
+*Recall:* `deb` binaries / `deb-src` source.
 
 ```bash
 sudo apt-get update          # refresh package lists (does not upgrade)
@@ -358,8 +381,8 @@ apt-cache showpkg nginx      # general info for one package
 apt-cache depends nginx      # raw dependency list
 ```
 
-**`alternatives`** — One public name, many implementations (Debian: `update-alternatives`).  
-`--install link name path priority` · `--remove` · `--set` manual · `--auto` highest priority · `--display` · `--config` menu. `--slave` extra links that follow. Menu: `*` current, `+` auto choice.
+**`alternatives`** — Lets several programs share one public command name (Debian: `update-alternatives`). You pick which binary wins for e.g. `java`.  
+*Recall:* One public name, many implementations. `--install link name path priority` · `--remove` · `--set` manual · `--auto` highest priority · `--display` · `--config` menu. `--slave` extra links that follow. Menu: `*` current, `+` auto choice.
 
 ```bash
 alternatives --install /usr/bin/java java /usr/java/latest/bin/java 5  # register: link name path priority
@@ -370,21 +393,28 @@ alternatives --display java                                            # paths, 
 alternatives --remove java /usr/java/latest/bin/java                   # unregister that path
 ```
 
-**SysV** — `/etc/init.d/`: `start` `stop` `reload` `restart` `force-reload`. Wrapper: `service nginx start`.
+**SysV** — Older init: scripts in `/etc/init.d/` take `start`/`stop`/`reload`/`restart`. The `service` wrapper calls them.  
+*Recall:* `/etc/init.d/`: `start` `stop` `reload` `restart` `force-reload`. Wrapper: `service nginx start`.
 
-**systemd** — PID 1: services + journald, logind, networkd.
+**systemd** — Modern PID 1: manages services plus journald, logind, networkd, and more.
 
-**Unit locations** — `/usr/lib/systemd/system/` packages · `/run/systemd/system/` runtime · `/etc/systemd/system/` admin.
+**Unit locations** — Where unit files live, in priority order from package defaults to admin overrides.  
+*Recall:* `/usr/lib/systemd/system/` packages · `/run/systemd/system/` runtime · `/etc/systemd/system/` admin.
 
-**Unit types** — `.service` `.socket` `.device` `.mount` `.automount` `.swap` `.target` `.path` `.timer` `.snapshot` `.slice` `.scope`
+**Unit types** — File suffix tells systemd what kind of unit it is.  
+*Recall:* `.service` `.socket` `.device` `.mount` `.automount` `.swap` `.target` `.path` `.timer` `.snapshot` `.slice` `.scope`
 
-**`[Unit]`** — `Description` · `Requires` hard · `Wants` soft · `BindsTo` · `PartOf` · `Conflicts` · `Before`/`After`
+**`[Unit]`** — Metadata and dependencies for any unit.  
+*Recall:* `Description` · `Requires` hard · `Wants` soft · `BindsTo` · `PartOf` · `Conflicts` · `Before`/`After`
 
-**`[Service]`** — `Type=` · `ExecStart=` · `ExecStop=` · `User=` · `PIDFile=`
+**`[Service]`** — How to start and stop a service process.  
+*Recall:* `Type=` · `ExecStart=` · `ExecStop=` · `User=` · `PIDFile=`
 
-**`[Install]`** — `WantedBy=` for `enable` (usually `multi-user.target`).
+**`[Install]`** — What `systemctl enable` hooks into so the unit starts at boot.  
+*Recall:* `WantedBy=` for `enable` (usually `multi-user.target`).
 
-**`systemctl`** — `start`/`stop`/`restart`/`reload` **now** · `enable`/`disable` **boot** · `daemon-reload` after unit edits.
+**`systemctl`** — Control systemd units right now, or at boot. After editing a unit file, run `daemon-reload`.  
+*Recall:* `start`/`stop`/`restart`/`reload` **now** · `enable`/`disable` **boot** · `daemon-reload` after unit edits.
 
 ```bash
 /etc/init.d/nginx start          # SysV script: start now
@@ -400,9 +430,11 @@ systemctl disable name.service   # do not start at boot
 systemctl daemon-reload          # after you edit a unit file
 ```
 
-**cron** — Matches jobs **each minute**. User tables: RH `/var/spool/cron/` · Debian `/var/spool/cron/crontabs/`. Also `/etc/crontab`, `/etc/cron.d/` (extra **username** field), `/etc/anacrontab` (catch-up if powered off), `/etc/cron.{hourly,daily,weekly,monthly}/`. Mail to owner or `MAILTO`. Edit: `crontab -e` (`-u user`).
+**cron** — Scheduler that checks job tables every minute and runs matching lines. Mail goes to the owner (or `MAILTO`). Edit with `crontab -e`.  
+*Recall:* User tables: RH `/var/spool/cron/` · Debian `/var/spool/cron/crontabs/`. Also `/etc/crontab`, `/etc/cron.d/` (extra **username** field), `/etc/anacrontab` (catch-up if powered off), `/etc/cron.{hourly,daily,weekly,monthly}/`.
 
-**Crontab fields** — min 0–59 · hour 0–23 · dom 1–31 · month 1–12 or `jan` · dow 0–7 (`0`/`7`=Sun). `*` all · `5,17` list · `*/10` step. Grain = 1 minute (`sleep 30` for sub-minute).
+**Crontab fields** — Five time fields, then the command. Smallest grain is one minute (use `sleep` for sub-minute).  
+*Recall:* min 0–59 · hour 0–23 · dom 1–31 · month 1–12 or `jan` · dow 0–7 (`0`/`7`=Sun). `*` all · `5,17` list · `*/10` step.
 
 ```bash
 crontab -e               # edit this user’s crontab
@@ -420,18 +452,23 @@ crontab -u username -e   # edit someone else’s (needs privilege)
 
 **Account** — Name + **UID**. Kernel uses the number. UID 0 = root. People often ≥1000 (older RH ≥500).
 
-**`/etc/passwd`** — `name:password:UID:GID:GECOS:home:shell`. Password `x` → hash in `/etc/shadow`. GID = **primary**. `/usr/sbin/nologin` or `/bin/false` = no login. Root home often `/root`.
+**`/etc/passwd`** — Public account database: one line per user. The password field is usually `x` (real hash lives in shadow).  
+*Recall:* `name:password:UID:GID:GECOS:home:shell`. GID = **primary**. `/usr/sbin/nologin` or `/bin/false` = no login. Root home often `/root`.
 
-**`/etc/shadow`** — Root-only: hash, lock (`*`/`!`), aging, expiry. Expiry is **not** in passwd.  
-`chage -l user` · `usermod -e YYYY-MM-DD`
+**`/etc/shadow`** — Root-only file with password hashes, lock flags, aging, and account expiry. Expiry is **not** in passwd.  
+*Recall:* Root-only: hash, lock (`*`/`!`), aging, expiry. `chage -l user` · `usermod -e YYYY-MM-DD`
 
-**`/etc/group`** — `name:password:GID:user1,user2`. GID 0 = root group. Comma list = **supplementary** only. Primary GID from passwd may **not** appear on the group line. Hash (rare) in `/etc/gshadow`.
+**`/etc/group`** — Group database. The comma list is **supplementary** members only; a user’s primary GID may not appear on their group’s line.  
+*Recall:* `name:password:GID:user1,user2`. GID 0 = root group. Hash (rare) in `/etc/gshadow`.
 
-**`su`** — Become that user; **their** password (root can su down without it). `su -` = login env.
+**`su`** — Switch to another user (needs **their** password, unless you are already root). `su -` loads that user’s login environment.  
+*Recall:* Become that user; **their** password (root can su down without it). `su -` = login env.
 
-**`sudo`** — Run as other (usually root); **your** password if sudoers allows. `sudo su` = root shell without root’s password.
+**`sudo`** — Run a command as another user (usually root) using **your** password, if sudoers allows it. `sudo su` gives a root shell without knowing root’s password.  
+*Recall:* Run as other (usually root); **your** password if sudoers allows. `sudo su` = root shell without root’s password.
 
-**`usermod -aG`** — **append** extras. `-G` alone **replaces** them.
+**`usermod -aG`** — Add a user to extra groups without wiping the existing list. Plain `-G` replaces the whole supplementary set.  
+*Recall:* **append** extras. `-G` alone **replaces** them.
 
 ```bash
 cat /etc/passwd                              # users: name:x:UID:GID:comment:home:shell
@@ -463,15 +500,17 @@ groupmod -n newname oldname                  # rename group (GID unchanged)
 gpasswd -a user group                        # add supplementary member
 ```
 
-**DAC** — Owner / group / other × `r w x`. `ls -l` type: `-` file `d` dir `l` symlink.  
-File: r read, w write, x execute. Dir: r list, x enter (`cd`), w create/delete (**needs x**).
+**DAC** — Discretionary access control: each file has an owner, a group, and permissions for owner / group / other.  
+*Recall:* Owner / group / other × `r w x`. `ls -l` type: `-` file `d` dir `l` symlink. File: r read, w write, x execute. Dir: r list, x enter (`cd`), w create/delete (**needs x**).
 
-**Octal** — r=4 w=2 x=1. `755` `644` `700`. Symbolic: `u/g/o/a` `+-=`.
+**Octal** — Compact way to write rwx bits: r=4, w=2, x=1, add them per class.  
+*Recall:* r=4 w=2 x=1. `755` `644` `700`. Symbolic: `u/g/o/a` `+-=`.
 
-**SUID / SGID / sticky** — Extra digit: **4** SUID (`s` on owner x — run as **file owner**; ignored on scripts) · **2** SGID (`s` on group x; dirs: new files inherit dir group) · **1** sticky (`t` on other x — `/tmp`: delete only own files).  
-`chmod 4755` · `2555` · `1777` / `chmod +t`
+**SUID / SGID / sticky** — Special bits beyond normal rwx. SUID runs a binary as the file owner; SGID on a dir makes new files inherit the dir’s group; sticky on `/tmp` means you can only delete your own files.  
+*Recall:* Extra digit: **4** SUID (`s` on owner x — run as **file owner**; ignored on scripts) · **2** SGID (`s` on group x; dirs: new files inherit dir group) · **1** sticky (`t` on other x — `/tmp`: delete only own files). `chmod 4755` · `2555` · `1777` / `chmod +t`
 
-**ext attributes** — `lsattr` · `chattr +i` immutable · `+A` no atime · `+a` append-only · `+s` zero on delete (if FS honors).
+**ext attributes** — Extra flags on ext filesystems beyond chmod (immutable, append-only, etc.).  
+*Recall:* `lsattr` · `chattr +i` immutable · `+A` no atime · `+a` append-only · `+s` zero on delete (if FS honors).
 
 ```bash
 ls -l                  # type + rwx for owner/group/other, owner, group
@@ -512,15 +551,20 @@ semanage boolean -l              # catalog of on/off policy switches
 
 ## 5. Network and remote access
 
-**Interface** — `eth0` / `ens9` / `lo`. Runtime `ip` or legacy `ifconfig`. Reboot loses runtime adds. Several IPs per NIC OK.
+**Interface** — A network card name (`eth0`, `ens9`, loopback `lo`). Runtime changes with `ip`/`ifconfig` are lost on reboot unless you persist them. One NIC can hold several IPs.  
+*Recall:* `eth0` / `ens9` / `lo`. Runtime `ip` or legacy `ifconfig`. Reboot loses runtime adds.
 
-**CIDR** — `/24` = `255.255.255.0`
+**CIDR** — Compact address + netmask, e.g. `/24` means `255.255.255.0`.  
+*Recall:* `/24` = `255.255.255.0`
 
-**Routes** — `ip route add … via …`. Default: `default via … metric …` (lower metric wins). RH: put `GATEWAY=` on the NIC `ifcfg-*` file.
+**Routes** — How the kernel decides where to send packets. Default route is the gateway for “everything else”; lower metric wins when several defaults exist.  
+*Recall:* `ip route add … via …`. Default: `default via … metric …`. RH: put `GATEWAY=` on the NIC `ifcfg-*` file.
 
-**Persist** — RH: `/etc/sysconfig/network-scripts/ifcfg-ethX` (`DEVICE` `IPADDR` `GATEWAY` `ONBOOT` `BOOTPROTO`) · `/etc/sysconfig/network`. Debian: `/etc/network/interfaces` · `/etc/hostname`. Both: `/etc/resolv.conf`.
+**Persist** — Config files so addresses, hostname, and DNS survive reboot.  
+*Recall:* RH: `/etc/sysconfig/network-scripts/ifcfg-ethX` (`DEVICE` `IPADDR` `GATEWAY` `ONBOOT` `BOOTPROTO`) · `/etc/sysconfig/network`. Debian: `/etc/network/interfaces` · `/etc/hostname`. Both: `/etc/resolv.conf`.
 
-**NSS** — `/etc/nsswitch.conf` order (`files` `dns` `nis` `ldap` `db`).
+**NSS** — Name Service Switch: the order in which the system looks up users, hosts, etc. (`files`, then `dns`, …).  
+*Recall:* `/etc/nsswitch.conf` order (`files` `dns` `nis` `ldap` `db`).
 
 ```bash
 ifconfig                                              # interfaces that are up
@@ -536,13 +580,18 @@ cat /etc/resolv.conf                                  # DNS nameservers
 cat /etc/nsswitch.conf                                # search order: files / dns / …
 ```
 
-**Reachability** — `ping` ICMP · `traceroute` · `tracepath` (often no root).
+**Reachability** — Check whether a host answers and what path packets take.  
+*Recall:* `ping` ICMP · `traceroute` · `tracepath` (often no root).
 
-**DNS** — `host` · `dig` (`-x` PTR) · `nslookup`. Non-authoritative = cache. Reverse: `in-addr.arpa`.
+**DNS** — Resolve names to addresses (and the reverse). Non-authoritative answers often came from a cache.  
+*Recall:* `host` · `dig` (`-x` PTR) · `nslookup`. Reverse: `in-addr.arpa`.
 
-**Sockets** — `netstat -ant` / `-nlpt` (listen, numeric, PID). Modern: `ss`.
+**Sockets** — See open/listening network connections and which process owns them. Prefer modern `ss` over `netstat`.  
+*Recall:* `netstat -ant` / `-nlpt` (listen, numeric, PID). Modern: `ss`.
 
-**`whois`** — Registration. **`tcpdump`** — Capture; `host` `port` `src` `dst` `and`/`or`; `-w file`.
+**`whois`** — Looks up domain/IP registration (registrar record), not DNS A records.  
+**`tcpdump`** — Captures packets on an interface; filter with `host`/`port`/`src`/`dst` and write with `-w`.  
+*Recall:* whois = registration. tcpdump = capture; `host` `port` `src` `dst` `and`/`or`; `-w file`.
 
 ```bash
 ping -c 5 host                                       # ICMP; stop after 5
@@ -560,11 +609,14 @@ tcpdump port 80 -w capture_file                      # port 80; write pcap
 tcpdump 'src 10.0.2.4 and (dst port 3389 or 22)'     # filter: from IP and RDP or SSH
 ```
 
-**firewalld** — Zones. **Runtime** vs `--permanent` then `--reload`. Programs **netfilter**. Does not flush the whole table each change. Admin XML `/etc/firewalld/` overrides `/usr/lib/firewalld/`.
+**firewalld** — Zone-based firewall front-end for netfilter. Runtime changes are immediate; permanent ones need `--permanent` then `--reload`.  
+*Recall:* Zones. **Runtime** vs `--permanent` then `--reload`. Programs **netfilter**. Admin XML `/etc/firewalld/` overrides `/usr/lib/firewalld/`.
 
-**Zones** — `drop` silent · `block` ICMP reject · `public` untrusted, few services (often SSH, default) · `external` WAN+NAT · `internal` LAN of gateway · `dmz` isolated public hosts · `work`/`home` more trusted · `trusted` almost open.
+**Zones** — Trust levels for traffic. Default is often `public` (SSH allowed, little else).  
+*Recall:* `drop` silent · `block` ICMP reject · `public` untrusted, few services (often SSH, default) · `external` WAN+NAT · `internal` LAN of gateway · `dmz` isolated public hosts · `work`/`home` more trusted · `trusted` almost open.
 
-**firewall-cmd** — Named services. `--panic-on` drop all (can lock SSH). Forward-port needs masquerade.
+**firewall-cmd** — CLI for firewalld: allow named services/ports, NAT, port forwards. Panic mode drops everything (can lock you out of SSH).  
+*Recall:* Named services. `--panic-on` drop all (can lock SSH). Forward-port needs masquerade.
 
 ```bash
 firewall-cmd --get-services                                           # named services you can allow
@@ -579,16 +631,20 @@ firewall-cmd --zone=external --add-forward-port=port=22:proto=tcp:toport=3753  #
 
 **Console vs remote** — Console for recovery. Telnet = cleartext. SSH = encrypted shell/files/forwarding. WinSCP = Windows SFTP/SCP GUI. X11 = one app window; VNC = whole desktop.
 
-**SSH keys** — `ssh-keygen -t rsa` → `~/.ssh/id_rsa` (**600**) + `id_rsa.pub` → remote `authorized_keys`.  
-Client: `-i` key · `-l` user · `-p` port · `-t` force tty · `-v` debug · `-N` no remote command.
+**SSH keys** — Passwordless (or stronger) login: generate a key pair locally, put the public key in the remote `authorized_keys`. Private key must be mode `600`.  
+*Recall:* `ssh-keygen -t rsa` → `~/.ssh/id_rsa` (**600**) + `id_rsa.pub` → remote `authorized_keys`. Client: `-i` key · `-l` user · `-p` port · `-t` force tty · `-v` debug · `-N` no remote command.
 
-**`sshd_config`** — `PermitRootLogin` off by default. Restart `sshd`; keep a console. Prefer user + sudo.
+**`sshd_config`** — Server-side SSH settings. Prefer disabling root login and using a normal user + sudo. Keep a console open when you restart `sshd`.  
+*Recall:* `PermitRootLogin` off by default. Restart `sshd`; keep a console. Prefer user + sudo.
 
-**`scp`** — Remote `host:path`. Port is **`-P`** (ssh is `-p`).
+**`scp`** — Copy files over SSH. Remote path is `host:path`. Port flag is **`-P`** (capital); plain `ssh` uses `-p`.  
+*Recall:* Remote `host:path`. Port is **`-P`** (ssh is `-p`).
 
-**Bastion** — `ProxyCommand ssh -W %h:%p jump@bastion`. `~/.ssh/config`: `Host` `HostName` `User` `Port` `IdentityFile`.
+**Bastion** — Jump host: reach an inner machine by SSHing through a bastion first.  
+*Recall:* `ProxyCommand ssh -W %h:%p jump@bastion`. `~/.ssh/config`: `Host` `HostName` `User` `Port` `IdentityFile`.
 
-**SFTP** — Files over SSH (22). FTP unencrypted. Jail: `Match User` · `ForceCommand internal-sftp` · `ChrootDirectory` · no tunnel/forward/X11.
+**SFTP** — Interactive file transfer over SSH (port 22). Unlike FTP, it is encrypted. Jails use `Match User` + `ForceCommand internal-sftp` + `ChrootDirectory`.  
+*Recall:* Files over SSH (22). FTP unencrypted. Jail: `Match User` · `ForceCommand internal-sftp` · `ChrootDirectory` · no tunnel/forward/X11.
 
 ```bash
 ssh-keygen -t rsa                          # create id_rsa + id_rsa.pub
@@ -610,11 +666,14 @@ systemctl restart sshd                     # apply sshd_config
 
 **Process / PID** — Running program; address it by PID.
 
-**`top`** — Live. `q` quit · `P` CPU · `M` mem · `k` kill.
+**`top`** — Live, updating process list. Sort and kill from inside the UI.  
+*Recall:* Live. `q` quit · `P` CPU · `M` mem · `k` kill.
 
-**`ps aux`** — Snapshot: `a` all users · `u` user columns · `x` no TTY (daemons).
+**`ps aux`** — One-shot snapshot of processes (all users, with user columns, including daemons with no TTY).  
+*Recall:* Snapshot: `a` all users · `u` user columns · `x` no TTY (daemons).
 
-**Signals** — `kill PID` = SIGTERM **15** (clean). `kill -9` / `-KILL` = SIGKILL, no catch. Only root kills others’ processes. `killall name` = every match.
+**Signals** — How you ask a process to exit. Default `kill` is polite; `-9` is force and cannot be caught.  
+*Recall:* `kill PID` = SIGTERM **15** (clean). `kill -9` / `-KILL` = SIGKILL, no catch. Only root kills others’ processes. `killall name` = every match.
 
 ```bash
 top              # live process list; q quit, P CPU, M mem, k kill
@@ -625,11 +684,14 @@ killall top      # SIGTERM every process named top
 killall -9 top   # SIGKILL by name
 ```
 
-**`lscpu`** — Logical `CPU(s)` ≈ sockets × cores × threads. `Thread(s) per core` 2 = SMT.
+**`lscpu`** — Shows CPU topology: sockets, cores, threads, NUMA.  
+*Recall:* Logical `CPU(s)` ≈ sockets × cores × threads. `Thread(s) per core` 2 = SMT.
 
-**`mpstat` / `sar`** — Per-CPU %. No interval = **since boot**. `-P ALL` every CPU + `all`. `sar` history `/var/log/sa/`.
+**`mpstat` / `sar`** — Per-CPU utilization. With no interval, numbers are **since boot**. `sar` can also read history under `/var/log/sa/`.  
+*Recall:* Per-CPU %. No interval = **since boot**. `-P ALL` every CPU + `all`. `sar` history `/var/log/sa/`.
 
-**CPU %** — `%usr` user · `%nice` niced · `%sys` kernel · `%iowait` idle waiting I/O (storage, not “need CPU”) · `%irq`/`%soft` · `%steal` hypervisor · `%guest` KVM · `%idle`.
+**CPU %** — What each percentage column means in mpstat/sar/top.  
+*Recall:* `%usr` user · `%nice` niced · `%sys` kernel · `%iowait` idle waiting I/O (storage, not “need CPU”) · `%irq`/`%soft` · `%steal` hypervisor · `%guest` KVM · `%idle`.
 
 ```bash
 lscpu                 # sockets, cores, threads, NUMA
@@ -638,9 +700,11 @@ mpstat -P ALL 1 5     # every 1s, 5 samples
 sar -P ALL 1 1        # per-CPU; interval 1s, 1 sample
 ```
 
-**`free -h`** — Trust **`available`**. `buff/cache` is reclaimable. Low `free` + high cache is normal. Worry: tiny available + swap climbing.
+**`free -h`** — Shows RAM and swap usage in human sizes. Trust **`available`**, not the tiny `free` column when cache is high.  
+*Recall:* Trust **`available`**. `buff/cache` is reclaimable. Low `free` + high cache is normal. Worry: tiny available + swap climbing.
 
-**`vmstat`** — `r` CPU queue · `b` I/O block · `si`/`so` swap (sustained `so` = RAM pressure) · `bi`/`bo` disk · CPU `us sy id wa st`. First line often since-boot if you pass an interval.
+**`vmstat`** — Snapshot of run queue, blocked I/O, swap in/out, disk, and CPU. Sustained swap-out (`so`) means RAM pressure.  
+*Recall:* `r` CPU queue · `b` I/O block · `si`/`so` swap (sustained `so` = RAM pressure) · `bi`/`bo` disk · CPU `us sy id wa st`. First line often since-boot if you pass an interval.
 
 ```bash
 free -h          # RAM/swap; trust available
@@ -650,15 +714,19 @@ vmstat -s        # summary counters
 vmstat -f        # forks since boot
 ```
 
-**`df -h`** — Space **per mount**. Does not say **which directory**.
+**`df -h`** — Free space **per mounted filesystem**. It does not tell you which directory inside the mount is large.  
+*Recall:* Space **per mount**. Does not say **which directory**.
 
-**`du -sh`** — Usage inside a tree. Drill `/*` then `/var/*`.
+**`du -sh`** — How much space a path (and its children) use. Drill down: `/` → `/var` → `/var/log`, etc.  
+*Recall:* Usage inside a tree. Drill `/*` then `/var/*`.
 
-**Deleted but still open** — Space not freed until close → `lsof`.
+**Deleted but still open** — Deleting a file does not free space until every process closes it. Find the culprit with `lsof`.
 
-**`lsof`** — Open files. Path · `-c cmd` · `-i` network.
+**`lsof`** — Lists open files (and network sockets). Filter by path, command name, or `-i` for network.  
+*Recall:* Open files. Path · `-c cmd` · `-i` network.
 
-**`iostat`** — Device I/O (`sysstat`). No interval = since boot. `dm-0` = mapper/LVM.
+**`iostat`** — Device I/O stats (from `sysstat`). No interval = since boot. `dm-0` is usually LVM/mapper.  
+*Recall:* Device I/O (`sysstat`). No interval = since boot. `dm-0` = mapper/LVM.
 
 ```bash
 df -h               # space per mount (not which directory)
@@ -673,13 +741,16 @@ iostat -d           # device I/O only
 iostat -d 1 5       # devices every 1s, 5 samples
 ```
 
-**Three log planes** — Kernel ring **`dmesg`** · systemd **journal** · text **`/var/log`**.
+**Three log planes** — Kernel ring buffer (`dmesg`), systemd journal (`journalctl`), and classic text files under `/var/log`.
 
-**`dmesg`** — Kernel buffer (boot, drivers, OOM). **Not** `/var/log/messages`. Fixed size, old lines drop. `-T` wall clock.
+**`dmesg`** — Kernel ring buffer: boot messages, drivers, OOM. Fixed size; old lines drop. This is **not** the same as `/var/log/messages`.  
+*Recall:* Kernel buffer (boot, drivers, OOM). **Not** `/var/log/messages`. Fixed size, old lines drop. `-T` wall clock.
 
-**`journalctl`** — Not `tail`able; use `journalctl -f`. `-u` unit · `-p err` · `-b` this boot · `-b -1` previous · `-x` explain · `-t` ident · `--since` / `--until`.
+**`journalctl`** — Query the systemd journal. You cannot `tail` the journal file; use `journalctl -f` to follow.  
+*Recall:* Not `tail`able; use `journalctl -f`. `-u` unit · `-p err` · `-b` this boot · `-b -1` previous · `-x` explain · `-t` ident · `--since` / `--until`.
 
-**Text logs** — RH `messages` + `secure` · Debian `syslog` + `auth.log` · `cron` · `maillog`/`mail.log` · `/var/log/sa/` (`sar`).
+**Text logs** — Distro text logs under `/var/log` for syslog, auth, cron, mail, and `sar` history.  
+*Recall:* RH `messages` + `secure` · Debian `syslog` + `auth.log` · `cron` · `maillog`/`mail.log` · `/var/log/sa/` (`sar`).
 
 ```bash
 dmesg -T                           # kernel ring buffer, wall-clock time
