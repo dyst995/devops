@@ -1,31 +1,41 @@
 # Tasks — Exit codes
 
-Close `theory.md`. After each command, record the status of **that** command before you run another.
+Close `theory.md`. Work in `/tmp/exit-codes-tasks` when creating scripts. After each command, record the status of **that** command before you run another. Put `exit` only **inside scripts** — never type bare `exit` in your interactive shell to “try” a status.
 
 ## Warm-up
 
 1. What integer range can a status use? What means success?
 2. Run `true` and `false` (or `:` and a failing `ls` of a missing path). Report both statuses.
 3. Recite 1, 2, 126, 127, 128, 128+n, 130, 255 from memory. Check the table after.
+4. Recite the memory hook: 126 = found it, **cannot run** it. 127 = **never found** it. 128+n = killed by signal n. Ctrl-C = SIGINT = signal 2 → ?
 
-## Produce the numbers (find this)
+## Produce the table numbers
 
-4. Cause a catchall / illegal operation like the notes’ divide-by-zero `let`. Report the status.
-5. Run a name that does not exist (typo). Report the status. Which table row? `$PATH` or typo?
-6. Try to execute something that exists but is not an executable (the notes use `/dev/null`). Report the status. How is this different from task 5?
-7. In a script, `exit` with a **fraction** like the notes. What status do you get? Why is that invalid?
-8. In a script, `exit -1`. What status? Range rule?
+5. Cause a catchall / illegal operation like the notes’ divide-by-zero `let "var1 = 1/0"`. Report the status. Which table row?
+6. Run a name that does not exist (typo like `Illegal_command`). Report the status. `$PATH` or typo?
+7. Try to execute something that exists but is not an executable (the notes use `/dev/null`). Report the status. How is this different from task 6?
+8. In a **script** under `/tmp/exit-codes-tasks`, call `exit 3.14159`. What status does the script leave? Why is that invalid? (Run the script; do not `exit` the interactive shell.)
+9. In a script, `exit -1`. What status? Range rule?
+10. In a script, `exit 0` then prove a later line never runs. In another script, omit `exit` and end with a failing command — what is the script’s status?
 
-## Predict 128+n
+## 126 vs 127 drills
 
-9. Signal 9 → status? Signal 2 (Ctrl-C) → status? Write 128+n before you try.
-10. Start `sleep 30`, interrupt it with Control-C, report status. Match the table.
+11. `chmod -x` a tiny script you own under `/tmp/exit-codes-tasks`, run it with `./`. Report status. Which table row?
+12. Restore execute and rename the invocation to a typo path. Two statuses from 11–12; two meanings in one sentence each.
+13. Create an empty file `not-a-binary`, leave it non-executable, try `./not-a-binary`. Status? Same family as `/dev/null`?
 
-## Repeat 126 vs 127
+## 128+n / signals
 
-11. `chmod -x` a tiny script you own, run it with `./`. Then restore execute and rename the invocation to a typo. Two statuses; two meanings.
+14. Signal 9 → status? Signal 2 (Ctrl-C) → status? Write **128+n** before you try.
+15. Start `sleep 30`, interrupt it with Control-C, report status. Match the table (130).
+16. Write a script that `sleep 60`s. In another terminal (or background + `kill`), send `kill -9` to that script’s PID. What status should the parent see (137)? Confirm with `wait` / foreground run as the notes allow.
+
+## `$?` timing
+
+17. Run a failing command, then **immediately** `echo $?`. Then run `echo $?` again without another failure — what happened to the second `$?`?
+18. Pipeline or compound: run `false; echo $?` vs `false && echo $?`. Explain which status you see and why order matters.
 
 ## Scenario
 
-12. A junior says “it failed with 127 so it is not executable.” Correct them using the table. What number would “not executable” be?
-13. A pipeline was killed with signal 9. They report status 9. What should `$?` actually show, and why?
+19. A junior says “it failed with 127 so it is not executable.” Correct them using the table. What number would “not executable” be? Demonstrate both mistakes under `/tmp/exit-codes-tasks`.
+20. A pipeline was killed with signal 9. They report status 9. What should `$?` actually show, and why? Write 128+n for signals 2, 9, and 15 from memory.
