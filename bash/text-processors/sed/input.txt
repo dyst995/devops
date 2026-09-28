@@ -1,0 +1,14 @@
+hello there
+say hello again
+foo bar
+goodbye
+apple pie hello snack
+foo only
+hello world
+notfoo
+plain hello line
+apple and hello together
+/home/alice/documents/report.txt
+/home/bob/documents/notes.txt
+/home/alice/documents/todo.md
+foo at start of this longer line
