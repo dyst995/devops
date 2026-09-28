@@ -1,0 +1,93 @@
+{
+  "title": "Conditions",
+  "subtitle": "test, [[ ]], (( )), if, case, && / ||",
+  "frontLabel": "Form",
+  "modeForward": "Form → meaning",
+  "modeReverse": "Meaning → form",
+  "cards": [
+    {
+      "id": "test",
+      "front": "test / [ ]",
+      "meaning": "Classic test builtin ( [ is a synonym for test )",
+      "example": "[ -f file.txt ] && echo Indeed",
+      "notes": "Status 0 = true, 1 = false. Need spaces: [ -f file ]. Unquoted spaces can cause “too many arguments”."
+    },
+    {
+      "id": "n-z",
+      "front": "-n / -z",
+      "meaning": "String length nonzero / zero",
+      "example": "[ -n \"$s\" ]; [ -z \"$s\" ]",
+      "notes": "-n = non-empty. -z = empty."
+    },
+    {
+      "id": "file-tests",
+      "front": "-d / -f / -w",
+      "meaning": "Directory / regular file / writable",
+      "example": "[ -d dir ]; [ -f file ]; [ -w file ]",
+      "notes": "File must exist for these to be true (and have the matching property)."
+    },
+    {
+      "id": "a-o",
+      "front": "-a / -o / !",
+      "meaning": "AND / OR / negate inside test / [ ]",
+      "example": "[ -f a -a -w a ]",
+      "notes": "Inside [[ ]] prefer && and || instead of -a / -o."
+    },
+    {
+      "id": "dbl-bracket",
+      "front": "[[ ]]",
+      "meaning": "Extended test — a keyword, one element",
+      "example": "[[ -n $string_with_spaces ]]",
+      "notes": "&& || < > legal inside. Safer with spaces than [ ]."
+    },
+    {
+      "id": "arith",
+      "front": "(( )) / let",
+      "meaning": "Arithmetic evaluation",
+      "example": "(( 0 && 1 )); echo $?",
+      "notes": "Non-zero value → status 0. Value 0 → status 1 (opposite of C booleans for exit status)."
+    },
+    {
+      "id": "if",
+      "front": "if / then / elif / else / fi",
+      "meaning": "Branch when a command list returns 0",
+      "example": "if [ cond ]; then …; fi",
+      "notes": "Can test any command, not only [. Ends with fi."
+    },
+    {
+      "id": "case",
+      "front": "case / esac / ;;",
+      "meaning": "Pattern match on a value",
+      "example": "case \"$1\" in start) … ;; *) … ;; esac",
+      "notes": "Each arm ends with ;;. Statement ends with esac."
+    },
+    {
+      "id": "and-list",
+      "front": "cmd1 && cmd2",
+      "meaning": "AND list — run next only if previous succeeded (0)",
+      "example": "command-1 && command-2 && command-3",
+      "notes": "Stops at the first failure."
+    },
+    {
+      "id": "or-list",
+      "front": "cmd1 || cmd2",
+      "meaning": "OR list — run next only if previous failed",
+      "example": "[ -f file1.txt ] || echo No such file",
+      "notes": "Stops at the first success."
+    },
+    {
+      "id": "status-check",
+      "front": "[ $? -ne 0 ] && …",
+      "meaning": "Do something if the last command failed",
+      "example": "ifup eth0; [ $? -ne 0 ] && rc=1",
+      "notes": "Read $? immediately — the next command overwrites it."
+    },
+    {
+      "id": "word-split",
+      "front": "[ -n $spaces ] vs [[ -n $spaces ]]",
+      "meaning": "Word-split trap vs safe extended test",
+      "example": "string_with_spaces='some spaces here'",
+      "notes": "[ can become “too many arguments”. [[ treats it as one test."
+    }
+  ]
+}

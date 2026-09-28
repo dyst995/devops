@@ -1,0 +1,65 @@
+{
+  "title": "Loops",
+  "subtitle": "for, while, until, break, continue",
+  "frontLabel": "Form",
+  "modeForward": "Form → meaning",
+  "modeReverse": "Meaning → form",
+  "cards": [
+    {
+      "id": "for",
+      "front": "for … in …; do …; done",
+      "meaning": "Loop once per item in a known list",
+      "example": "for arg in one two three; do echo \"$arg\"; done",
+      "notes": "You already have the list. One pass per item."
+    },
+    {
+      "id": "for-cmd",
+      "front": "for file in \"$(find …)\"",
+      "meaning": "Build the list from a command’s output",
+      "example": "for file in \"$(find . -type l)\"; do echo \"$file\"; done | sort",
+      "notes": "Quoting matters; piping the whole loop’s output is allowed."
+    },
+    {
+      "id": "brace",
+      "front": "{1..5}",
+      "meaning": "Brace expansion — generate a list 1 2 3 4 5",
+      "example": "for i in {1..5}; do echo $i; done",
+      "notes": "Common list source for for-loops."
+    },
+    {
+      "id": "while",
+      "front": "while …; do …; done",
+      "meaning": "Loop while the test at the top is true (status 0)",
+      "example": "while [ \"$a\" -le 10 ]; do …; let \"a+=1\"; done",
+      "notes": "Count unknown beforehand. Give counters a starting value."
+    },
+    {
+      "id": "until",
+      "front": "until …; do …; done",
+      "meaning": "Opposite of while — body while false; stop when true",
+      "example": "until [ condition-is-true ]; do …; done",
+      "notes": "Runs until the condition succeeds."
+    },
+    {
+      "id": "break",
+      "front": "break",
+      "meaning": "Leave the loop entirely",
+      "example": "[[ $i -eq 3 ]] && break",
+      "notes": "With for i in {1..5} and break at 3, prints 1 2 3."
+    },
+    {
+      "id": "continue",
+      "front": "continue",
+      "meaning": "Skip the rest of this pass; go to the next item",
+      "example": "continue",
+      "notes": "Does not exit the loop — only this iteration."
+    },
+    {
+      "id": "when-for-while",
+      "front": "for vs while",
+      "meaning": "Known list vs unknown count / condition-driven",
+      "example": "for x in list · while [ cond ]",
+      "notes": "for = you have the items. while/until = keep going based on a test."
+    }
+  ]
+}

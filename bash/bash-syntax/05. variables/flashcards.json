@@ -1,0 +1,142 @@
+{
+  "title": "Variables",
+  "subtitle": "Assignment, expansions, specials, arrays",
+  "frontLabel": "Form",
+  "modeForward": "Form → meaning",
+  "modeReverse": "Meaning → form",
+  "cards": [
+    {
+      "id": "assign",
+      "front": "var=value",
+      "meaning": "Assign a value to a variable",
+      "example": "var2=\"one two three\"",
+      "notes": "No spaces around =. Quote or backslash-escape if the value has spaces."
+    },
+    {
+      "id": "ref",
+      "front": "$var / ${var}",
+      "meaning": "Expand to the variable’s value",
+      "example": "echo ${var}s",
+      "notes": "Braces required when glued to other text or for ${10}."
+    },
+    {
+      "id": "indirect",
+      "front": "eval b=\\$$var",
+      "meaning": "Indirect referencing",
+      "example": "var=value; value=hello; eval b=\\$$var",
+      "notes": "$b becomes the variable named by $var (hello)."
+    },
+    {
+      "id": "declare-i",
+      "front": "declare -i",
+      "meaning": "Treat the variable as an integer",
+      "example": "declare -i n; n=6/3",
+      "notes": "Same as typeset -i. Without it, n=6/3 stays the string 6/3; with it, n is 2. Values are otherwise strings."
+    },
+    {
+      "id": "len",
+      "front": "${#var}",
+      "meaning": "Length of the string (characters)",
+      "example": "stringZ=abcABC123ABCabc → ${#stringZ} is 15",
+      "notes": "On an array name without [@], this is the length of element 0, not the element count."
+    },
+    {
+      "id": "substr",
+      "front": "${var:pos:len}",
+      "meaning": "Substring — 0-based position and length",
+      "example": "${stringZ:2:5}",
+      "notes": "Extracts len characters starting at pos."
+    },
+    {
+      "id": "hash",
+      "front": "${var#Pat} / ${var##Pat}",
+      "meaning": "Strip pattern from the front",
+      "example": "${var#a*C} vs ${var##a*C}",
+      "notes": "# = shortest match; ## = longest match."
+    },
+    {
+      "id": "percent",
+      "front": "${var%Pat} / ${var%%Pat}",
+      "meaning": "Strip pattern from the back",
+      "example": "${var%a*c} vs ${var%%b*c}",
+      "notes": "% = shortest; %% = longest."
+    },
+    {
+      "id": "replace",
+      "front": "${var/Pat/Rep} / ${var//Pat/Rep}",
+      "meaning": "Replace pattern with replacement",
+      "example": "${var/abc/xyz} vs ${var//abc/xyz}",
+      "notes": "One slash = first only; two = all. Omit Rep to delete."
+    },
+    {
+      "id": "prefix-suffix",
+      "front": "${var/#Pat/Rep} / ${var/%Pat/Rep}",
+      "meaning": "Replace only as prefix / only as suffix",
+      "example": "${var/#abc/XYZ}",
+      "notes": "/# = front only; /% = end only."
+    },
+    {
+      "id": "default-use",
+      "front": "${p-default} / ${p:-default}",
+      "meaning": "Use a default (do not assign)",
+      "example": "filename=${1:-generic.data}",
+      "notes": "Without : = only if unset. With : = unset or null."
+    },
+    {
+      "id": "default-assign",
+      "front": "${p=default} / ${p:=default}",
+      "meaning": "Assign a default into the variable",
+      "example": "${parameter:=default}",
+      "notes": "Writes the default when missing (and with : also when null)."
+    },
+    {
+      "id": "alt",
+      "front": "${p+alt} / ${p:+alt}",
+      "meaning": "Use alternate value if set",
+      "example": "${parameter:+alt_value}",
+      "notes": "+ = set (even empty); :+ = set and not empty."
+    },
+    {
+      "id": "abort",
+      "front": "${p?} / ${p:?}",
+      "meaning": "Abort if parameter is missing",
+      "example": ": ${HOSTNAME?} ${USER?} ${MAIL?}",
+      "notes": "Prints an error and exits with status 1. :? also treats null as missing."
+    },
+    {
+      "id": "local-export",
+      "front": "local / export",
+      "meaning": "Function-only vs environment for children",
+      "example": "local var=$1; export MYVAR=value",
+      "notes": "local is only valid in a function. export makes the variable visible to child processes."
+    },
+    {
+      "id": "star-at",
+      "front": "\"$*\" vs \"$@\"",
+      "meaning": "All positionals as one word vs separate words",
+      "example": "\"$*\" · \"$@\"",
+      "notes": "Prefer \"$@\" so each argument stays its own word (spaces preserved)."
+    },
+    {
+      "id": "builtins",
+      "front": "$? $$ $- $_ $!",
+      "meaning": "Status · PID · set flags · last arg · background PID",
+      "example": "echo $? $$ $- $_ $!",
+      "notes": "Recite what each special means."
+    },
+    {
+      "id": "env-list",
+      "front": "$EDITOR $HOME $PATH $RANDOM …",
+      "meaning": "Common environment / special env values",
+      "example": "echo $RANDOM; echo $RANDOM",
+      "notes": "RANDOM is 0–32767 and not a constant. PATH = search path for binaries."
+    },
+    {
+      "id": "array-count",
+      "front": "${#arr[@]} vs ${#arr}",
+      "meaning": "Element count vs length of first element",
+      "example": "echo ${#my_array[@]}",
+      "notes": "Use [@] or [*] for how many elements. Without it you get length of index 0."
+    }
+  ]
+}

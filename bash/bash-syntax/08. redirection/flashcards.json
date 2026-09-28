@@ -1,0 +1,114 @@
+{
+  "title": "Redirection",
+  "subtitle": "fds, >, >>, pipes, here docs, special files",
+  "frontLabel": "Form",
+  "modeForward": "Form → meaning",
+  "modeReverse": "Meaning → form",
+  "cards": [
+    {
+      "id": "fds",
+      "front": "0 / 1 / 2",
+      "meaning": "stdin / stdout / stderr",
+      "example": "extras 3–9 to save/restore",
+      "notes": "Default file descriptors for every process."
+    },
+    {
+      "id": "in",
+      "front": "<file",
+      "meaning": "Redirect stdin from a file",
+      "example": "grep search-word <filename",
+      "notes": "Same idea as cat file | grep … for simple cases."
+    },
+    {
+      "id": "out",
+      "front": ">file",
+      "meaning": "Redirect stdout — create or truncate",
+      "example": "ls -la > list_of_files.txt",
+      "notes": ": > filename truncates to zero length."
+    },
+    {
+      "id": "append",
+      "front": ">>file",
+      "meaning": "Append stdout (create if missing)",
+      "example": "echo two >> file",
+      "notes": "Does not wipe existing content."
+    },
+    {
+      "id": "both",
+      "front": "&>file",
+      "meaning": "Redirect stdout and stderr together",
+      "example": "java -version &> version",
+      "notes": "Preferred form. Also >&file or >file 2>&1."
+    },
+    {
+      "id": "stderr",
+      "front": "2>file",
+      "meaning": "Redirect stderr only",
+      "example": "java -version 2> version",
+      "notes": "Classic trap: java -version > version leaves the banner on screen and an empty file."
+    },
+    {
+      "id": "merge",
+      "front": "2>&1",
+      "meaning": "Send fd 2 wherever fd 1 currently goes",
+      "example": ">filename 2>&1",
+      "notes": "Order matters: set up stdout first, then merge stderr into it."
+    },
+    {
+      "id": "null",
+      "front": "&> /dev/null",
+      "meaning": "Throw away all output",
+      "example": "ps aux &> /dev/null",
+      "notes": "Silence stdout and stderr."
+    },
+    {
+      "id": "pipe",
+      "front": "|",
+      "meaning": "Pipe — stdout of one → stdin of the next",
+      "example": "cat *.txt | sort | uniq > result-file",
+      "notes": "Chains processes. Not the same as > to a file."
+    },
+    {
+      "id": "pipestatus",
+      "front": "$PIPESTATUS",
+      "meaning": "Array of exit status for each pipe stage",
+      "example": "echo ${PIPESTATUS[@]}",
+      "notes": "Overwrite by the next command — copy immediately if you need it."
+    },
+    {
+      "id": "tee",
+      "front": "tee -a",
+      "meaning": "Write to the screen and append to a file",
+      "example": "cat *.txt | tee -a result-file",
+      "notes": "tee without -a overwrites the file."
+    },
+    {
+      "id": "heredoc",
+      "front": "<<EOF … EOF",
+      "meaning": "Here document — stdin until a line that is only the delimiter",
+      "example": "cat <<EOF > unit.file",
+      "notes": "Delimiter alone, no trailing blanks on that line."
+    },
+    {
+      "id": "herestring",
+      "front": "<<< \"$word\"",
+      "meaning": "Here string — expanded word as stdin",
+      "example": "grep -q \"txt\" <<< \"$VAR\"",
+      "notes": "Instead of echo \"$VAR\" | grep …"
+    },
+    {
+      "id": "special",
+      "front": "/dev/stdin · /dev/tcp/host/port",
+      "meaning": "Special filenames usable in redirections",
+      "example": "cat </dev/tcp/time.nist.gov/13",
+      "notes": "Also /dev/stdout, /dev/stderr, /dev/fd/n, /dev/udp/…"
+    },
+    {
+      "id": "block",
+      "front": "done < file",
+      "meaning": "Redirect a whole loop/block from a file",
+      "example": "while read name; do echo $name; done < file",
+      "notes": "The entire loop reads from that file."
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "title": "Functions",
+  "subtitle": "Define, call, local, return vs exit",
+  "frontLabel": "Form",
+  "modeForward": "Form → meaning",
+  "modeReverse": "Meaning → form",
+  "cards": [
+    {
+      "id": "define",
+      "front": "name () { … }",
+      "meaning": "Define a function (subroutine)",
+      "example": "function_name () { command...; }",
+      "notes": "A black box for a repeating task. Parentheses required after the name."
+    },
+    {
+      "id": "call",
+      "front": "name arg1 arg2",
+      "meaning": "Call a function; args become $1 $2 … inside",
+      "example": "print_args /tmp hello",
+      "notes": "Same positional rules as a script inside the function body."
+    },
+    {
+      "id": "local",
+      "front": "local var=$1",
+      "meaning": "Variable visible only inside the function",
+      "example": "local var1=$1; local var2=$2",
+      "notes": "Without local, assignments leak into the global shell."
+    },
+    {
+      "id": "status",
+      "front": "Function exit status",
+      "meaning": "return N, or the status of the last command",
+      "example": "retfunc; echo $?",
+      "notes": "The caller reads $? after the function returns."
+    },
+    {
+      "id": "return",
+      "front": "return",
+      "meaning": "End the function; script continues",
+      "example": "return 1",
+      "notes": "Sets the function’s status. Does not kill the whole script."
+    },
+    {
+      "id": "exit",
+      "front": "exit",
+      "meaning": "End the whole script",
+      "example": "exit 1",
+      "notes": "Unlike return — nothing after this runs in the script."
+    },
+    {
+      "id": "return-vs-exit",
+      "front": "return vs exit",
+      "meaning": "Leave function vs leave script",
+      "example": "retfunc uses return 1; exitfunc uses exit 1",
+      "notes": "return → script keeps going. exit → process ends."
+    },
+    {
+      "id": "last-cmd",
+      "front": "No explicit return",
+      "meaning": "Status is the last command in the function",
+      "example": "fn() { false; }",
+      "notes": "Caller still sees that status in $?."
+    }
+  ]
+}
