@@ -1,0 +1,107 @@
+{
+  "title": "Monitoring memory",
+  "subtitle": "RAM, swap, and paging — flip to reveal meaning, example, and notes",
+  "frontLabel": "Command / field",
+  "modeForward": "Term → meaning",
+  "modeReverse": "Meaning → term",
+  "cards": [
+    {
+      "id": "free-h",
+      "front": "free -h",
+      "meaning": "Snapshot of RAM and swap: total / used / free / cache / available (human-readable)",
+      "example": "free -h",
+      "notes": "Answers “how much RAM is left?” Trust available more than free. -h prints M/G sizes."
+    },
+    {
+      "id": "available",
+      "front": "available (free)",
+      "meaning": "Estimate of RAM still usable for new workloads (free + reclaimable cache)",
+      "example": "available column in free -h",
+      "notes": "The number to trust. Panic when available is tiny and swap is climbing — not when free alone looks low."
+    },
+    {
+      "id": "buff-cache",
+      "front": "buff/cache",
+      "meaning": "Kernel buffers + page cache — file data kept in RAM; can be given to apps when needed",
+      "example": "buff/cache column in free -h",
+      "notes": "Not wasted. Linux loves to fill RAM with cache. Low free + high buff/cache is normal."
+    },
+    {
+      "id": "free-col",
+      "front": "free (column)",
+      "meaning": "Completely unused RAM (or swap on the Swap row)",
+      "example": "free column under Mem: in free -h",
+      "notes": "Do not panic on low free alone — read available. Cache is a spare tank."
+    },
+    {
+      "id": "swap-row",
+      "front": "Swap (free -h)",
+      "meaning": "Disk overflow for RAM — total / used / free swap",
+      "example": "Swap: 2.0G 70Mi 1.9G",
+      "notes": "A little used swap is not always a crisis. Sustained growth with tiny available means RAM pressure."
+    },
+    {
+      "id": "vmstat-a",
+      "front": "vmstat -a",
+      "meaning": "Snapshot of procs, memory (active/inactive), swap in/out, I/O, interrupts, CPU",
+      "example": "vmstat -a",
+      "notes": "-a shows active/inactive memory instead of the default buffer/cache split. Answers “is it swapping / waiting on I/O right now?”"
+    },
+    {
+      "id": "vmstat-r",
+      "front": "r (vmstat procs)",
+      "meaning": "Runnable processes that want CPU",
+      "example": "r column under procs",
+      "notes": "High r = CPU queue. Pair with idle/us/sy to confirm saturation."
+    },
+    {
+      "id": "vmstat-b",
+      "front": "b (vmstat procs)",
+      "meaning": "Blocked processes (usually waiting on I/O)",
+      "example": "b column under procs",
+      "notes": "High b = waiting on disk/network I/O, not necessarily needing more CPU."
+    },
+    {
+      "id": "si-so",
+      "front": "si / so",
+      "meaning": "Swap in / swap out rates (KB/s)",
+      "example": "si and so columns in vmstat",
+      "notes": "Sustained so = RAM pressure (paging out). si/so > 0 and climbing often means thrashing."
+    },
+    {
+      "id": "swpd",
+      "front": "swpd",
+      "meaning": "Amount of swap currently used (KB)",
+      "example": "swpd column under memory in vmstat",
+      "notes": "Stock of swap in use. Combine with si/so rates to see if paging is active now."
+    },
+    {
+      "id": "wa",
+      "front": "wa (vmstat cpu)",
+      "meaning": "I/O wait — CPU idle while waiting on block I/O",
+      "example": "wa in us sy id wa st",
+      "notes": "Same story as %iowait in mpstat. High wa points to disk, not pure compute need."
+    },
+    {
+      "id": "vmstat-f",
+      "front": "vmstat -f",
+      "meaning": "Total number of tasks (forks) created since last boot",
+      "example": "vmstat -f",
+      "notes": "Prints a single forks count, not the live table."
+    },
+    {
+      "id": "vmstat-w",
+      "front": "vmstat -w 1 3",
+      "meaning": "Wide columns; sample every 1 second, 3 times (live)",
+      "example": "vmstat -w 1 3",
+      "notes": "First line is often since-boot; later lines are the live interval. Same pattern as vmstat 1 3."
+    },
+    {
+      "id": "vmstat-s",
+      "front": "vmstat -s",
+      "meaning": "Summary counters dump (total memory, pages swapped, forks, CPU ticks, …)",
+      "example": "vmstat -s",
+      "notes": "A dump of totals, not the repeating activity table."
+    }
+  ]
+}

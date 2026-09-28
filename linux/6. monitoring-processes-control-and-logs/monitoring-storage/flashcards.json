@@ -1,0 +1,114 @@
+{
+  "title": "Monitoring storage",
+  "subtitle": "Space, open files, and disk I/O — flip to reveal meaning, example, and notes",
+  "frontLabel": "Command / field",
+  "modeForward": "Term → meaning",
+  "modeReverse": "Meaning → term",
+  "cards": [
+    {
+      "id": "df-h",
+      "front": "df -h",
+      "meaning": "Free space per mounted filesystem (Size / Used / Avail / Use% / Mounted on)",
+      "example": "df -h",
+      "notes": "Answers “is / full?” One row per mount. Does not say which directory ate the space — that is du."
+    },
+    {
+      "id": "use-pct",
+      "front": "Use% (df)",
+      "meaning": "Percentage of the filesystem that is used — what paging/alerts usually watch",
+      "example": "/ at 91% Use%",
+      "notes": "Alert on Use%, not only Avail. Each Mounted on path can fill independently."
+    },
+    {
+      "id": "du-sh",
+      "front": "du -sh /etc/*",
+      "meaning": "Disk usage: one human-readable total per argument (-s summarize, -h human)",
+      "example": "du -sh /etc/*",
+      "notes": "Typical hunt: du -sh /* then drill into /var/* until you find the fat directory."
+    },
+    {
+      "id": "df-vs-du",
+      "front": "df vs du",
+      "meaning": "df = which mount is full; du = which folder inside it",
+      "example": "df -h; du -sh /var/*",
+      "notes": "Memory hook: disks vs folders. Deleted-but-still-open files can make df and du disagree until the process closes them."
+    },
+    {
+      "id": "lsof",
+      "front": "lsof",
+      "meaning": "List open files belonging to active processes (everything is a file on Linux)",
+      "example": "lsof | less",
+      "notes": "No options = all open files, all processes (huge). Need root to see other users’ files."
+    },
+    {
+      "id": "lsof-path",
+      "front": "lsof /path",
+      "meaning": "Processes that have this file/path open",
+      "example": "lsof /usr/bin/sshd",
+      "notes": "Useful when a path will not unmount or a binary is still held open."
+    },
+    {
+      "id": "lsof-c",
+      "front": "lsof -c name",
+      "meaning": "Open files for processes whose command name starts with name",
+      "example": "lsof -c sshd",
+      "notes": "-c filters by command name. Pair with -i for network-focused views."
+    },
+    {
+      "id": "lsof-i",
+      "front": "lsof -i",
+      "meaning": "List Internet network files — TCP/UDP connections and listeners",
+      "example": "lsof -i",
+      "notes": "Who is listening or connected. Network sockets as open files."
+    },
+    {
+      "id": "deleted-open",
+      "front": "deleted file still holds space",
+      "meaning": "A file deleted from the directory tree but still open by a process keeps the blocks until close",
+      "example": "df shows full; du does not find the dir; use lsof (e.g. +L1 later)",
+      "notes": "du shrinks only after the process closes the handle. Classic “where did space go?” trap."
+    },
+    {
+      "id": "vmstat-d",
+      "front": "vmstat -d",
+      "meaning": "Per-disk read/write statistics (totals, merged ops, sectors, time, current IO)",
+      "example": "vmstat -d",
+      "notes": "Report for each block device (sda, dm-0, …). How hard disks have been working."
+    },
+    {
+      "id": "vmstat-p",
+      "front": "vmstat -p partition",
+      "meaning": "Detailed read/write statistics for one partition",
+      "example": "vmstat -p sda2",
+      "notes": "Narrower than -d: one partition name. Memory hook: -d = each disk; -p name = one partition."
+    },
+    {
+      "id": "iostat-t",
+      "front": "iostat -t",
+      "meaning": "I/O load with timestamp — CPU averages plus Device table (tps, kB/s)",
+      "example": "iostat -t",
+      "notes": "From sysstat (like sar/mpstat). Watch iowait together with tps and df Use%."
+    },
+    {
+      "id": "iostat-d",
+      "front": "iostat -d",
+      "meaning": "Device I/O only — no CPU block (tps, kB read/write rates and totals)",
+      "example": "iostat -d",
+      "notes": "Disks-only view. Live sample: iostat -d 1 5 (every 1s, 5 times)."
+    },
+    {
+      "id": "tps",
+      "front": "tps (iostat)",
+      "meaning": "Transfers (I/O requests) per second for a device",
+      "example": "tps column under Device:",
+      "notes": "Request rate, not only throughput. Pair with kB_read/s and kB_wrtn/s."
+    },
+    {
+      "id": "kb-rates",
+      "front": "kB_read/s / kB_wrtn/s",
+      "meaning": "Read and write throughput for the device",
+      "example": "iostat Device columns",
+      "notes": "kB_read / kB_wrtn without /s are totals since boot when no interval is given. dm-0 is often LVM on sda."
+    }
+  ]
+}

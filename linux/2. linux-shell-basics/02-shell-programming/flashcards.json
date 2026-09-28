@@ -1,0 +1,93 @@
+{
+  "title": "Shell programming",
+  "subtitle": "Scripts, xtrace, and environment vs shell variables",
+  "frontLabel": "Command",
+  "modeForward": "Command → meaning",
+  "modeReverse": "Meaning → command",
+  "cards": [
+    {
+      "id": "script",
+      "front": "shell script",
+      "meaning": "Text file the shell interprets line by line (not a precompiled binary)",
+      "example": "#!/bin/bash\\necho \"$HOME\"",
+      "notes": "Memory hook: script = recipe the cook reads as it goes. Compiled program = meal already cooked."
+    },
+    {
+      "id": "bash-x",
+      "front": "bash -x script.sh",
+      "meaning": "Run the script with xtrace for the whole process (no file edit)",
+      "example": "bash -x ./script.sh",
+      "notes": "Each command prints to stderr with a + (PS4) after expansions. Same idea: bash -x -c 'echo \"$HOME\"'."
+    },
+    {
+      "id": "set-x",
+      "front": "set -x",
+      "meaning": "Turn xtrace on from this line (script or prompt)",
+      "example": "set -x; ls \"$HOME\"",
+      "notes": "Long name: set -o xtrace. Scope is from here until set +x or the end."
+    },
+    {
+      "id": "set-plus-x",
+      "front": "set +x",
+      "meaning": "Turn xtrace off",
+      "example": "set -x; echo traced; set +x; echo quiet",
+      "notes": "Minus = option on, plus = option off. Wrap a block you care about, leave quiet elsewhere."
+    },
+    {
+      "id": "assign",
+      "front": "KEY=value",
+      "meaning": "Assign a variable — no spaces around =",
+      "example": "ANOTHER_KEY=\"Some other value\"",
+      "notes": "KEY = value is wrong (shell treats KEY as a command). Names are case-sensitive."
+    },
+    {
+      "id": "colon-values",
+      "front": "KEY=value1:value2",
+      "meaning": "Multiple values in one variable, separated by :",
+      "example": "PATH=/usr/local/bin:/usr/bin",
+      "notes": "How PATH works. First matching executable in order wins."
+    },
+    {
+      "id": "env-vs-shell",
+      "front": "environment vs shell variable",
+      "meaning": "Environment is inherited by children; shell-only stays in this shell until exported",
+      "example": "MYLOCAL=hello  # shell only until export",
+      "notes": "Memory hook: environment = inherited by kids. Shell-only = stays in the room."
+    },
+    {
+      "id": "echo-home",
+      "front": "echo \"$HOME\"",
+      "meaning": "Print the home directory of the current user",
+      "example": "echo \"$HOME\"",
+      "notes": "Quote expansions. HOME is a common environment variable."
+    },
+    {
+      "id": "path",
+      "front": "PATH",
+      "meaning": "Colon-separated directories searched for commands; first match wins",
+      "example": "echo \"$PATH\"",
+      "notes": "Put ~/bin at the front to override /usr/bin. Walked in order when you type ls, python, …"
+    },
+    {
+      "id": "env",
+      "front": "env",
+      "meaning": "Dump exported environment variables",
+      "example": "env | less",
+      "notes": "Contrast with set — set also prints shell vars and functions (huge)."
+    },
+    {
+      "id": "set",
+      "front": "set",
+      "meaning": "Dump shell variables + environment + functions",
+      "example": "set | less",
+      "notes": "Noisy. Use env/printenv when you only want exported environment."
+    },
+    {
+      "id": "common-vars",
+      "front": "USER / EDITOR / SHELL / LANG",
+      "meaning": "Logged-in user / default editor / login shell path / locale",
+      "example": "echo \"$USER\"; echo \"$EDITOR\"",
+      "notes": "Also LOGNAME, TERM, MAIL. Convention: UPPER_CASE with _ between words."
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "title": "Filesystem search",
+  "subtitle": "find, locate, and grep — which tool for which job",
+  "frontLabel": "Command",
+  "modeForward": "Command → meaning",
+  "modeReverse": "Meaning → command",
+  "cards": [
+    {
+      "id": "three-tools",
+      "front": "find vs locate vs grep",
+      "meaning": "Live tree by criteria / fast name DB / lines inside files",
+      "example": "find . -name '*.log'; locate passwd; grep -r pattern /etc",
+      "notes": "Memory hook: find = walk the tree. locate = phone book (update it). grep = search inside."
+    },
+    {
+      "id": "find-name",
+      "front": "find / -name hosts",
+      "meaning": "Walk from / for basename exactly hosts",
+      "example": "find . -name '*.log'",
+      "notes": "-name matches basename, not full path. Quote globs so the shell does not expand them."
+    },
+    {
+      "id": "find-user-type",
+      "front": "find /home -user user / -type f / -type d",
+      "meaning": "Owned by user / regular file / directory",
+      "example": "find /tmp -name core -type f",
+      "notes": "Start narrow (/home, /var/log) — find / walks the whole machine."
+    },
+    {
+      "id": "find-exec",
+      "front": "find … -exec rm {} \\;",
+      "meaning": "For each match, run rm with that path substituted for {}",
+      "example": "find /tmp -name core -type f -exec rm {} \\;",
+      "notes": "\\; ends -exec. One rm process per match."
+    },
+    {
+      "id": "find-xargs",
+      "front": "find … -print | xargs rm",
+      "meaning": "Print paths; xargs batches them as args to rm (fewer process starts)",
+      "example": "find /tmp -name core -type f -print | xargs /bin/rm -",
+      "notes": "Equal job to -exec for this course. Spaces in names need -print0 | xargs -0."
+    },
+    {
+      "id": "find-print0",
+      "front": "find … -print0 | xargs -0 rm",
+      "meaning": "Null-separated paths — safe if names have spaces",
+      "example": "find /tmp -name core -type f -print0 | xargs -0 rm",
+      "notes": "Default whitespace split breaks on spaces/quotes. Pair -print0 with xargs -0."
+    },
+    {
+      "id": "locate",
+      "front": "locate passwd",
+      "meaning": "Fast name search via database (can be stale)",
+      "example": "locate passwd",
+      "notes": "Default DB: /var/lib/mlocate/mlocate.db. Does not crawl the live disk."
+    },
+    {
+      "id": "updatedb",
+      "front": "updatedb",
+      "meaning": "Rebuild the locate database (usually as root)",
+      "example": "sudo updatedb && locate myfile",
+      "notes": "New file missing from locate? updatedb then locate, or use find."
+    },
+    {
+      "id": "grep",
+      "front": "grep pattern file",
+      "meaning": "Print lines that match a pattern (regex)",
+      "example": "grep pattern file.txt",
+      "notes": "find/locate = which files. grep = which lines."
+    },
+    {
+      "id": "grep-flags",
+      "front": "grep -i / -n / -r",
+      "meaning": "Ignore case / show line numbers / recurse a tree",
+      "example": "grep -r \"fun\" ~",
+      "notes": "Pattern can be a regex. Combine later: find … | xargs grep or grep -r."
+    }
+  ]
+}

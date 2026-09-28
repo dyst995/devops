@@ -1,0 +1,83 @@
+{
+  "title": "Runlevels and targets",
+  "subtitle": "Machine state after boot — flip for meaning, example, and notes",
+  "frontLabel": "Concept",
+  "modeForward": "Term → meaning",
+  "modeReverse": "Meaning → term",
+  "cards": [
+    {
+      "id": "runlevel",
+      "front": "runlevel",
+      "meaning": "Classic SysV state after boot: which services, network, GUI, halt/reboot",
+      "notes": "System is in one runlevel at a time"
+    },
+    {
+      "id": "rl-0",
+      "front": "runlevel 0",
+      "meaning": "Halt / power off",
+      "notes": "systemd: poweroff.target (runlevel0.target)"
+    },
+    {
+      "id": "rl-1",
+      "front": "runlevel 1",
+      "meaning": "Single-user / rescue-style maintenance; usually no network services",
+      "notes": "systemd: rescue.target"
+    },
+    {
+      "id": "rl-3",
+      "front": "runlevel 3",
+      "meaning": "Multi-user, text console, networking — typical server",
+      "notes": "systemd: multi-user.target"
+    },
+    {
+      "id": "rl-5",
+      "front": "runlevel 5",
+      "meaning": "Multi-user with graphical desktop",
+      "notes": "systemd: graphical.target"
+    },
+    {
+      "id": "rl-6",
+      "front": "runlevel 6",
+      "meaning": "Reboot",
+      "notes": "systemd: reboot.target — 0 = zero life, 6 = full circle"
+    },
+    {
+      "id": "rc-d",
+      "front": "/etc/rc[0-6].d/",
+      "meaning": "Per-runlevel start/stop script symlinks (K = kill, S = start + order)",
+      "example": "K20nfs -> ../init.d/nfs",
+      "notes": "Lower two-digit number runs first"
+    },
+    {
+      "id": "inittab",
+      "front": "/etc/inittab",
+      "meaning": "Classic default runlevel, e.g. id:3:initdefault:",
+      "notes": "Boot into runlevel 3"
+    },
+    {
+      "id": "get-default",
+      "front": "systemctl get-default",
+      "meaning": "Show which systemd target the machine boots into",
+      "example": "systemctl get-default"
+    },
+    {
+      "id": "set-default",
+      "front": "systemctl set-default",
+      "meaning": "Change the default boot target (multi-user / graphical / …)",
+      "example": "systemctl set-default multi-user.target",
+      "notes": "set-default runlevel0.target = poweroff at boot — do not on a real server"
+    },
+    {
+      "id": "isolate",
+      "front": "systemctl isolate",
+      "meaning": "Switch to a target now without changing the default",
+      "example": "systemctl isolate multi-user.target"
+    },
+    {
+      "id": "emergency",
+      "front": "emergency.target",
+      "meaning": "Minimal systemd recovery target — even more minimal than rescue",
+      "notes": "Own target; not a classic runlevel number"
+    }
+  ]
+}

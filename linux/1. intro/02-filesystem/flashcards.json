@@ -1,0 +1,80 @@
+{
+  "title": "File system",
+  "subtitle": "How Linux organizes storage — flip for meaning, example, and notes",
+  "frontLabel": "Concept",
+  "modeForward": "Term → meaning",
+  "modeReverse": "Meaning → term",
+  "cards": [
+    {
+      "id": "filesystem",
+      "front": "file system",
+      "meaning": "How the OS organizes, names, and stores data on disk"
+    },
+    {
+      "id": "linux-tree",
+      "front": "single hierarchy / tree",
+      "meaning": "Linux has one root directory /; every file lives under it",
+      "notes": "Even files on a second disk sit somewhere under /"
+    },
+    {
+      "id": "mount",
+      "front": "mount",
+      "meaning": "Attach a disk/partition onto a directory in the single tree (no drive letters)",
+      "example": "mount /dev/sdb1 /mnt/data"
+    },
+    {
+      "id": "no-extension",
+      "front": "no required extension",
+      "meaning": "Linux does not decide file type from the name; extension is optional",
+      "notes": "Executable = execute bit (+ shebang for scripts), not .sh"
+    },
+    {
+      "id": "chmod-x",
+      "front": "chmod +x",
+      "meaning": "Turn on the execute bit — what makes a file runnable on Linux",
+      "example": "chmod +x script.sh"
+    },
+    {
+      "id": "linux-fs-types",
+      "front": "ext4 / XFS / Btrfs",
+      "meaning": "Common local Linux file system types",
+      "notes": "Also ext2, ext3, ReiserFS, and others"
+    },
+    {
+      "id": "windows-letters",
+      "front": "drive letters A:–Z:",
+      "meaning": "Windows shows disks/partitions as separate roots (C:\\, D:\\, …)",
+      "notes": "Second disk often becomes a new letter"
+    },
+    {
+      "id": "windows-extension",
+      "front": ".exe / .txt / .dll",
+      "meaning": "Windows system behavior often depends on the file extension",
+      "notes": "Linux *can* use extensions for humans/tools, but OS does not require them"
+    },
+    {
+      "id": "windows-fs",
+      "front": "NTFS / FAT16 / FAT32",
+      "meaning": "Classic main local Windows file systems",
+      "notes": "Modern Windows also has ReFS"
+    },
+    {
+      "id": "lsblk",
+      "front": "lsblk",
+      "meaning": "List block devices and their mount points",
+      "example": "lsblk"
+    },
+    {
+      "id": "df-h",
+      "front": "df -h",
+      "meaning": "Disk space used/free on mounted filesystems, human-readable",
+      "example": "df -h"
+    },
+    {
+      "id": "findmnt",
+      "front": "findmnt",
+      "meaning": "Show what is mounted where",
+      "example": "findmnt"
+    }
+  ]
+}

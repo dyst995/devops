@@ -1,0 +1,121 @@
+{
+  "title": "SELinux",
+  "subtitle": "MAC modes, config, booleans, and contexts — flip to reveal meaning, example, and notes",
+  "frontLabel": "Topic",
+  "modeForward": "Topic → meaning",
+  "modeReverse": "Meaning → topic",
+  "cards": [
+    {
+      "id": "dac-vs-mac",
+      "front": "DAC vs MAC (SELinux)",
+      "meaning": "DAC = owner decides (chmod/chown); MAC = system policy decides by label",
+      "example": "chmod 777 still denied for httpd if policy forbids that path",
+      "notes": "Both must say yes. SELinux sits on top of the permission model you already know."
+    },
+    {
+      "id": "enforcing",
+      "front": "Enforcing",
+      "meaning": "Policy loaded and applied — unauthorized access is blocked and logged",
+      "example": "getenforce   # Enforcing",
+      "notes": "Memory hook: lock the door. Success checks in labs must stay enforcing — permissive-only “fixes” do not count."
+    },
+    {
+      "id": "permissive",
+      "front": "Permissive",
+      "meaning": "Policy loaded but not enforced — everything allowed; violations still logged",
+      "example": "setenforce 0",
+      "notes": "Door open, but write down who tried the lock. Use before enforcing when enabling."
+    },
+    {
+      "id": "disabled",
+      "front": "Disabled",
+      "meaning": "No SELinux policy loaded — no decisions, no SELinux logs",
+      "example": "getenforce   # Disabled",
+      "notes": "Course labs often start here. Cannot setenforce from fully disabled — need config + reboot (often a relabel)."
+    },
+    {
+      "id": "getenforce-sestatus",
+      "front": "getenforce / sestatus",
+      "meaning": "Current mode short vs longer status (policy, mode, config)",
+      "example": "getenforce; sestatus",
+      "notes": "getenforce/sestatus = now. /etc/selinux/config = boot default after reboot."
+    },
+    {
+      "id": "selinux-config",
+      "front": "/etc/selinux/config",
+      "meaning": "Boot defaults: SELINUX= mode and SELINUXTYPE= policy type",
+      "example": "SELINUX=permissive\\nSELINUXTYPE=targeted",
+      "notes": "On RHEL, /etc/sysconfig/selinux is often the same file (symlink). Mode enable/disable needs reboot."
+    },
+    {
+      "id": "setenforce",
+      "front": "setenforce 1 / 0",
+      "meaning": "Temporary enforcing (1) or permissive (0) when SELinux is already enabled",
+      "example": "setenforce 1; getenforce",
+      "notes": "Does not work from Disabled. Does not change the boot default in the config file."
+    },
+    {
+      "id": "selinuxtype",
+      "front": "SELINUXTYPE values",
+      "meaning": "targeted = jail usual daemons; minimum = smaller set; mls = multi-level security",
+      "example": "SELINUXTYPE=targeted",
+      "notes": "targeted is the default on ordinary servers. mls is rare (strict classifications)."
+    },
+    {
+      "id": "safe-enable",
+      "front": "Safe enable path",
+      "meaning": "Set permissive in config → reboot → watch logs → then enforcing → reboot",
+      "example": "SELINUX=permissive  # then later SELINUX=enforcing",
+      "notes": "Do not jump disabled → enforcing on a box you need. First enable often needs a filesystem relabel."
+    },
+    {
+      "id": "context-label",
+      "front": "SELinux context (label)",
+      "meaning": "Security identity on files/processes that policy matches against (user:role:type:…)",
+      "example": "ls -Z /var/www/html; ps -Z",
+      "notes": "Type is what most targeted policy cares about (e.g. httpd_sys_content_t). Wrong type → deny even if DAC allows."
+    },
+    {
+      "id": "ls-z",
+      "front": "ls -Z",
+      "meaning": "Show file SELinux contexts (inspect before changing)",
+      "example": "ls -Z /srv/www/lab",
+      "notes": "Prefer for reading contexts. Compare expected web content type vs a wrong type like default_t."
+    },
+    {
+      "id": "chcon",
+      "front": "chcon",
+      "meaning": "Temporarily change a file’s SELinux context (label)",
+      "example": "chcon -t httpd_sys_content_t /srv/www/lab/index.html",
+      "notes": "Fix without turning SELinux off. A restore/relabel can wipe a chcon-only change — make it permanent when needed."
+    },
+    {
+      "id": "restorecon",
+      "front": "restorecon",
+      "meaning": "Reset labels on a path to the policy’s default file-context mapping",
+      "example": "restorecon -Rv /srv/www/lab",
+      "notes": "Uses the permanent fcontext database. If mapping is wrong, restorecon puts the wrong type back."
+    },
+    {
+      "id": "semanage-fcontext",
+      "front": "semanage fcontext + restorecon",
+      "meaning": "Permanent path→type mapping so labels survive a full restore",
+      "example": "semanage fcontext -a -t httpd_sys_content_t '/srv/www/lab(/.*)?'; restorecon -Rv /srv/www/lab",
+      "notes": "Lab idea: temporary chcon drifts after restore; permanent fcontext keeps the custom path correct under enforcing."
+    },
+    {
+      "id": "booleans",
+      "front": "SELinux booleans",
+      "meaning": "Named on/off policy knobs without writing new policy",
+      "example": "getsebool ftpd_anon_write; setsebool ftpd_anon_write on",
+      "notes": "semanage boolean -l shows (current, default). setsebool alone lasts until reboot; setsebool -P persists."
+    },
+    {
+      "id": "semodule",
+      "front": "semodule -l",
+      "meaning": "List policy modules loaded in memory",
+      "example": "semodule -l | less",
+      "notes": "Modular policy packs (apache, antivirus, …). Booleans flip switches inside those packs."
+    }
+  ]
+}

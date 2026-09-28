@@ -1,0 +1,121 @@
+{
+  "title": "Crond",
+  "subtitle": "Scheduled jobs — flip for meaning, crontab examples, and notes",
+  "frontLabel": "Form / schedule",
+  "modeForward": "Form → meaning",
+  "modeReverse": "Meaning → form",
+  "cards": [
+    {
+      "id": "cron-vs-crontab",
+      "front": "cron vs crontab",
+      "meaning": "cron = the clock daemon; crontab = that user’s schedule file",
+      "example": "Edit with crontab -e, not a random text file (unless admin on system files)",
+      "notes": "Together they run “every night at 2am” without a human at the keyboard. systemd unit: crond.service / cron.service."
+    },
+    {
+      "id": "crontab-e",
+      "front": "crontab -e",
+      "meaning": "Edit the current user’s crontab in $EDITOR",
+      "example": "crontab -e",
+      "notes": "Supported way to change user jobs. Spool files live under /var/spool/cron (RHEL) or /var/spool/cron/crontabs (Debian)."
+    },
+    {
+      "id": "crontab-u",
+      "front": "crontab -u username -e",
+      "meaning": "Edit someone else’s crontab (needs privilege)",
+      "example": "crontab -u alice -e",
+      "notes": "User jobs are named after accounts in /etc/passwd."
+    },
+    {
+      "id": "five-fields",
+      "front": "* * * * * command",
+      "meaning": "minute hour day-of-month month weekday, then the command",
+      "example": "0 2 * * * /bin/sh backup.sh",
+      "notes": "Ranges: min 0–59, hour 0–23, dom 1–31, month 1–12, weekday 0–7 (0 and 7 = Sunday). Cron’s finest grain is one minute."
+    },
+    {
+      "id": "system-user-field",
+      "front": "* * * * * root /usr/local/bin/job.sh",
+      "meaning": "System crontab line: five time fields, then a username, then the command",
+      "example": "/etc/crontab and /etc/cron.d/*",
+      "notes": "User crontabs omit the username field. System drop-ins in /etc/cron.d/ use a different format from personal crontabs."
+    },
+    {
+      "id": "spool",
+      "front": "/var/spool/cron",
+      "meaning": "User crontab files, named after accounts; loaded into memory",
+      "example": "File named alice holds alice’s jobs",
+      "notes": "Memory hook: user jobs = spool dir. System jobs = /etc/crontab and /etc/cron.d/."
+    },
+    {
+      "id": "cron-dirs",
+      "front": "/etc/cron.hourly|daily|weekly|monthly/",
+      "meaning": "Drop scripts here to run on that cadence without writing a five-field line",
+      "example": "Put backup.sh in /etc/cron.daily/",
+      "notes": "Run via a system cron/anacron hook. /etc/anacrontab is for jobs that should still run if the machine was off."
+    },
+    {
+      "id": "star",
+      "front": "*",
+      "meaning": "Every value in that field",
+      "example": "* * * * * /scripts/script.sh → every minute",
+      "notes": "Also: 5,17 = 5 and 17; */10 = every 10; jan,may or sun,fri allowed."
+    },
+    {
+      "id": "step",
+      "front": "*/10 * * * *",
+      "meaning": "Every 10 minutes",
+      "example": "*/10 * * * * /scripts/monitor.sh",
+      "notes": "*/n is a step in whichever field it sits (minutes, hours, …)."
+    },
+    {
+      "id": "daily-2am",
+      "front": "0 2 * * *",
+      "meaning": "02:00 every day",
+      "example": "0 2 * * * /bin/sh backup.sh",
+      "notes": "Minute 0, hour 2, any day/month/weekday."
+    },
+    {
+      "id": "twice-day",
+      "front": "0 5,17 * * *",
+      "meaning": "05:00 and 17:00 every day",
+      "example": "0 5,17 * * * /scripts/script.sh",
+      "notes": "Comma = list of values in one field."
+    },
+    {
+      "id": "sunday",
+      "front": "0 17 * * sun",
+      "meaning": "Every Sunday at 17:00",
+      "example": "0 17 * * sun /scripts/script.sh",
+      "notes": "Weekday names work. Also: 0 17 * * sun,fri for Sun and Fri."
+    },
+    {
+      "id": "first-sunday",
+      "front": "0 2 * * sun [ $(date +%d) -le 07 ] && …",
+      "meaning": "First Sunday of the month at 02:00",
+      "example": "0 2 * * sun [ $(date +%d) -le 07 ] && /script/script.sh",
+      "notes": "Cron cannot say “first Sunday” alone — 0 2 * * sun is every Sunday; the date test keeps only days 1–7."
+    },
+    {
+      "id": "subminute",
+      "front": "Every 30 seconds",
+      "meaning": "Two cron lines: the job at second 0, and sleep 30; same job",
+      "example": "* * * * * /scripts/script.sh\n* * * * * sleep 30; /scripts/script.sh",
+      "notes": "Cron has no sub-minute field. Finest grain is one minute."
+    },
+    {
+      "id": "mailto",
+      "front": "MAILTO / job output",
+      "meaning": "Job stdout/stderr is mailed to the crontab owner, or to MAILTO if set",
+      "example": "MAILTO=ops@example.com at top of crontab",
+      "notes": "Redirect yourself with >> log 2>&1 to avoid mail. With cron -s, output can also go to syslog."
+    },
+    {
+      "id": "every-4h",
+      "front": "0 */4 * * *",
+      "meaning": "Every four hours, on the hour",
+      "example": "0 */4 * * * /scripts/script.sh",
+      "notes": "Minute 0, hours 0,4,8,12,16,20."
+    }
+  ]
+}

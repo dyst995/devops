@@ -1,0 +1,56 @@
+{
+  "title": "Boot loaders",
+  "subtitle": "From power-on to kernel — flip for meaning, example, and notes",
+  "frontLabel": "Concept",
+  "modeForward": "Term → meaning",
+  "modeReverse": "Meaning → term",
+  "cards": [
+    {
+      "id": "boot-loader",
+      "front": "boot loader",
+      "meaning": "Small program that finds and loads the kernel into RAM after firmware runs",
+      "notes": "Also called bootstrap / bootstrap loader"
+    },
+    {
+      "id": "boot-chain",
+      "front": "Power → firmware → loader → kernel → init",
+      "meaning": "Boot sequence: ROM firmware, boot loader, kernel in RAM, then init/systemd and user space",
+      "notes": "Often multi-stage chain loading"
+    },
+    {
+      "id": "firmware",
+      "front": "BIOS / UEFI",
+      "meaning": "Firmware in ROM that runs first and hands off to the boot loader",
+      "notes": "RAM is empty at power-on; OS lives on disk until loaded"
+    },
+    {
+      "id": "chain-loading",
+      "front": "chain loading",
+      "meaning": "Tiny first-stage loader loads a more capable second stage, which loads the kernel"
+    },
+    {
+      "id": "lilo",
+      "front": "LILO",
+      "meaning": "LInux LOader — older, less powerful historical default; rarely used on new systems",
+      "notes": "Originally no GUI menu for choosing OS/kernel"
+    },
+    {
+      "id": "grub",
+      "front": "GRUB",
+      "meaning": "GRand Unified Bootloader — modern default; easier to administer",
+      "notes": "CLI, network boot, MD5 passwords"
+    },
+    {
+      "id": "grub-conf-boot",
+      "front": "/boot/grub/grub.conf",
+      "meaning": "Main GRUB config path under /boot (course answer)",
+      "notes": "GRUB2 often uses grub.cfg under /boot/grub2 or EFI paths"
+    },
+    {
+      "id": "grub-conf-etc",
+      "front": "/etc/grub.conf",
+      "meaning": "Alternate GRUB config path — often a symlink into /boot",
+      "notes": "Course asks for both /boot/grub/grub.conf and /etc/grub.conf"
+    }
+  ]
+}

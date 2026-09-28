@@ -1,0 +1,93 @@
+{
+  "title": "Text editors",
+  "subtitle": "Vim modes, nano bindings, EDITOR, and visudo",
+  "frontLabel": "Command",
+  "modeForward": "Command → meaning",
+  "modeReverse": "Meaning → command",
+  "cards": [
+    {
+      "id": "editor",
+      "front": "export EDITOR=vim",
+      "meaning": "Set the default editor for tools that open one",
+      "example": "export EDITOR=nano",
+      "notes": "Honored by visudo, crontab -e, git commit (and VISUAL). On a server you live in an editor."
+    },
+    {
+      "id": "vim",
+      "front": "vim file",
+      "meaning": "Open file in Vim — starts in Command (Normal) mode",
+      "example": "vim file_to_edit.txt",
+      "notes": "Vim = Vi IMproved. Always expect vi/vim on Unix. Learn with vimtutor."
+    },
+    {
+      "id": "modes",
+      "front": "Command / Insert / Last-line",
+      "meaning": "Vim’s three modes: keys are commands, text, or Ex commands",
+      "example": "Esc → Command; i → Insert; : → Last-line",
+      "notes": "Type to change the file only in Insert. Esc always returns to Command."
+    },
+    {
+      "id": "hjkl",
+      "front": "h j k l",
+      "meaning": "Move left / down / up / right (Command mode)",
+      "example": "hjkl",
+      "notes": "Inverted-T navigation. Also: w/b word, 0/$ line ends, gg/G file start/end."
+    },
+    {
+      "id": "gg-G",
+      "front": "gg / G",
+      "meaning": "Jump to first / last line of the file",
+      "example": "gg; G",
+      "notes": "Memory hook: gg ground floor, G Ground of the file (the end)."
+    },
+    {
+      "id": "dd-yy",
+      "front": "dd / yy / p",
+      "meaning": "Delete (cut) line / yank (copy) line / paste after",
+      "example": "dd; yy; p",
+      "notes": "Double letter = whole line. P pastes before. Also x = delete char, dw = delete word."
+    },
+    {
+      "id": "insert-keys",
+      "front": "i / a / o / O",
+      "meaning": "Insert before cursor / append after / new line below / above",
+      "example": "i then type text; Esc",
+      "notes": "All enter Insert from Command. Esc to leave Insert."
+    },
+    {
+      "id": "search",
+      "front": "/pattern / n",
+      "meaning": "Search forward / next match (same direction)",
+      "example": "/TODO then n",
+      "notes": "?pattern searches backward. N = previous match. Same idea as less."
+    },
+    {
+      "id": "last-line",
+      "front": ":w / :q / :wq / :q!",
+      "meaning": "Write / quit / save+quit / quit discarding changes",
+      "example": "Esc then :wq",
+      "notes": "Panic combo: Esc then :wq. :q fails if unsaved. :!command runs a shell command."
+    },
+    {
+      "id": "nano",
+      "front": "nano file",
+      "meaning": "Modeless editor — ordinary keys type text; cheatsheet on screen",
+      "example": "nano file_to_edit.txt",
+      "notes": "^ = Ctrl, M- = Alt/Cmd. Easier than vim for beginners."
+    },
+    {
+      "id": "nano-keys",
+      "front": "^O / ^X / ^W / ^K / ^U",
+      "meaning": "Save / exit / search / cut line / paste (uncut)",
+      "example": "^O then Enter to save",
+      "notes": "M-6 copies the line without cutting. Kill/uncut = cut/paste."
+    },
+    {
+      "id": "visudo",
+      "front": "sudo visudo",
+      "meaning": "Edit /etc/sudoers with a syntax check on save",
+      "example": "sudo visudo",
+      "notes": "Never edit sudoers with a normal editor. A typo can lock you out of sudo. Ubuntu often opens nano."
+    }
+  ]
+}

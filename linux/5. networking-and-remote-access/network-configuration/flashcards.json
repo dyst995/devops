@@ -1,0 +1,121 @@
+{
+  "title": "Network configuration",
+  "subtitle": "Interfaces, routes, persistent files, NSS — flip for meaning, example, and notes",
+  "frontLabel": "Topic",
+  "modeForward": "Topic → meaning",
+  "modeReverse": "Meaning → topic",
+  "cards": [
+    {
+      "id": "ifconfig",
+      "front": "ifconfig",
+      "meaning": "Show or change TCP/IP interfaces that are up (legacy net-tools)",
+      "example": "ifconfig eth0",
+      "notes": "Set IP/netmask, bring interfaces up/down. Prefer ip on modern systems; know both for the course."
+    },
+    {
+      "id": "ifconfig-a",
+      "front": "ifconfig -a",
+      "meaning": "List all interfaces, including those that are down",
+      "example": "ifconfig -a",
+      "notes": "-a = even the sleeping NICs. Plain ifconfig only shows interfaces that are up."
+    },
+    {
+      "id": "ifconfig-up",
+      "front": "ifconfig eth0 up",
+      "meaning": "Activate an interface (down deactivates)",
+      "example": "ifconfig eth0 up",
+      "notes": "Logical cable on/off — not unplugging the NIC. Pair with ifconfig eth0 down."
+    },
+    {
+      "id": "ip-addr-add",
+      "front": "ip address add IP/MASK dev IFACE",
+      "meaning": "Add a static IPv4 address to a NIC at runtime",
+      "example": "ip address add 192.168.2.223/24 dev eth1",
+      "notes": "/24 = netmask 255.255.255.0. A NIC can hold more than one address. Gone after reboot unless written to config."
+    },
+    {
+      "id": "ip-addr-show",
+      "front": "ip addr show dev eth1",
+      "meaning": "Show addresses on one interface (addr = address)",
+      "example": "ip addr show dev eth1",
+      "notes": "Verify after add. Multiple inet lines on the same NIC means both addresses are active."
+    },
+    {
+      "id": "ip-route-add",
+      "front": "ip route add DEST via GW dev IFACE",
+      "meaning": "Add a static host or network route",
+      "example": "ip route add 192.0.2.0/24 via 10.0.0.3 dev eth0",
+      "notes": "via = next hop. Use a single IP for a host route (/32). Runtime only unless persisted."
+    },
+    {
+      "id": "ip-route",
+      "front": "ip route",
+      "meaning": "Print the routing table",
+      "example": "ip route",
+      "notes": "Look for default via — the default gateway. metric = preference (lower usually wins)."
+    },
+    {
+      "id": "default-via",
+      "front": "default via",
+      "meaning": "Default gateway — where unmatched destinations go",
+      "example": "default via 10.0.0.10 dev ens9",
+      "notes": "On Red Hat scripts, the last GATEWAY= read from ifcfg files that are up wins."
+    },
+    {
+      "id": "ifcfg",
+      "front": "/etc/sysconfig/network-scripts/ifcfg-ethX",
+      "meaning": "RHEL per-NIC persistent config: IP, mask, gateway, DHCP, on-boot",
+      "example": "DEVICE=eth0 IPADDR=… GATEWAY=… ONBOOT=yes",
+      "notes": "Prefer GATEWAY= here, not only in the global network file (deprecated). Apply with network restart."
+    },
+    {
+      "id": "sysconfig-network",
+      "front": "/etc/sysconfig/network",
+      "meaning": "RHEL global networking file (NETWORKING, HOSTNAME; legacy gateway)",
+      "example": "cat /etc/sysconfig/network",
+      "notes": "Putting GATEWAY only here is deprecated — use per-interface ifcfg-* instead."
+    },
+    {
+      "id": "debian-interfaces",
+      "front": "/etc/network/interfaces",
+      "meaning": "Debian persistent interface config: static/DHCP, address, gateway",
+      "example": "iface eth0 inet static\\naddress 192.168.0.10",
+      "notes": "With /etc/hostname for the hostname. Both families still use resolv.conf for DNS."
+    },
+    {
+      "id": "resolv-conf",
+      "front": "/etc/resolv.conf",
+      "meaning": "DNS nameserver list (both RHEL and Debian)",
+      "example": "nameserver 8.8.8.8",
+      "notes": "Where the resolver asks for DNS. Shared by both distro families."
+    },
+    {
+      "id": "onboot-bootproto",
+      "front": "ONBOOT=yes / BOOTPROTO=dhcp",
+      "meaning": "Bring interface up at boot; get address via DHCP vs static",
+      "example": "ONBOOT=yes\\nBOOTPROTO=dhcp",
+      "notes": "Static setups use none/static plus IPADDR instead of dhcp."
+    },
+    {
+      "id": "nsswitch",
+      "front": "/etc/nsswitch.conf",
+      "meaning": "Name Service Switch — which sources to query and in what order",
+      "example": "hosts: dns nis files",
+      "notes": "Order = search order. files = local files; dns/nis/ldap/db = other backends."
+    },
+    {
+      "id": "hosts-line",
+      "front": "hosts: dns nis files",
+      "meaning": "Resolve hostnames via DNS first, then NIS, then /etc/hosts",
+      "example": "hosts: dns nis files",
+      "notes": "Why ping myhost may ignore /etc/hosts if dns comes first. nsswitch = phone book index."
+    },
+    {
+      "id": "network-restart",
+      "front": "service network restart",
+      "meaning": "Reload ifcfg scripts (older RHEL / SysV)",
+      "example": "service network restart",
+      "notes": "On systemd: systemctl restart network (or NetworkManager). Needed after editing ifcfg files."
+    }
+  ]
+}

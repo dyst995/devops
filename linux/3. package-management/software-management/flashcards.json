@@ -1,0 +1,107 @@
+{
+  "title": "Software management",
+  "subtitle": "APT, apt-get, apt-cache, and package families — flip for meaning, example, and notes",
+  "frontLabel": "Command / concept",
+  "modeForward": "Form → meaning",
+  "modeReverse": "Meaning → form",
+  "cards": [
+    {
+      "id": "package",
+      "front": "software package / package management system",
+      "meaning": "Package = software in an archive; PMS installs, upgrades, configures, and removes packages (and deps)",
+      "example": "Install a package instead of copying random binaries onto a server",
+      "notes": "The manager tracks files, versions, and dependencies."
+    },
+    {
+      "id": "families",
+      "front": "Red Hat vs Debian families",
+      "meaning": "RPM + rpm/yum  ·  DEB + dpkg/apt",
+      "example": "*.rpm with yum; *.deb with apt-get",
+      "notes": "Interview hook: yum is to rpm as apt is to dpkg. Low-level = single file; high-level = repos + deps."
+    },
+    {
+      "id": "low-high",
+      "front": "rpm/dpkg vs yum/apt",
+      "meaning": "Low-level talks to one file on disk; high-level talks to repositories, resolves deps, then calls low-level",
+      "example": "rpm -i foo.rpm  ·  dpkg -i foo.deb  ·  apt-get install nginx",
+      "notes": "Newer RHEL uses dnf; this course names yum."
+    },
+    {
+      "id": "update",
+      "front": "sudo apt-get update",
+      "meaning": "Retrieve new lists of packages from repos (refresh the catalog)",
+      "example": "sudo apt-get update",
+      "notes": "Does not upgrade installed software by itself. Run after adding a repo or APT will not see new packages."
+    },
+    {
+      "id": "upgrade",
+      "front": "sudo apt-get upgrade",
+      "meaning": "Upgrade already installed packages",
+      "example": "sudo apt-get upgrade",
+      "notes": "Memory hook: update = refresh catalog; upgrade/install = change what is on disk."
+    },
+    {
+      "id": "install",
+      "front": "sudo apt-get install nginx",
+      "meaning": "Install by package name, not the .deb filename",
+      "example": "sudo apt-get install nginx  (not nginx.deb)",
+      "notes": "High-level apt-get downloads and resolves deps; you name the package (libc6), not the file (libc6.deb)."
+    },
+    {
+      "id": "remove",
+      "front": "sudo apt-get remove nginx",
+      "meaning": "Remove the package; config files may stay",
+      "example": "sudo apt-get remove nginx",
+      "notes": "Opposite of install for the binaries; configs can remain on disk."
+    },
+    {
+      "id": "purge",
+      "front": "sudo apt-get purge nginx",
+      "meaning": "Remove the package and its config files",
+      "example": "sudo apt-get purge nginx",
+      "notes": "remove keeps configs; purge does not."
+    },
+    {
+      "id": "check",
+      "front": "sudo apt-get check",
+      "meaning": "Verify there are no broken dependencies",
+      "example": "sudo apt-get check",
+      "notes": "Diagnostic — does not install or upgrade by itself."
+    },
+    {
+      "id": "cache-vs-get",
+      "front": "apt-get vs apt-cache",
+      "meaning": "apt-get changes the system; apt-cache only looks up the binary cache",
+      "example": "apt-cache search nginx  (no install)",
+      "notes": "apt-cache never installs anything."
+    },
+    {
+      "id": "search-show",
+      "front": "apt-cache search / show / showpkg / depends",
+      "meaning": "Regex search · readable record · general info · raw dependency list",
+      "example": "apt-cache search nginx\\napt-cache show nginx",
+      "notes": "Query-only tools against APT’s cache."
+    },
+    {
+      "id": "sources",
+      "front": "/etc/apt/sources.list and sources.list.d/",
+      "meaning": "Where APT reads repository lists (main file + per-vendor drop-ins)",
+      "example": "ls /etc/apt/sources.list /etc/apt/sources.list.d/",
+      "notes": "Extra vendors (Docker, Terraform, …) drop a file in sources.list.d/. Then apt-get update."
+    },
+    {
+      "id": "deb-line",
+      "front": "deb URL release components",
+      "meaning": "Binary packages from a mirror for a release and component set",
+      "example": "deb http://ftp.by.debian.org/debian/ buster main non-free contrib",
+      "notes": "deb-src = source packages. buster = Debian 10 codename. main/contrib/non-free = components."
+    },
+    {
+      "id": "deb-name",
+      "front": ".deb name origin",
+      "meaning": "Debian binary package extension; “Deb” from Debra (Ian Murdock’s partner) / Debian",
+      "example": "nginx_1.18.0-0ubuntu1_amd64.deb",
+      "notes": "APT is the user interface + libraries that install and remove software on Debian and variants (Ubuntu, Mint, …)."
+    }
+  ]
+}

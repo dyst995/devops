@@ -1,0 +1,65 @@
+{
+  "title": "xargs",
+  "subtitle": "Stdin words → command arguments — batch, per-item, null-safe, parallel",
+  "frontLabel": "Command",
+  "modeForward": "Command → meaning",
+  "modeReverse": "Meaning → command",
+  "cards": [
+    {
+      "id": "xargs",
+      "front": "xargs",
+      "meaning": "Read args from stdin (blanks/newlines) and append them to a command",
+      "example": "cat names.txt | xargs",
+      "notes": "Default command is /bin/echo. Memory hook: stdin = list of words; xargs stuffs them onto a command."
+    },
+    {
+      "id": "echo-join",
+      "front": "cat names.txt | xargs",
+      "meaning": "Join multiline input into one echoed line",
+      "example": "one\\ntwo\\nthree  →  one two three",
+      "notes": "No command given → echo. Many lines become one line of args."
+    },
+    {
+      "id": "xargs-i",
+      "front": "xargs -i touch {}",
+      "meaning": "One command per input item; {} is the placeholder",
+      "example": "cat names.txt | xargs -i touch {}",
+      "notes": "Bare xargs cmd = one cmd with many args. -i = one cmd per item."
+    },
+    {
+      "id": "xargs-I",
+      "front": "xargs -I {} touch {}",
+      "meaning": "Modern spelling of -i — replace {} once per item",
+      "example": "cat names.txt | xargs -I {} touch {}",
+      "notes": "Preferred on GNU xargs. Same idea as -i."
+    },
+    {
+      "id": "custom-placeholder",
+      "front": "xargs -iT touch T",
+      "meaning": "Same as -i, but placeholder is T instead of {}",
+      "example": "cat names.txt | xargs -iT touch T",
+      "notes": "Custom replace string when {} is awkward or already used."
+    },
+    {
+      "id": "null",
+      "front": "xargs -0 / --null",
+      "meaning": "Split on NUL, not whitespace — safe for spaces/quotes/backslashes",
+      "example": "find /tmp -name core -type f -print0 | xargs -0 rm",
+      "notes": "Quotes and backslashes are not special. Always pair with find -print0."
+    },
+    {
+      "id": "parallel",
+      "front": "xargs -P 4",
+      "meaning": "Run up to 4 processes at a time (default is 1)",
+      "example": "cat urls.txt | xargs -P 4 -I {} curl -O {}",
+      "notes": "-P 0 = as many as possible (be careful). Speeds multicore work."
+    },
+    {
+      "id": "find-pair",
+      "front": "find … | xargs",
+      "meaning": "find prints paths; xargs turns lines into command arguments",
+      "example": "find /tmp -name core -type f -print | xargs /bin/rm -",
+      "notes": "Other half of find -exec. Prefer -print0 | xargs -0 when names may have spaces."
+    }
+  ]
+}

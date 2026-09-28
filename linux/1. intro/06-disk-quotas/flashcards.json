@@ -1,0 +1,78 @@
+{
+  "title": "Disk quotas",
+  "subtitle": "Cap user/group space and file count — flip for meaning, example, and notes",
+  "frontLabel": "Command",
+  "modeForward": "Command → meaning",
+  "modeReverse": "Meaning → command",
+  "cards": [
+    {
+      "id": "quotas",
+      "front": "disk quotas",
+      "meaning": "Limit how much disk a user or group may use; alert before filling a partition"
+    },
+    {
+      "id": "who",
+      "front": "user vs group quotas",
+      "meaning": "Cap an individual separately from a project group they belong to",
+      "notes": "Both matter on shared /home or multi-tenant hosts"
+    },
+    {
+      "id": "blocks",
+      "front": "block quota",
+      "meaning": "Limits disk space consumed — stop one user from filling the partition"
+    },
+    {
+      "id": "inodes",
+      "front": "inode quota",
+      "meaning": "Limits number of files/directories — avoid “disk full” with free gigabytes",
+      "notes": "Classic cause: millions of tiny files"
+    },
+    {
+      "id": "soft-hard",
+      "front": "soft vs hard limit",
+      "meaning": "Soft = warning / grace period; hard = cannot go beyond"
+    },
+    {
+      "id": "fstab-quota",
+      "front": "usrquota,grpquota",
+      "meaning": "fstab mount options that enable quota accounting on that filesystem",
+      "notes": "Must be on the mount before quotas work"
+    },
+    {
+      "id": "quotacheck",
+      "front": "quotacheck",
+      "meaning": "Scan the filesystem and build/update quota files",
+      "example": "quotacheck"
+    },
+    {
+      "id": "quotaon",
+      "front": "quotaon",
+      "meaning": "Turn quotas on for a filesystem",
+      "example": "quotaon"
+    },
+    {
+      "id": "edquota",
+      "front": "edquota",
+      "meaning": "Interactively edit a user’s or group’s soft/hard limits",
+      "example": "edquota"
+    },
+    {
+      "id": "setquota",
+      "front": "setquota",
+      "meaning": "Set quota limits non-interactively",
+      "example": "setquota"
+    },
+    {
+      "id": "repquota",
+      "front": "repquota",
+      "meaning": "Admin report of usage vs limits",
+      "example": "repquota"
+    },
+    {
+      "id": "quota",
+      "front": "quota",
+      "meaning": "Show quota for the current (or named) user",
+      "example": "quota"
+    }
+  ]
+}

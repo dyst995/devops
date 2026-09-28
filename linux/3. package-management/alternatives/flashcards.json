@@ -1,0 +1,93 @@
+{
+  "title": "alternatives",
+  "subtitle": "Managed symlinks for one public name, many binaries — flip for meaning, example, and notes",
+  "frontLabel": "Command / concept",
+  "modeForward": "Form → meaning",
+  "modeReverse": "Meaning → form",
+  "cards": [
+    {
+      "id": "what",
+      "front": "alternatives",
+      "meaning": "Creates, removes, maintains, and displays the symlinks that pick which implementation a generic name points at",
+      "example": "java → /usr/java/latest/bin/java (not a second JVM copy)",
+      "notes": "Memory hook: a managed symlink farm. One public name, many real binaries, one current choice. Debian/Ubuntu: update-alternatives."
+    },
+    {
+      "id": "install",
+      "front": "alternatives --install link name path priority",
+      "meaning": "Register a new path in the alternative group",
+      "example": "alternatives --install /usr/bin/java java /usr/java/latest/bin/java 5",
+      "notes": "link = public symlink users run; name = group; path = real binary; priority = integer (highest wins in --auto)."
+    },
+    {
+      "id": "config",
+      "front": "alternatives --config name",
+      "meaning": "Interactive menu to pick which path provides the group",
+      "example": "alternatives --config java",
+      "notes": "* = current selection; + = auto-mode winner (highest priority). Enter keeps current; type a number to switch."
+    },
+    {
+      "id": "set",
+      "front": "alternatives --set name path",
+      "meaning": "Pin the group to a specific path (manual mode)",
+      "example": "alternatives --set java /usr/java/latest/bin/java",
+      "notes": "Non-interactive: pick by path instead of typing a menu number."
+    },
+    {
+      "id": "auto",
+      "front": "alternatives --auto name",
+      "meaning": "Let priority choose the current alternative (automatic mode)",
+      "example": "alternatives --auto java",
+      "notes": "Highest priority wins. Opposite of --set (manual pin)."
+    },
+    {
+      "id": "display",
+      "front": "alternatives --display name",
+      "meaning": "Show status, paths, priorities, and current choice",
+      "example": "alternatives --display java",
+      "notes": "Inspect without changing anything."
+    },
+    {
+      "id": "remove",
+      "front": "alternatives --remove name path",
+      "meaning": "Unregister that path from the group",
+      "example": "alternatives --remove java /usr/java/latest/bin/java",
+      "notes": "Does not delete the binary on disk — only drops it from the alternatives group."
+    },
+    {
+      "id": "priority",
+      "front": "priority (in --install)",
+      "meaning": "Integer weight; in auto mode the highest priority wins",
+      "example": "... /usr/java/latest/bin/java 5",
+      "notes": "Only matters when the group is in --auto mode. Manual --set ignores priority until you switch back."
+    },
+    {
+      "id": "slave",
+      "front": "--slave link name path",
+      "meaning": "Extra symlinks that must switch together with the master",
+      "example": "alternatives --install ... --slave /usr/bin/javac javac /usr/java/latest/bin/javac",
+      "notes": "Man pages, javac, and similar companions flip when the master alternative flips."
+    },
+    {
+      "id": "parts",
+      "front": "link / name / path",
+      "meaning": "Public symlink · group name · real binary",
+      "example": "/usr/bin/java · java · /usr/java/latest/bin/java",
+      "notes": "Users run link; alternatives manages which path it points at under name."
+    },
+    {
+      "id": "markers",
+      "front": "* and + in --config menu",
+      "meaning": "* = current selection; + = would win in auto mode",
+      "example": "*+ 4  /usr/lib/jvm/.../java",
+      "notes": "Both markers on one line means current choice is also the auto winner."
+    },
+    {
+      "id": "verify",
+      "front": "java -version",
+      "meaning": "Confirm which JVM /usr/bin/java now resolves to",
+      "example": "java -version → java version \"1.6.0_26\"",
+      "notes": "After --config or --set, the PATH name is the symlink target you selected — not a second copy of the JVM."
+    }
+  ]
+}

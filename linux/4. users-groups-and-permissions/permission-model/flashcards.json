@@ -1,0 +1,114 @@
+{
+  "title": "Permission model",
+  "subtitle": "rwx, chmod, SUID/SGID, sticky, chattr — flip to reveal meaning, example, and notes",
+  "frontLabel": "Topic",
+  "modeForward": "Topic → meaning",
+  "modeReverse": "Meaning → topic",
+  "cards": [
+    {
+      "id": "ls-l-buckets",
+      "front": "ls -l identity buckets",
+      "meaning": "Three who: user (owner), group, other — each with r, w, x",
+      "example": "-rwxr-x--- 1 nika staff … backup.sh",
+      "notes": "Leading type char: - file, d directory, l symlink, c/b device. Ownership is UID/GID."
+    },
+    {
+      "id": "dir-x",
+      "front": "Directory execute (x)",
+      "meaning": "May enter / resolve a path (cd, open a file inside)",
+      "example": "chmod u+x mydir",
+      "notes": "On a dir: r = list names; w = create/delete/rename entries (needs x too). On a file: x = run."
+    },
+    {
+      "id": "octal-421",
+      "front": "Octal 4-2-1",
+      "meaning": "r=4, w=2, x=1 — three digits = user, group, other",
+      "example": "rwxr-x--- → 750",
+      "notes": "Common: 755, 644, 700. Avoid 777 except /tmp-style sticky dirs."
+    },
+    {
+      "id": "chmod-symbolic",
+      "front": "chmod symbolic",
+      "meaning": "u/g/o/a with + add, - remove, = set exactly",
+      "example": "chmod g=rw test.t; chmod o-r,g+w test.t",
+      "notes": "chmod 755 when you think in numbers; chmod g+w when you think in letters."
+    },
+    {
+      "id": "chown-chgrp",
+      "front": "chown / chgrp",
+      "meaning": "chown sets user owner; chgrp sets group owner",
+      "example": "chown user:group path; chown -R user path",
+      "notes": "Only root can give a file to another user on typical Linux. -R is recursive."
+    },
+    {
+      "id": "sticky",
+      "front": "Sticky bit (t)",
+      "meaning": "On a shared directory, only delete/rename files you own",
+      "example": "chmod +t somedir; chmod 1777 /tmp",
+      "notes": "Without sticky, write on the dir lets anyone unlink anyone’s file. ls -l shows t/T in other’s x slot. Extra octal digit 1."
+    },
+    {
+      "id": "suid",
+      "front": "SUID (s on owner x)",
+      "meaning": "Process runs with the file owner’s effective UID",
+      "example": "chmod 4555 path_to_file",
+      "notes": "Classic: passwd runs as root to update /etc/shadow. Linux typically ignores SUID on scripts — binaries only. Extra octal 4."
+    },
+    {
+      "id": "sgid",
+      "front": "SGID (s on group x)",
+      "meaning": "Process runs with file’s group as effective GID; on dirs, new files inherit the directory’s group",
+      "example": "chmod 2555 path_to_folder",
+      "notes": "Useful for shared project directories. Extra octal digit 2. 4755 = SUID+755; 2755 = SGID+755; 1777 = sticky+777."
+    },
+    {
+      "id": "special-octal",
+      "front": "Special-bit octal (left digit)",
+      "meaning": "4 = SUID, 2 = SGID, 1 = sticky",
+      "example": "chmod 4755 bin; chmod 2755 shared; chmod 1777 /tmp",
+      "notes": "Leading 0 clears special bits (e.g. chmod 0700). Combine with the usual three mode digits."
+    },
+    {
+      "id": "chmod-755",
+      "front": "chmod 755",
+      "meaning": "rwxr-xr-x — owner full; group and other read+execute",
+      "example": "chmod 755 test.t",
+      "notes": "7=rwx, 5=r-x, 5=r-x. Typical for directories and some scripts others must run."
+    },
+    {
+      "id": "chmod-644",
+      "front": "chmod 644",
+      "meaning": "rw-r--r-- — owner read+write; everyone else read-only",
+      "example": "chmod 644 notes.txt",
+      "notes": "Common for ordinary data files (no execute)."
+    },
+    {
+      "id": "chattr-i",
+      "front": "chattr +i / -i",
+      "meaning": "Immutable — no changes, deletes, or renames until unlocked",
+      "example": "chattr +i /sbin/lilo.conf; chattr -i /sbin/lilo.conf",
+      "notes": "Beyond rwx on ext filesystems. Unlock with -i before you edit. lsattr to inspect."
+    },
+    {
+      "id": "chattr-a",
+      "front": "chattr +a",
+      "meaning": "Append-only — file: only append; directory: add files but not rename/delete existing",
+      "example": "chattr +a logfile",
+      "notes": "Other common flags: +A no atime; +s secure deletion (zero blocks on delete if FS honors it)."
+    },
+    {
+      "id": "lsattr",
+      "front": "lsattr",
+      "meaning": "List ext filesystem attributes",
+      "example": "lsattr /directory/or/file; lsattr -d dir",
+      "notes": "-R recursive; -d treat directory as a file (do not list contents). chmod = rwx; chattr = extra ext flags."
+    },
+    {
+      "id": "tmp-sticky",
+      "front": "/tmp with sticky",
+      "meaning": "World-writable shared dir where you may only throw away your own trash",
+      "example": "drwxrwxrwt … /tmp",
+      "notes": "Bob’s /tmp/bob cannot be deleted by tom when sticky is set, even if /tmp is 777."
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "title": "Swap and swappiness",
+  "subtitle": "Disk overflow for RAM — flip for meaning, example, and notes",
+  "frontLabel": "Command",
+  "modeForward": "Command → meaning",
+  "modeReverse": "Meaning → command",
+  "cards": [
+    {
+      "id": "swap",
+      "front": "swap",
+      "meaning": "Disk space used as overflow when RAM is full; inactive pages move there",
+      "notes": "Helps low-RAM machines; not a replacement for more RAM. Btrfs does not support swap."
+    },
+    {
+      "id": "swap-forms",
+      "front": "swap partition vs file",
+      "meaning": "Partition recommended (contiguous); file more flexible without repartitioning",
+      "notes": "Can combine both. Kernel 2.6+ swap files nearly as fast if contiguous."
+    },
+    {
+      "id": "proc-swaps",
+      "front": "cat /proc/swaps",
+      "meaning": "List active swap devices/files",
+      "example": "cat /proc/swaps"
+    },
+    {
+      "id": "free-h",
+      "front": "free -h",
+      "meaning": "Show RAM and swap usage in human-readable units",
+      "example": "free -h"
+    },
+    {
+      "id": "swappiness",
+      "front": "swappiness",
+      "meaning": "Kernel weight: swap cold app pages vs drop page cache (range 0–100, default 60)",
+      "notes": "High = happy to swap; low = protect app RAM, evict cache first"
+    },
+    {
+      "id": "mkswap",
+      "front": "mkswap",
+      "meaning": "Format a device or file as swap (never mkfs.ext4 on a swap LV)",
+      "example": "mkswap /dev/VolGroup00/LogVol02"
+    },
+    {
+      "id": "swapon",
+      "front": "swapon",
+      "meaning": "Activate a swap device or file now",
+      "example": "swapon -v /dev/VolGroup00/LogVol02"
+    },
+    {
+      "id": "swapoff",
+      "front": "swapoff",
+      "meaning": "Deactivate swap before removing it — never rm an active swap file",
+      "example": "swapoff -v /swapfile",
+      "notes": "Order: swapoff → fstab → daemon-reload → rm"
+    },
+    {
+      "id": "lv-swap-flow",
+      "front": "lvcreate → mkswap → fstab → swapon",
+      "meaning": "Add swap as an LVM LV: create LV, format as swap, persist in fstab, activate",
+      "example": "lvcreate VolGroup00 -n LogVol02 -L 2G",
+      "notes": "Also systemctl daemon-reload after fstab"
+    },
+    {
+      "id": "swapfile-dd",
+      "front": "dd if=/dev/zero of=/swapfile …",
+      "meaning": "Create an empty file to use as swap (then mkswap, chmod 0600, fstab, swapon)",
+      "example": "dd if=/dev/zero of=/swapfile bs=1024 count=65536",
+      "notes": "64 MB = 64*1024 blocks; chmod 0600 — may hold RAM secrets"
+    },
+    {
+      "id": "swap-size-rhel",
+      "front": "RHEL swap sizing (≤2 GB RAM)",
+      "meaning": "Recommended swap = 2× RAM; with hibernation = 3× RAM",
+      "notes": "Bigger RAM: table drops toward ≥4 GB; hibernation needs ≥ RAM"
+    },
+    {
+      "id": "fstab-swap",
+      "front": "fstab swap line",
+      "meaning": "Persist swap across reboot: device/file swap swap defaults 0 0",
+      "example": "/swapfile swap swap defaults 0 0"
+    }
+  ]
+}

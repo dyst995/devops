@@ -1,0 +1,121 @@
+{
+  "title": "Networking tools",
+  "subtitle": "Reachability, path, DNS, sockets, whois, packets — flip for meaning and notes",
+  "frontLabel": "Command",
+  "modeForward": "Command → meaning",
+  "modeReverse": "Meaning → command",
+  "cards": [
+    {
+      "id": "ping",
+      "front": "ping host",
+      "meaning": "Send ICMP echo requests — is the host reachable?",
+      "example": "ping google.com",
+      "notes": "Runs until Ctrl-C. No reply ≠ always down — firewalls often drop ICMP."
+    },
+    {
+      "id": "ping-c",
+      "front": "ping -c N host",
+      "meaning": "Stop ping after N packets",
+      "example": "ping -c 5 google.com",
+      "notes": "-c = count. Useful in scripts so ping does not hang forever."
+    },
+    {
+      "id": "traceroute",
+      "front": "traceroute host",
+      "meaning": "Show hop-by-hop path toward a host",
+      "example": "traceroute google.com",
+      "notes": "Map of the road, not just destination alive. Each router that answers is a hop."
+    },
+    {
+      "id": "tracepath",
+      "front": "tracepath host",
+      "meaning": "Similar path discovery; often works without root",
+      "example": "tracepath ya.ru",
+      "notes": "Same idea as traceroute with fewer privilege needs on many systems."
+    },
+    {
+      "id": "host",
+      "front": "host name-or-ip",
+      "meaning": "Short DNS lookup: name → IP or reverse IP → name",
+      "example": "host ya.ru",
+      "notes": "host = short answer. Contrast with dig for the full DNS packet."
+    },
+    {
+      "id": "dig",
+      "front": "dig name",
+      "meaning": "DNS lookup with full answer (question, answer, extra)",
+      "example": "dig ya.ru",
+      "notes": "dig = full packet view. Use when host’s one-liners are not enough."
+    },
+    {
+      "id": "dig-x",
+      "front": "dig -x IP",
+      "meaning": "Reverse DNS lookup (PTR)",
+      "example": "dig -x 213.180.204.8",
+      "notes": "-x = reverse. Same job as host IP or nslookup IP."
+    },
+    {
+      "id": "nslookup",
+      "front": "nslookup name-or-ip",
+      "meaning": "Query DNS; shows your resolver (#53) and A or reverse result",
+      "example": "nslookup epam.com",
+      "notes": "Server line is your resolver from resolv.conf. Non-authoritative = cached/recursive answer."
+    },
+    {
+      "id": "in-addr-arpa",
+      "front": "in-addr.arpa",
+      "meaning": "Reverse DNS namespace — IP octets reversed under this domain",
+      "example": "201.60.128.174.in-addr.arpa name = epam.com.",
+      "notes": "How nslookup/dig reverse lookups are structured. One IP can have several names."
+    },
+    {
+      "id": "netstat-ant",
+      "front": "netstat -ant",
+      "meaning": "All TCP sockets, numeric addresses (no reverse DNS)",
+      "example": "netstat -ant",
+      "notes": "-a all, -n numeric, -t TCP. Look for LISTEN vs ESTABLISHED. Modern equivalent: ss."
+    },
+    {
+      "id": "netstat-nlpt",
+      "front": "sudo netstat -nlpt",
+      "meaning": "Listening TCP sockets plus PID/program name",
+      "example": "sudo netstat -nlpt",
+      "notes": "-l listening, -p process. Root needed to see other users’ processes. Who owns the port?"
+    },
+    {
+      "id": "listen-established",
+      "front": "LISTEN / ESTABLISHED",
+      "meaning": "LISTEN = server waiting; ESTABLISHED = session up",
+      "example": "tcp … 127.0.0.1:631 … LISTEN",
+      "notes": "Local address:port then remote. Bound to 127.0.0.1 = local only."
+    },
+    {
+      "id": "whois",
+      "front": "whois domain",
+      "meaning": "Look up registrar/NIC records (owner, dates, contacts)",
+      "example": "whois google.com",
+      "notes": "Answers “who owns this domain?” — not “what IP is it?” (that is DNS)."
+    },
+    {
+      "id": "tcpdump-i",
+      "front": "tcpdump -i IFACE",
+      "meaning": "Capture packets on that interface",
+      "example": "tcpdump -i eth0",
+      "notes": "Needs privilege for most interfaces. Start with -i, then add host/port filters."
+    },
+    {
+      "id": "tcpdump-host-port",
+      "front": "tcpdump host / port / -w",
+      "meaning": "Filter by IP or port; -w writes raw pcap",
+      "example": "tcpdump port 80 -w capture_file",
+      "notes": "-w is for Wireshark later, not text. host matches source or destination."
+    },
+    {
+      "id": "tcpdump-expr",
+      "front": "tcpdump 'src … and (dst port …)'",
+      "meaning": "Boolean packet filter; quotes keep and/or for tcpdump",
+      "example": "tcpdump 'src 10.0.2.4 and (dst port 3389 or 22)'",
+      "notes": "Without quotes the shell eats and/or. Parentheses group OR inside AND."
+    }
+  ]
+}

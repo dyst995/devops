@@ -1,0 +1,81 @@
+{
+  "title": "Inodes and links",
+  "subtitle": "Names vs inodes — flip for meaning, example, and notes",
+  "frontLabel": "Concept",
+  "modeForward": "Term → meaning",
+  "modeReverse": "Meaning → term",
+  "cards": [
+    {
+      "id": "inode",
+      "front": "inode",
+      "meaning": "File-system object ID: metadata, owner/perms, and disk block locations — not the name",
+      "notes": "Names live in directories; inode = ID card + map of data blocks"
+    },
+    {
+      "id": "directory",
+      "front": "directory",
+      "meaning": "List of names assigned to inodes (., .., and each child)",
+      "notes": "Phone book of names → inode numbers"
+    },
+    {
+      "id": "link-count",
+      "front": "link count",
+      "meaning": "How many directory entries point at an inode; data deletable when count is 0 and nothing has it open"
+    },
+    {
+      "id": "hard-link",
+      "front": "hard link",
+      "meaning": "Direct pointer to an inode — another name for the same file",
+      "example": "ln original.txt another-name.txt",
+      "notes": "Indistinguishable from original; same inode"
+    },
+    {
+      "id": "ln",
+      "front": "ln src dest",
+      "meaning": "Create a hard link (extra name for the same inode)",
+      "example": "ln original.txt another-name.txt"
+    },
+    {
+      "id": "hard-no-cross",
+      "front": "hard link + cross FS",
+      "meaning": "Hard links cannot cross file systems (inodes unique per FS)",
+      "notes": "Cannot hard-link from disk A to a file on separately mounted disk B"
+    },
+    {
+      "id": "soft-link",
+      "front": "soft link / symlink",
+      "meaning": "Pointer to a path/file name, not to the inode",
+      "example": "ln -s /var/www/html/current /srv/app",
+      "notes": "Its own inode, type symlink; can dangle"
+    },
+    {
+      "id": "ln-s",
+      "front": "ln -s src dest",
+      "meaning": "Create a symbolic (soft) link",
+      "example": "ln -s /var/www/html/current /srv/app"
+    },
+    {
+      "id": "soft-breaks",
+      "front": "move/rename target of symlink",
+      "meaning": "Soft link usually becomes invalid (dangling); hard link still works",
+      "notes": "Hard = same inode; soft = sticky note with a path"
+    },
+    {
+      "id": "delete-original",
+      "front": "delete original name",
+      "meaning": "Hard link: data remains if link count > 0. Soft link: link breaks; original gone",
+      "notes": "Deleting the soft link itself does not delete the original"
+    },
+    {
+      "id": "soft-cross-fs",
+      "front": "symlink across file systems",
+      "meaning": "Allowed — soft links can cross file systems; hard links cannot"
+    },
+    {
+      "id": "ls-li",
+      "front": "ls -li",
+      "meaning": "List with inode numbers; same number = hard links to the same file",
+      "example": "ls -li"
+    }
+  ]
+}

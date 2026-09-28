@@ -1,0 +1,74 @@
+{
+  "title": "Shell",
+  "subtitle": "CLI between you and the kernel — flip for meaning, example, and notes",
+  "frontLabel": "Concept",
+  "modeForward": "Term → meaning",
+  "modeReverse": "Meaning → term",
+  "cards": [
+    {
+      "id": "shell",
+      "front": "shell",
+      "meaning": "Program that interprets commands and asks the kernel to do the real work",
+      "notes": "User → Shell → Kernel → Hardware"
+    },
+    {
+      "id": "sh",
+      "front": "sh",
+      "meaning": "Bourne Shell — original Unix shell; many scripts still use #!/bin/sh",
+      "example": "/bin/sh",
+      "notes": "On modern Linux often a symlink to bash or dash (POSIX mode)"
+    },
+    {
+      "id": "bash",
+      "front": "bash",
+      "meaning": "GNU Bourne-Again Shell — default interactive shell on most Linux distros",
+      "example": "/bin/bash",
+      "notes": "Bourne-compatible + history, completion, better scripting"
+    },
+    {
+      "id": "csh",
+      "front": "csh",
+      "meaning": "C Shell — syntax looks more like C; less common on servers today",
+      "example": "/bin/csh",
+      "notes": "Only csh uses % for a normal-user prompt"
+    },
+    {
+      "id": "ksh",
+      "front": "ksh",
+      "meaning": "Korn Shell — Bourne-compatible with extra features; still seen on some Unix",
+      "example": "/bin/ksh"
+    },
+    {
+      "id": "prompt-user",
+      "front": "$ or %",
+      "meaning": "Default prompt for a regular (non-root) user",
+      "notes": "$ for sh/ksh/bash; % only for csh"
+    },
+    {
+      "id": "prompt-root",
+      "front": "#",
+      "meaning": "Default root (superuser) prompt — commands can change the whole system",
+      "notes": "Hash = extra power; same across shells"
+    },
+    {
+      "id": "echo-shell",
+      "front": "echo $SHELL",
+      "meaning": "Shows the login shell from your account (passwd / SHELL var)",
+      "example": "echo $SHELL"
+    },
+    {
+      "id": "echo-0",
+      "front": "echo $0",
+      "meaning": "Name of the current shell process",
+      "example": "echo $0",
+      "notes": "A leading - often means login shell"
+    },
+    {
+      "id": "passwd-shell",
+      "front": "/etc/passwd last field",
+      "meaning": "Stores your login shell (last field on your user line)",
+      "example": "cat /etc/passwd",
+      "notes": "Not always the same as the shell of your current process ($0)"
+    }
+  ]
+}

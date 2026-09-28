@@ -1,0 +1,114 @@
+{
+  "title": "Logs",
+  "subtitle": "Kernel buffer, journalctl, and classic /var/log files — flip to reveal meaning, example, and notes",
+  "frontLabel": "Command / path",
+  "modeForward": "Term → meaning",
+  "modeReverse": "Meaning → term",
+  "cards": [
+    {
+      "id": "dmesg",
+      "front": "dmesg",
+      "meaning": "Print the kernel message ring buffer (boot, drivers, OOM, hardware events)",
+      "example": "dmesg",
+      "notes": "Not the same as /var/log/messages — size-limited kernel diary. First stop for “did the kernel see this device?”"
+    },
+    {
+      "id": "dmesg-t",
+      "front": "dmesg -T",
+      "meaning": "Kernel messages with human-readable wall-clock timestamps",
+      "example": "dmesg -T",
+      "notes": "Default dmesg often shows seconds since boot; -T is easier to correlate with other logs."
+    },
+    {
+      "id": "journald",
+      "front": "systemd-journald",
+      "meaning": "Service that collects and stores structured, indexed binary journals from many sources",
+      "example": "systemctl status systemd-journald",
+      "notes": "Centralizes kernel, unit stdout/stderr, syslog, audit, etc. Journals are binary — query with journalctl."
+    },
+    {
+      "id": "journalctl",
+      "front": "journalctl",
+      "meaning": "Query and display systemd journal data",
+      "example": "journalctl",
+      "notes": "Cannot tail the journal files as plain text; always go through journalctl (or -f to follow)."
+    },
+    {
+      "id": "journalctl-u",
+      "front": "journalctl -u httpd",
+      "meaning": "Show journal lines for that systemd unit only",
+      "example": "journalctl -u httpd",
+      "notes": "-u filters by unit (service). Use when a service fails to start or misbehaves."
+    },
+    {
+      "id": "journalctl-p-b-x",
+      "front": "journalctl -p err -b -x",
+      "meaning": "Error and worse, this boot only, with extra explanatory help texts when available",
+      "example": "journalctl -p err -b -x",
+      "notes": "-p priority · -b last boot (-b -1 previous) · -x adds context/hints when systemd has them."
+    },
+    {
+      "id": "journalctl-t",
+      "front": "journalctl -t dockerd",
+      "meaning": "Filter by syslog identifier (not necessarily the unit name)",
+      "example": "journalctl -t dockerd",
+      "notes": "Same process can appear as -u docker.service and as -t dockerd. Use -t for the syslog id."
+    },
+    {
+      "id": "journalctl-since",
+      "front": "journalctl --since / --until",
+      "meaning": "Limit journal output to a time window (relative or absolute)",
+      "example": "journalctl --since \"1 hour ago\"",
+      "notes": "Phrases like \"2 days ago\" or \"2015-06-26 23:15:00\". Combine with -u, -p, -t."
+    },
+    {
+      "id": "var-log-messages",
+      "front": "/var/log/messages",
+      "meaning": "Global system text log including startup; mail, cron, daemon, kern, auth, …",
+      "example": "tail -f /var/log/messages",
+      "notes": "Classic rsyslog file on RHEL-family. Debian/Ubuntu often uses /var/log/syslog instead."
+    },
+    {
+      "id": "var-log-secure",
+      "front": "/var/log/secure",
+      "meaning": "Authentication and authorization; sshd including failed logins (RHEL-family)",
+      "example": "grep Failed /var/log/secure",
+      "notes": "Who tried to log in and whether they succeeded. Pair with journalctl -u sshd when using the journal."
+    },
+    {
+      "id": "var-log-auth",
+      "front": "/var/log/auth.log",
+      "meaning": "System authorization, user logins, and auth mechanisms (Debian-family)",
+      "example": "tail /var/log/auth.log",
+      "notes": "Same story as /var/log/secure on RHEL — know which file your distro uses."
+    },
+    {
+      "id": "var-log-cron",
+      "front": "/var/log/cron",
+      "meaning": "Cron/anacron job start and related scheduling log lines",
+      "example": "tail /var/log/cron",
+      "notes": "Check here when a scheduled job “didn’t run” or ran at the wrong time."
+    },
+    {
+      "id": "var-log-mail",
+      "front": "/var/log/maillog or mail.log",
+      "meaning": "Mail server log (e.g. sendmail); /var/log/mail/ holds extra mail logs",
+      "example": "tail /var/log/maillog",
+      "notes": "Name varies by distro: maillog vs mail.log. Subdirectory /var/log/mail/ for more detail."
+    },
+    {
+      "id": "var-log-sa",
+      "front": "/var/log/sa/",
+      "meaning": "Daily sar data files collected by the sysstat package",
+      "example": "ls /var/log/sa/",
+      "notes": "Historical CPU/IO stats that sar reads. Memory hook: sa/ = sysstat archive."
+    },
+    {
+      "id": "log-triage",
+      "front": "boot/hardware vs unit vs classic files",
+      "meaning": "dmesg for kernel; journalctl for systemd units; /var/log/… for classic syslog text",
+      "example": "dmesg -T; journalctl -u httpd -b; tail /var/log/secure",
+      "notes": "Pick the source that matches the failure class — don’t grep everywhere first."
+    }
+  ]
+}
