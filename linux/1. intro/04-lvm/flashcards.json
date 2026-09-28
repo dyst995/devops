@@ -1,84 +1,212 @@
 {
   "title": "LVM",
-  "subtitle": "Physical → volume group → logical — flip for meaning, example, and notes",
-  "frontLabel": "Command",
-  "modeForward": "Command → meaning",
-  "modeReverse": "Meaning → command",
+  "subtitle": "Physical → volume group → logical volumes — flip for meaning, example, and notes",
+  "frontLabel": "Concept / command",
+  "modeForward": "Term → meaning",
+  "modeReverse": "Meaning → term",
   "cards": [
     {
+      "id": "lvm-def",
+      "front": "LVM",
+      "meaning": "Logical Volume Manager — sits between physical disks and the file systems you mount",
+      "example": "PV → VG → LV → mkfs + mount",
+      "notes": "Pool disks and slice logical volumes you can resize instead of fixed partitions that are painful to grow."
+    },
+    {
       "id": "lvm-stack",
-      "front": "PV → VG → LV",
-      "meaning": "LVM stack: physical volumes pooled into a volume group, then sliced into logical volumes",
-      "notes": "Then mkfs + mount for a real filesystem"
+      "front": "LVM stack order",
+      "meaning": "Physical disks/partitions → PV (pvcreate) → VG (vgcreate) → LV (lvcreate) → filesystem (mkfs + mount)",
+      "example": "pvcreate → vgcreate → lvcreate → mkfs",
+      "notes": "Memory hook: Physical → Volume group → Logical — initialize, pool, slice."
+    },
+    {
+      "id": "pv",
+      "front": "Physical Volume (PV)",
+      "meaning": "A disk or partition labeled for LVM use",
+      "example": "pvcreate /dev/sdb1",
+      "notes": "Initialized with pvcreate; shown with pvdisplay / pvscan."
+    },
+    {
+      "id": "vg",
+      "front": "Volume Group (VG)",
+      "meaning": "One pool of space made from one or more PVs",
+      "example": "vgcreate vg_newlvm /dev/sdb1 /dev/sdc1",
+      "notes": "Any number of disks as one big disk."
+    },
+    {
+      "id": "lv",
+      "front": "Logical Volume (LV)",
+      "meaning": "A slice of space carved from a VG — the block device you format and mount",
+      "example": "lvcreate --name centos7_newvol -l 100%FREE vg_newlvm",
+      "notes": "Can span several disks; can be resized dynamically."
+    },
+    {
+      "id": "adv-pool",
+      "front": "LVM advantage: one pool",
+      "meaning": "Use any number of disks as one big disk; an LV can stretch across several disks",
+      "example": "vgcreate with multiple PVs",
+      "notes": "More flexible than raw partitions."
+    },
+    {
+      "id": "adv-resize",
+      "front": "LVM dynamic resize",
+      "meaning": "Create small LVs and resize them dynamically; order on disk does not matter",
+      "example": "grow an LV without free space sitting next to it",
+      "notes": "You do not need free space adjacent to the LV inside the VG."
+    },
+    {
+      "id": "adv-online",
+      "front": "LVM online changes",
+      "meaning": "Resize / create / delete logical and physical volumes online",
+      "example": "grow PV/LV while the system runs",
+      "notes": "The filesystem on the LV still needs its own resize; some filesystems support online resize."
+    },
+    {
+      "id": "adv-migrate",
+      "front": "LVM live migration",
+      "meaning": "Move an LV that services are using to different disks without restarting those services",
+      "example": "live migrate LV to other disks",
+      "notes": "Services keep running during the move."
+    },
+    {
+      "id": "adv-snapshots",
+      "front": "LVM snapshots",
+      "meaning": "Freeze a copy of the filesystem for backup with little downtime",
+      "example": "snapshot before a risky change",
+      "notes": "Point-in-time copy for backup."
+    },
+    {
+      "id": "disadv-linux-only",
+      "front": "LVM disadvantage: platform support",
+      "meaning": "Almost Linux-only — no official support on most other OS (FreeBSD, Windows, …)",
+      "example": "not portable to Windows as official LVM",
+      "notes": "Also more setup than plain partitions."
+    },
+    {
+      "id": "disadv-btrfs",
+      "front": "LVM on top of Btrfs",
+      "meaning": "Btrfs subvolumes already give a flexible layout — LVM on top may be unnecessary extra abstraction",
+      "example": "Btrfs subvolumes without LVM",
+      "notes": "Know when not to stack both."
+    },
+    {
+      "id": "three-steps",
+      "front": "Create an LV in three steps",
+      "meaning": "1) pvcreate 2) vgcreate 3) lvcreate — then mkfs and mount",
+      "example": "pvcreate → vgcreate → lvcreate → mkfs",
+      "notes": "Formatting is separate from LVM."
     },
     {
       "id": "pvcreate",
       "front": "pvcreate",
       "meaning": "Label a disk/partition as an LVM physical volume",
-      "example": "pvcreate /dev/sdb1"
+      "example": "sudo pvcreate /dev/sdb1",
+      "notes": "“Physical volume successfully created.”"
     },
     {
       "id": "pvscan",
       "front": "pvscan",
-      "meaning": "List PVs, which VG they are in, and free space",
-      "example": "pvscan"
+      "meaning": "Quick list of PVs: which exist, which VG they are in, how much is free",
+      "example": "sudo pvscan",
+      "notes": "Example output shows Total / in use / in no VG."
     },
     {
       "id": "pvdisplay",
       "front": "pvdisplay",
-      "meaning": "Show detailed physical volume info",
-      "example": "pvdisplay"
+      "meaning": "Detailed physical volume info",
+      "example": "sudo pvdisplay",
+      "notes": "Shows fields like PV Name and VG Name."
     },
     {
       "id": "vgcreate",
       "front": "vgcreate",
-      "meaning": "Pool one or more PVs into a volume group",
-      "example": "vgcreate vg_newlvm /dev/sdb1 /dev/sdc1"
+      "meaning": "Create a volume group from one or more PVs",
+      "example": "sudo vgcreate vg_newlvm /dev/sdb1 /dev/sdc1 /dev/sdc2",
+      "notes": "One PV or several PVs pooled into one VG."
     },
     {
       "id": "vgdisplay",
       "front": "vgdisplay",
-      "meaning": "Show detailed volume group info",
-      "example": "vgdisplay"
+      "meaning": "Detailed volume group info",
+      "example": "vgdisplay",
+      "notes": "Pair with vgscan to discover volume groups."
     },
     {
-      "id": "lvcreate-free",
-      "front": "lvcreate -l 100%FREE",
-      "meaning": "Create an LV using all remaining space in the VG",
+      "id": "vgscan",
+      "front": "vgscan",
+      "meaning": "Discover volume groups",
+      "example": "vgscan",
+      "notes": "Show/scan counterpart to vgcreate."
+    },
+    {
+      "id": "lvcreate",
+      "front": "lvcreate",
+      "meaning": "Create a logical volume inside a volume group",
       "example": "lvcreate --name centos7_newvol -l 100%FREE vg_newlvm",
-      "notes": "-l = size in logical extents"
+      "notes": "LV lives inside a VG; then format with mkfs."
     },
     {
-      "id": "lvcreate-size",
-      "front": "lvcreate -L 2G",
-      "meaning": "Create an LV of a fixed size",
+      "id": "lvcreate-name",
+      "front": "lvcreate --name / -n",
+      "meaning": "Set the logical volume name",
       "example": "lvcreate -n LogVol02 -L 2G VolGroup00",
-      "notes": "--name / -n for the LV name"
+      "notes": "--name and -n are the same idea."
+    },
+    {
+      "id": "lvcreate-L",
+      "front": "lvcreate -L",
+      "meaning": "Size the LV in bytes (G, M, …)",
+      "example": "lvcreate -n LogVol02 -L 2G VolGroup00",
+      "notes": "Fixed size, e.g. 2G."
+    },
+    {
+      "id": "lvcreate-l",
+      "front": "lvcreate -l 100%FREE",
+      "meaning": "Size in logical extents — here, all remaining unallocated space in the VG",
+      "example": "lvcreate --name centos7_newvol -l 100%FREE vg_newlvm",
+      "notes": "-l uses extents; -L uses byte sizes."
     },
     {
       "id": "lvdisplay",
       "front": "lvdisplay",
-      "meaning": "List logical volumes (path, size, VG, status)",
-      "example": "lvdisplay"
+      "meaning": "List logical volumes — path, name, VG, status, size",
+      "example": "lvdisplay",
+      "notes": "Example fields: LV Path, LV Name, VG Name, LV Status available, LV Size."
     },
     {
-      "id": "lv-path",
-      "front": "/dev/<vg>/<lv>",
-      "meaning": "Typical device path after lvcreate (also /dev/mapper/<vg>-<lv>)",
-      "example": "/dev/vg_newlvm/centos7_newvol"
+      "id": "lvscan",
+      "front": "lvscan",
+      "meaning": "Short scan of logical volumes",
+      "example": "lvscan",
+      "notes": "Show/scan counterpart to lvcreate."
     },
     {
-      "id": "mkfs",
-      "front": "mkfs.ext4",
-      "meaning": "Format the LV as a filesystem — separate from LVM itself",
-      "example": "mkfs.ext4 /dev/vg_newlvm/centos7_newvol",
-      "notes": "LVM only gives a block device; then mount (+ fstab for reboot)"
+      "id": "lv-device-path",
+      "front": "LV device path",
+      "meaning": "Typically /dev/<vg_name>/<lv_name> and also /dev/mapper/<vg_name>-<lv_name>",
+      "example": "/dev/vg_newlvm/centos7_newvol",
+      "notes": "Also /dev/mapper/vg_newlvm-centos7_newvol."
     },
     {
-      "id": "lvm-why",
-      "front": "LVM advantage",
-      "meaning": "Resize LVs dynamically, pool disks, snapshots, online changes — unlike fixed partitions",
-      "notes": "Almost Linux-only; Btrfs subvolumes may already be enough flexibility"
+      "id": "mkfs-separate",
+      "front": "mkfs on an LV",
+      "meaning": "Format a filesystem on the LV — LVM only gives you a block device",
+      "example": "sudo mkfs.ext4 /dev/vg_newlvm/centos7_newvol",
+      "notes": "Also mkfs.btrfs, mkfs.ntfs in the notes. Then mount; add /etc/fstab to survive reboot."
+    },
+    {
+      "id": "mount-lv",
+      "front": "mount (LVM LV)",
+      "meaning": "Mount the filesystem on the LV so you can use it",
+      "example": "mount /dev/vg_newlvm/centos7_newvol /mnt",
+      "notes": "Persist with /etc/fstab if needed."
+    },
+    {
+      "id": "df-lsblk-findmnt",
+      "front": "df / lsblk / findmnt after LVM",
+      "meaning": "df -h = space; lsblk = which LV sits on which disk; findmnt = mount table",
+      "example": "df -h; lsblk; findmnt",
+      "notes": "Filesystem layer tools after mkfs + mount."
     }
   ]
 }

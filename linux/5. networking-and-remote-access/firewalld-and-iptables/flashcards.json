@@ -1,6 +1,6 @@
 {
   "title": "firewalld and iptables",
-  "subtitle": "Zones, services, panic, NAT, forwarding — flip for meaning and notes",
+  "subtitle": "Zones, services, panic, masquerade, and port forwarding",
   "frontLabel": "Topic",
   "modeForward": "Topic → meaning",
   "modeReverse": "Meaning → topic",
@@ -8,114 +8,247 @@
     {
       "id": "firewalld",
       "front": "firewalld",
-      "meaning": "Dynamically managed firewall using zones of trust for networks/interfaces",
-      "example": "firewall-cmd …",
-      "notes": "Supports IPv4/IPv6, bridges, IP sets. Runtime = now; permanent = XML on disk. Default on RHEL."
+      "meaning": "Dynamically managed firewall daemon using zones for trust levels",
+      "example": "",
+      "notes": "Supports IPv4/IPv6, bridges, IP sets, runtime vs permanent, and apps adding rules without hand-editing iptables."
+    },
+    {
+      "id": "zone",
+      "front": "firewalld zone",
+      "meaning": "Trust level bound to an interface (or source); decides open services, NAT, etc.",
+      "example": "",
+      "notes": "Zone = how much do I trust this NIC / this network?"
     },
     {
       "id": "runtime-vs-permanent",
-      "front": "Runtime vs --permanent",
-      "meaning": "Runtime changes apply now; --permanent writes disk; --reload loads disk → runtime",
-      "example": "firewall-cmd --add-masquerade --permanent && firewall-cmd --reload",
-      "notes": "Permanent alone does not change live rules until reload. Runtime-only vanishes on reload."
+      "front": "Runtime vs permanent (firewalld)",
+      "meaning": "Runtime = active now; permanent = XML on disk for after reboot/--reload",
+      "example": "firewall-cmd … --permanent then firewall-cmd --reload",
+      "notes": "--permanent then --reload copies disk → runtime. Runtime-only changes vanish on reload."
     },
     {
-      "id": "iptables-vs-firewalld",
-      "front": "iptables service vs firewalld",
-      "meaning": "iptables service rebuilds all rules from a file; firewalld applies only diffs",
-      "example": "/etc/sysconfig/iptables vs /etc/firewalld/",
-      "notes": "Full rebuild can drop connections. firewalld keeps sessions up. Kernel still uses netfilter."
+      "id": "iptables-service-files",
+      "front": "/etc/sysconfig/iptables (and ip6tables)",
+      "meaning": "Old iptables-service config: one big IPv4 (and IPv6) rule dump",
+      "example": "",
+      "notes": "system-config-firewall GUI wrote the same files."
     },
     {
-      "id": "config-paths",
+      "id": "firewalld-files",
       "front": "/usr/lib/firewalld/ and /etc/firewalld/",
-      "meaning": "Stock defaults vs your overrides (zones, services)",
-      "example": "cat /etc/firewalld/zones/…",
-      "notes": "On RHEL, /etc/sysconfig/iptables often does not exist — normal when firewalld is default."
+      "meaning": "firewalld XML: stock defaults in /usr/lib; your overrides in /etc",
+      "example": "",
+      "notes": "Zones, services, and more under /etc/firewalld/."
+    },
+    {
+      "id": "no-sysconfig-iptables",
+      "front": "Missing /etc/sysconfig/iptables on RHEL",
+      "meaning": "Normal when firewalld is default — the old file often does not exist",
+      "example": "",
+      "notes": "Only look for it if you switched back to the iptables service."
+    },
+    {
+      "id": "iptables-apply",
+      "front": "How iptables service applies a change",
+      "meaning": "Flush all old rules, reread entire file, rebuild from scratch",
+      "example": "",
+      "notes": "Tears down the firewall briefly and typically drops existing connections."
+    },
+    {
+      "id": "firewalld-apply",
+      "front": "How firewalld applies a change",
+      "meaning": "Only differences are applied; existing connections can stay up",
+      "example": "",
+      "notes": "iptables service = throw away the wall; firewalld = add/remove one brick."
+    },
+    {
+      "id": "netfilter",
+      "front": "netfilter",
+      "meaning": "Kernel packet filter; firewalld or iptables service programs it",
+      "example": "",
+      "notes": "The iptables command may still display the resulting chains."
     },
     {
       "id": "zone-drop",
-      "front": "zone: drop",
-      "meaning": "Lowest trust — all incoming dropped with no reply; outbound allowed",
-      "example": "Assign interface to drop zone",
-      "notes": "Remote side times out (silence), not a rejection. Contrast with block."
+      "front": "drop zone",
+      "meaning": "Lowest trust: all incoming dropped with no reply; outgoing still possible",
+      "example": "",
+      "notes": "Remote side sees silence (timeout), not a rejection."
     },
     {
       "id": "zone-block",
-      "front": "zone: block",
-      "meaning": "Incoming rejected with ICMP host/adm prohibited",
-      "example": "icmp-host-prohibited / icmp6-adm-prohibited",
-      "notes": "Client is told “no” instead of hanging. Similar to drop but with a reply."
+      "front": "block zone",
+      "meaning": "Incoming rejected with ICMP error (icmp-host-prohibited / icmp6-adm-prohibited)",
+      "example": "",
+      "notes": "Client is told “no,” instead of hanging."
+    },
+    {
+      "id": "icmp-host-prohibited",
+      "front": "icmp-host-prohibited",
+      "meaning": "IPv4 reject message used by the block zone",
+      "example": "",
+      "notes": "IPv6 counterpart: icmp6-adm-prohibited."
     },
     {
       "id": "zone-public",
-      "front": "zone: public",
-      "meaning": "Untrusted networks; allow only selected incoming services",
-      "example": "Often default zone; allow ssh/http case by case",
-      "notes": "Internet / café Wi‑Fi mindset — do not trust other computers."
+      "front": "public zone",
+      "meaning": "Untrusted networks; allow only selected incoming (e.g. ssh, maybe http)",
+      "example": "",
+      "notes": "Default zone on many servers (internet, café Wi-Fi)."
     },
     {
-      "id": "zone-external-internal",
-      "front": "zones: external + internal",
-      "meaning": "Gateway pair — WAN with masquerade; LAN with more services",
-      "example": "external = toward internet; internal = private LAN",
-      "notes": "external hides RFC1918 behind the firewall’s public IP. internal trusts LAN more."
+      "id": "zone-external",
+      "front": "external zone",
+      "meaning": "Gateway WAN side; configured for NAT masquerading",
+      "example": "",
+      "notes": "Internal RFC1918 stays private; hosts reachable via firewall’s public IP."
     },
     {
-      "id": "zone-dmz-trusted",
-      "front": "zones: dmz / trusted",
-      "meaning": "dmz = isolated hosts, limited in; trusted = trust everyone (rare)",
-      "example": "Public web server in DMZ; trusted for lab only",
-      "notes": "work/home are fairly open office/home LANs. trusted = almost no filtering."
+      "id": "zone-internal",
+      "front": "internal zone",
+      "meaning": "Gateway LAN side; fairly trustworthy, more services than public/external",
+      "example": "",
+      "notes": "Pair with external for NAT gateway."
+    },
+    {
+      "id": "zone-dmz",
+      "front": "dmz zone",
+      "meaning": "Isolated hosts with no access to the rest of the network; limited incoming",
+      "example": "",
+      "notes": "e.g. a public web server in a separate segment."
+    },
+    {
+      "id": "zone-work",
+      "front": "work zone",
+      "meaning": "Office LAN — trust most computers; a few more services than public",
+      "example": "",
+      "notes": ""
+    },
+    {
+      "id": "zone-home",
+      "front": "home zone",
+      "meaning": "Home LAN — trust most; a few more services accepted",
+      "example": "",
+      "notes": ""
+    },
+    {
+      "id": "zone-trusted",
+      "front": "trusted zone",
+      "meaning": "Most open: trust all machines; almost no incoming filtering",
+      "example": "",
+      "notes": "Use sparingly (lab, fully private segment)."
+    },
+    {
+      "id": "named-services",
+      "front": "firewalld named services",
+      "meaning": "Port + protocol (+ sometimes a kernel helper) so you allow ftp instead of 21/tcp by hand",
+      "example": "firewall-cmd --get-services",
+      "notes": "--get-services = menu."
     },
     {
       "id": "get-services",
       "front": "firewall-cmd --get-services",
       "meaning": "List named services you can allow (ssh, http, ftp, …)",
       "example": "firewall-cmd --get-services",
-      "notes": "Named services wrap port + protocol (+ helpers) so you allow ftp instead of 21/tcp by hand."
+      "notes": ""
     },
     {
       "id": "info-service",
       "front": "firewall-cmd --info-service=NAME",
-      "meaning": "Show ports/modules for a named service",
+      "meaning": "Show ports/modules for that named service",
       "example": "firewall-cmd --info-service=ftp",
-      "notes": "ftp → ports 21/tcp and module nf_conntrack_ftp for related data ports."
+      "notes": "ftp → ports: 21/tcp; modules: nf_conntrack_ftp."
     },
     {
-      "id": "panic",
-      "front": "firewall-cmd --panic-on / --panic-off",
-      "meaning": "Emergency: drop all packets; then leave panic mode",
+      "id": "ftp-21",
+      "front": "ftp service ports",
+      "meaning": "Control channel 21/tcp",
+      "example": "ports: 21/tcp",
+      "notes": ""
+    },
+    {
+      "id": "nf-conntrack-ftp",
+      "front": "nf_conntrack_ftp",
+      "meaning": "Kernel helper so related FTP data ports can be tracked",
+      "example": "modules: nf_conntrack_ftp",
+      "notes": "Shown by --info-service=ftp."
+    },
+    {
+      "id": "panic-on",
+      "front": "firewall-cmd --panic-on",
+      "meaning": "Drop all packets immediately (global emergency lock)",
       "example": "firewall-cmd --panic-on",
-      "notes": "Not a zone — global nuclear switch. Can lock you out of SSH; use console for --panic-off if needed."
+      "notes": "Not a zone. Can lock you out of SSH — use --panic-off from console if needed."
     },
     {
-      "id": "masquerade",
-      "front": "--zone=external --add-masquerade",
-      "meaning": "NAT: hide internal IPs; outbound source becomes the firewall’s IP",
+      "id": "panic-off",
+      "front": "firewall-cmd --panic-off",
+      "meaning": "Leave panic mode",
+      "example": "firewall-cmd --panic-off",
+      "notes": ""
+    },
+    {
+      "id": "masquerade-purpose",
+      "front": "Masquerading (NAT)",
+      "meaning": "Leaving packets get the firewall’s IP as source; replies un-NAT to the real internal host",
+      "example": "",
+      "notes": "Use internal (LAN) + external (internet); turn masquerade on external."
+    },
+    {
+      "id": "add-masquerade",
+      "front": "firewall-cmd --zone=external --add-masquerade",
+      "meaning": "Enable NAT masquerade on external (runtime — temporary)",
       "example": "firewall-cmd --zone=external --add-masquerade",
-      "notes": "Masquerade on external, not internal. Pair with --remove- / --query-masquerade."
+      "notes": "Masquerade on external, not internal. Gone after reboot/firewall restart unless permanent."
     },
     {
-      "id": "masquerade-permanent",
+      "id": "remove-masquerade",
+      "front": "--remove-masquerade",
+      "meaning": "Turn masquerading off for the zone",
+      "example": "firewall-cmd --zone=external --remove-masquerade",
+      "notes": ""
+    },
+    {
+      "id": "query-masquerade",
+      "front": "--query-masquerade",
+      "meaning": "Ask whether masquerade is active in this zone",
+      "example": "firewall-cmd --zone=external --query-masquerade",
+      "notes": ""
+    },
+    {
+      "id": "permanent-masquerade",
       "front": "--add-masquerade --permanent + --reload",
-      "meaning": "Make masquerading survive reboot/restart",
-      "example": "firewall-cmd --zone=external --add-masquerade --permanent\\nfirewall-cmd --reload",
-      "notes": "--permanent writes XML; --reload copies permanent into runtime."
+      "meaning": "Survive reboot: write XML under /etc/firewalld/, then load into runtime",
+      "example": "firewall-cmd --zone=external --add-masquerade --permanent\nfirewall-cmd --reload",
+      "notes": "--permanent alone does not change live rules until --reload (or restart)."
     },
     {
-      "id": "forward-port",
+      "id": "reload",
+      "front": "firewall-cmd --reload",
+      "meaning": "Load permanent config into runtime",
+      "example": "firewall-cmd --reload",
+      "notes": "Runtime-only changes vanish on reload unless also made permanent."
+    },
+    {
+      "id": "port-forwarding",
+      "front": "Port forwarding (firewalld)",
+      "meaning": "DNAT: send inbound traffic for a port to another internal address or alternate port",
+      "example": "",
+      "notes": "Requires masquerading — classic RHCE exam mistake."
+    },
+    {
+      "id": "add-forward-port",
       "front": "--add-forward-port=port=:proto=:toport=",
-      "meaning": "DNAT: send inbound traffic for a port to another port (or toaddr)",
+      "meaning": "Forward inbound port to another port (same host unless toaddr= set)",
       "example": "firewall-cmd --zone=external --add-forward-port=port=22:proto=tcp:toport=3753",
-      "notes": "Requires masquerading first — classic RHCE trap. Permanent needs --permanent then --reload."
+      "notes": "port= seen on firewall; proto= protocol; toport= where sent. Masquerade first."
     },
     {
-      "id": "zone-hook",
-      "front": "What is a zone?",
-      "meaning": "Trust level bound to an interface (or source) for how incoming traffic is handled",
-      "example": "public, drop, external, trusted, …",
-      "notes": "Memory hook: how much do I trust this NIC / network? Services, NAT, and forwards hang off the zone."
+      "id": "forward-port-parts",
+      "front": "port= / proto= / toport= / toaddr=",
+      "meaning": "Seen port; protocol; destination port; optional destination address",
+      "example": "port=22:proto=tcp:toport=3753",
+      "notes": "Without toaddr=, forward stays on the same host."
     }
   ]
 }

@@ -1,107 +1,177 @@
 {
   "title": "Process monitoring",
-  "subtitle": "See and stop processes — flip to reveal meaning, example, and notes",
-  "frontLabel": "Command / key",
-  "modeForward": "Command → meaning",
-  "modeReverse": "Meaning → command",
+  "subtitle": "See running processes, then stop them by PID or name",
+  "frontLabel": "Term / command",
+  "modeForward": "Term → meaning",
+  "modeReverse": "Meaning → term",
   "cards": [
+    {
+      "id": "process-pid",
+      "front": "process / PID",
+      "meaning": "A process is a running program; PID is its process ID",
+      "example": "",
+      "notes": "Monitoring means see what is running, then stop it if needed"
+    },
+    {
+      "id": "tool-roles",
+      "front": "top vs ps vs kill vs killall",
+      "meaning": "top = live screen; ps = snapshot; kill = by PID; killall = by name",
+      "example": "",
+      "notes": "Memory hook for the four tools in this topic"
+    },
     {
       "id": "top",
       "front": "top",
-      "meaning": "Live, dynamically updating process list (CPU, memory, PID, user, command)",
+      "meaning": "Dynamically updating live task list (CPU, memory, PID, user, command)",
       "example": "top",
-      "notes": "Refreshes until you quit. Load averages and memory summary sit at the top; the table is the process list. Dashboard, not a one-shot snapshot."
+      "notes": "Refreshes by itself until you quit. Load averages and memory summary sit at the top; the table is the process list"
     },
     {
       "id": "top-q",
-      "front": "q (in top)",
+      "front": "top → q",
       "meaning": "Quit top",
-      "example": "press q while top is running",
-      "notes": "Leaves the live UI. Memory hook: top = dashboard; q to leave."
+      "example": "press q inside top",
+      "notes": "top = dashboard; q to leave"
     },
     {
-      "id": "top-p",
-      "front": "P (in top)",
-      "meaning": "Sort process list by CPU usage",
+      "id": "top-P",
+      "front": "top → P",
+      "meaning": "Sort process list by CPU",
       "example": "press P inside top",
-      "notes": "Useful when hunting a CPU hog. Contrast with M (sort by memory)."
+      "notes": "Not in the course snippet, but you will hit it"
     },
     {
-      "id": "top-m",
-      "front": "M (in top)",
-      "meaning": "Sort process list by memory usage",
+      "id": "top-M",
+      "front": "top → M",
+      "meaning": "Sort process list by memory",
       "example": "press M inside top",
-      "notes": "Use when RAM pressure is the question. Contrast with P (sort by CPU)."
+      "notes": "Not in the course snippet, but you will hit it"
     },
     {
       "id": "top-k",
-      "front": "k (in top)",
-      "meaning": "Kill a process from inside top (asks for PID and signal)",
-      "example": "press k, enter PID, choose signal",
-      "notes": "Interactive kill without leaving top. Still need the PID from the table."
+      "front": "top → k",
+      "meaning": "Kill a PID from inside top (asks for PID and signal)",
+      "example": "press k inside top",
+      "notes": "Not in the course snippet, but you will hit it"
+    },
+    {
+      "id": "ps",
+      "front": "ps",
+      "meaning": "Prints a list of processes once (snapshot, not a live UI)",
+      "example": "ps aux",
+      "notes": "Frozen photo, not a movie"
     },
     {
       "id": "ps-aux",
       "front": "ps aux",
-      "meaning": "One-shot snapshot of processes: all users, user-oriented columns, including daemons",
+      "meaning": "Snapshot of all users' processes with user-oriented columns, including daemons",
       "example": "ps aux",
-      "notes": "Frozen photo, not a movie. Columns include USER, PID, %CPU, %MEM, STAT, COMMAND — use PID with kill."
+      "notes": "Classic BSD-style combo: a + u + x"
     },
     {
       "id": "ps-a",
-      "front": "ps a",
-      "meaning": "Show processes of all users (not only yours)",
+      "front": "ps flag a",
+      "meaning": "Processes of all users (not only yours)",
       "example": "ps aux",
-      "notes": "BSD-style flag. Combined with u and x in the classic ps aux."
+      "notes": "BSD-style flag"
     },
     {
       "id": "ps-u",
-      "front": "ps u",
+      "front": "ps flag u",
       "meaning": "User-oriented columns (USER, %CPU, %MEM, …)",
       "example": "ps aux",
-      "notes": "Makes the snapshot readable for who owns what and how much they use."
+      "notes": "BSD-style flag"
     },
     {
       "id": "ps-x",
-      "front": "ps x",
+      "front": "ps flag x",
       "meaning": "Include processes with no controlling terminal (daemons)",
       "example": "ps aux",
-      "notes": "Without x you miss background services. Memory hook: ps aux = everyone, including daemons."
+      "notes": "BSD-style flag — why aux catches background services"
+    },
+    {
+      "id": "ps-columns",
+      "front": "ps aux columns USER PID %CPU %MEM STAT COMMAND",
+      "meaning": "Columns you read on a ps aux snapshot; use PID with kill",
+      "example": "ps aux",
+      "notes": "PID is the number you pass to kill"
     },
     {
       "id": "ps-grep",
-      "front": "ps aux | grep name",
-      "meaning": "Find PIDs by matching the command name in the snapshot",
+      "front": "ps aux | grep nginx",
+      "meaning": "Find PIDs by name in a snapshot",
       "example": "ps aux | grep nginx",
-      "notes": "Careful: grep often matches itself too. Prefer kill PID once you have the number."
+      "notes": "Careful: grep matches itself too"
     },
     {
       "id": "kill",
-      "front": "kill PID",
-      "meaning": "Send SIGTERM (15) — polite request to exit cleanly",
+      "front": "kill",
+      "meaning": "Sends a signal to a process by PID",
       "example": "kill 156",
-      "notes": "Default signal is TERM. Cannot kill another user’s process unless you are root. Need the number from ps/top."
+      "notes": "Need the number from ps or top"
+    },
+    {
+      "id": "kill-default",
+      "front": "kill 156",
+      "meaning": "SIGTERM (15) — ask the process to exit cleanly",
+      "example": "kill 156",
+      "notes": "Default signal is TERM — polite stop"
+    },
+    {
+      "id": "sigterm-15",
+      "front": "SIGTERM (15)",
+      "meaning": "Default kill signal — \"please exit cleanly\"",
+      "example": "kill 156",
+      "notes": "Process can catch it and shut down gracefully"
     },
     {
       "id": "kill-9",
-      "front": "kill -9 PID",
-      "meaning": "Send SIGKILL — force stop; process cannot catch or ignore it",
+      "front": "kill -9 156",
+      "meaning": "SIGKILL — force stop; process cannot catch or ignore it",
       "example": "kill -9 156",
-      "notes": "Same as kill -KILL. Use when TERM is ignored. Does not run cleanup (temp files; children may remain). Shotgun, not ask."
+      "notes": "Same as -KILL. Does not run cleanup — temp files and child processes may remain. Use when TERM is ignored"
+    },
+    {
+      "id": "kill-root",
+      "front": "kill another user's process",
+      "meaning": "You cannot kill another user's process unless you are root",
+      "example": "",
+      "notes": "Permission rule for kill"
     },
     {
       "id": "killall",
-      "front": "killall name",
-      "meaning": "SIGTERM every process with that command name",
+      "front": "killall",
+      "meaning": "Sends the signal to all processes with that command name",
       "example": "killall top",
-      "notes": "Dangerous on a busy box: killall java kills every Java. Prefer kill PID when you mean one process."
+      "notes": "Prefer kill PID when you mean one process"
+    },
+    {
+      "id": "killall-term",
+      "front": "killall top",
+      "meaning": "SIGTERM every process named top",
+      "example": "killall top",
+      "notes": "Default signal is still TERM"
     },
     {
       "id": "killall-9",
-      "front": "killall -9 name",
-      "meaning": "SIGKILL every process with that command name",
+      "front": "killall -9 top",
+      "meaning": "SIGKILL every process named top",
       "example": "killall -9 top",
-      "notes": "Same force as kill -9, but by name. killall -KILL top is equivalent (signal by name, not number)."
+      "notes": "Force by name"
+    },
+    {
+      "id": "killall-KILL",
+      "front": "killall -KILL top",
+      "meaning": "Same as -9; signal by name instead of number",
+      "example": "killall -KILL top",
+      "notes": "-KILL equals -9"
+    },
+    {
+      "id": "killall-danger",
+      "front": "killall java",
+      "meaning": "Kills every Java process, not one PID — dangerous on a busy box",
+      "example": "killall java",
+      "notes": "Every match gets the signal"
     }
   ]
 }

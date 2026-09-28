@@ -1,107 +1,212 @@
 {
   "title": "Archives",
-  "subtitle": "zip, tar, gzip — pack, extract, stream, and search compressed data",
-  "frontLabel": "Command",
-  "modeForward": "Command → meaning",
-  "modeReverse": "Meaning → command",
+  "subtitle": "zip, tar, and gzip — flip to reveal meaning",
+  "frontLabel": "Command / flag",
+  "modeForward": "Term → meaning",
+  "modeReverse": "Meaning → term",
   "cards": [
     {
-      "id": "layers",
+      "id": "three-layers",
       "front": "zip vs tar vs gzip",
-      "meaning": "Pack+compress ZIP / bundle many files (optional gzip) / compress one stream",
-      "example": "zip -r out.zip dir/; tar -cvzf a.tar.gz dir/; gzip file",
-      "notes": "Memory hook: tar = glue files. gzip = squeeze one stream. tar.gz = glue then squeeze. zip = both in one format."
+      "meaning": "zip/unzip = package and compress in one ZIP; tar = bundle many files (compression optional); gzip = compress/expand a single stream",
+      "example": "",
+      "notes": "tar = glue; gzip = squeeze; tar.gz = glue then squeeze; zip = glue + squeeze in one format"
     },
     {
-      "id": "zip",
+      "id": "zip-rp",
       "front": "zip -rp archive.zip /path/to/",
-      "meaning": "Pack a folder into a ZIP (recursive; store relative paths)",
+      "meaning": "Pack a folder into a ZIP recursively; -p stores relative paths as given",
       "example": "zip -rp archive.zip /path/to/",
-      "notes": "-r = recursive. Course example uses -rp for a folder. Common with Windows/Java."
+      "notes": "-r = recursive. Common with Windows/Java"
+    },
+    {
+      "id": "zip-r",
+      "front": "zip -r",
+      "meaning": "Recursive — include directories",
+      "example": "zip -r out.zip dir/",
+      "notes": ""
+    },
+    {
+      "id": "zip-p",
+      "front": "zip -p",
+      "meaning": "Store relative paths as given (course example uses -rp for a folder)",
+      "example": "zip -rp archive.zip /path/to/",
+      "notes": ""
     },
     {
       "id": "unzip",
       "front": "unzip archive.zip",
-      "meaning": "Extract ZIP contents into the current directory",
+      "meaning": "List, test, and extract files from a ZIP; extract into the current directory",
       "example": "unzip archive.zip",
-      "notes": "Also lists/tests archives. See man unzip for more flags."
+      "notes": ""
+    },
+    {
+      "id": "tar",
+      "front": "tar",
+      "meaning": "Save many files into a single tape/disk archive, and restore individual files from it",
+      "example": "",
+      "notes": "Originally tape archive. Compression is optional (z = gzip)"
     },
     {
       "id": "tar-c",
-      "front": "tar -cvf archive.tar path/",
-      "meaning": "Create a tar archive (verbose, file name last)",
+      "front": "tar -c",
+      "meaning": "Create archive",
       "example": "tar -cvf archive.tar path/to/",
-      "notes": "c = create, v = verbose, f = file. -f must be last among these because the filename follows it."
+      "notes": "c = create"
     },
     {
       "id": "tar-x",
-      "front": "tar -xvf archive.tar",
-      "meaning": "Extract a tar archive",
+      "front": "tar -x",
+      "meaning": "Extract from archive",
       "example": "tar -xvf archive.tar",
-      "notes": "x = extract. Can restore individual files from the archive too."
+      "notes": "x = extract"
     },
     {
       "id": "tar-t",
-      "front": "tar -tf archive.tar",
-      "meaning": "List contents of a tar archive",
+      "front": "tar -t",
+      "meaning": "List archive contents",
       "example": "tar -tf archive.tar",
-      "notes": "t = list. No extract — just see what is inside."
+      "notes": "t = list"
+    },
+    {
+      "id": "tar-v",
+      "front": "tar -v",
+      "meaning": "Verbose — print names",
+      "example": "tar -cvf archive.tar path/to/",
+      "notes": "v = verbose"
+    },
+    {
+      "id": "tar-f",
+      "front": "tar -f",
+      "meaning": "File — next argument is the archive name, or - for stdin/stdout; must be last among the classic cluster",
+      "example": "tar -cvf archive.tar path/to/",
+      "notes": "Always f for file"
     },
     {
       "id": "tar-z",
-      "front": "tar -cvzf archive.tar.gz path/",
-      "meaning": "Create a gzip-compressed tar (.tar.gz / .tgz)",
+      "front": "tar -z",
+      "meaning": "Filter through gzip (.tar.gz / .tgz)",
       "example": "tar -cvzf archive.tar.gz path/to/",
-      "notes": "z = filter through gzip. Memory cluster: cvf / xvf / tf / cvzf."
+      "notes": "Add z for gzip. Habit clusters: cvf / xvf / tf / cvzf"
     },
     {
-      "id": "tar-pipe",
-      "front": "tar cf - dir1 | (cd dir2 && tar xf -)",
-      "meaning": "Copy a tree via stdout/stdin — no .tar left on disk",
+      "id": "tar-cvf",
+      "front": "tar -cvf archive.tar path/",
+      "meaning": "Create a verbose archive named archive.tar from path/",
+      "example": "tar -cvf archive.tar path/to/",
+      "notes": ""
+    },
+    {
+      "id": "tar-xvf",
+      "front": "tar -xvf archive.tar",
+      "meaning": "Extract archive with verbose names",
+      "example": "tar -xvf archive.tar",
+      "notes": ""
+    },
+    {
+      "id": "tar-tf",
+      "front": "tar -tf archive.tar",
+      "meaning": "List contents of the archive",
+      "example": "tar -tf archive.tar",
+      "notes": ""
+    },
+    {
+      "id": "tar-cvzf",
+      "front": "tar -cvzf archive.tar.gz path/",
+      "meaning": "Create a gzip-compressed .tar.gz archive",
+      "example": "tar -cvzf archive.tar.gz path/to/",
+      "notes": ""
+    },
+    {
+      "id": "tar-dash-stdout",
+      "front": "tar cf -",
+      "meaning": "- as archive name on create means write the archive to stdout",
       "example": "tar cf - dir1 | (cd dir2 && tar xf -)",
-      "notes": "- as archive name = stdout (create) or stdin (extract). Local tree copy through a pipe."
+      "notes": "Copy trees without an intermediate .tar on disk"
     },
     {
-      "id": "tar-ssh",
-      "front": "ssh … tar -cf - | ssh … tar -xf -",
-      "meaning": "Pack on host1 → through your machine → unpack on host2",
-      "example": "ssh root@host1 \"cd /src && tar -cf - .\" | ssh root@host2 \"cd /dst && tar -xf -\"",
-      "notes": "Same - pipe idea over two SSH sessions. No intermediate archive file required."
+      "id": "tar-dash-stdin",
+      "front": "tar xf -",
+      "meaning": "- as archive name on extract means read the archive from stdin",
+      "example": "tar cf - dir1 | (cd dir2 && tar xf -)",
+      "notes": "Receive the tree from a pipe"
+    },
+    {
+      "id": "tar-local-pipe",
+      "front": "tar cf - dir1 | (cd dir2 && tar xf -)",
+      "meaning": "Copy dir1’s contents into dir2 through a tar stream; no .tar left on disk",
+      "example": "tar cf - dir1 | (cd dir2 && tar xf -)",
+      "notes": ""
+    },
+    {
+      "id": "tar-ssh-pipe",
+      "front": "tar over SSH pipe",
+      "meaning": "Host1 packs . to stdout → your SSH client → host2 unpacks from stdin",
+      "example": "ssh root@host1 \"cd /somedir/tocopy/ && tar -cf - .\" | ssh root@host2 \"cd /samedir/tocopyto/ && tar -xf -\"",
+      "notes": "Copy from host1 to host2 piped through your machine"
+    },
+    {
+      "id": "gzip",
+      "front": "gzip",
+      "meaning": "Compress a single stream/file; default gzip file replaces file with file.gz",
+      "example": "gzip -c file1 > foo.gz",
+      "notes": "Use -c or -k to keep the original"
     },
     {
       "id": "gzip-c",
-      "front": "gzip -c file1 > foo.gz",
-      "meaning": "Compress to stdout; leave the original file alone",
+      "front": "gzip -c",
+      "meaning": "Write compressed data to stdout; leave the original file alone",
       "example": "gzip -c file1 > foo.gz",
-      "notes": "Default gzip file replaces file with file.gz. Use -c or -k to keep the original."
+      "notes": "gzip -c = squeeze to stdout"
     },
     {
       "id": "gzip-append",
       "front": "gzip -c file2 >> foo.gz",
-      "meaning": "Append another gzip member (works, usually worse ratio)",
+      "meaning": "Append another gzip member; works, but worse compression ratio than one gzip of both files",
       "example": "gzip -c file2 >> foo.gz",
-      "notes": "Prefer cat file1 file2 | gzip > foo.gz — one gzip of both files compresses better."
+      "notes": "Prefer cat file1 file2 | gzip > foo.gz"
     },
     {
-      "id": "cat-gzip",
+      "id": "gzip-concat-pipe",
       "front": "cat file1 file2 | gzip > foo.gz",
-      "meaning": "One gzip of concatenated input — better compression than two >> members",
+      "meaning": "One gzip of both files — usually better compression than appending two gzip members",
       "example": "cat file1 file2 | gzip > foo.gz",
-      "notes": "Better than gzip -c a > foo.gz then gzip -c b >> foo.gz."
+      "notes": ""
+    },
+    {
+      "id": "gunzip",
+      "front": "gunzip",
+      "meaning": "Expand/decompress gzip data",
+      "example": "gunzip -c foo.gz",
+      "notes": ""
     },
     {
       "id": "zcat",
-      "front": "zcat foo.gz / gunzip -c foo.gz",
-      "meaning": "Print decompressed content without leaving a decompressed file",
+      "front": "zcat foo.gz",
+      "meaning": "Print uncompressed content of a gzip file (peek without leaving a decompressed file)",
       "example": "zcat foo.gz",
-      "notes": "zcat and gunzip -c are equivalent here. Peek at .gz data."
+      "notes": "Same result as gunzip -c foo.gz"
+    },
+    {
+      "id": "gunzip-c",
+      "front": "gunzip -c foo.gz",
+      "meaning": "Write decompressed content to stdout — equivalent to zcat",
+      "example": "gunzip -c foo.gz",
+      "notes": ""
     },
     {
       "id": "zgrep",
-      "front": "zgrep pattern foo.gz",
-      "meaning": "grep inside gzip-compressed data",
-      "example": "zgrep ERROR /var/log/app.log.gz",
-      "notes": "Search logs that stay compressed on disk — no manual gunzip first."
+      "front": "zgrep",
+      "meaning": "Search inside gzip data (grep for .gz files)",
+      "example": "zgrep pattern foo.gz",
+      "notes": ""
+    },
+    {
+      "id": "gzip-k",
+      "front": "gzip -k",
+      "meaning": "Keep the original file when compressing (along with -c as ways not to replace the source)",
+      "example": "",
+      "notes": "Default gzip file replaces file with file.gz"
     }
   ]
 }

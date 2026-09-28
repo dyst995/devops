@@ -1,78 +1,121 @@
 {
   "title": "Disk quotas",
-  "subtitle": "Cap user/group space and file count — flip for meaning, example, and notes",
-  "frontLabel": "Command",
-  "modeForward": "Command → meaning",
-  "modeReverse": "Meaning → command",
+  "subtitle": "Per-user and per-group space and inode caps — flip for meaning, example, and notes",
+  "frontLabel": "Concept / command",
+  "modeForward": "Term → meaning",
+  "modeReverse": "Meaning → term",
   "cards": [
     {
-      "id": "quotas",
-      "front": "disk quotas",
-      "meaning": "Limit how much disk a user or group may use; alert before filling a partition"
+      "id": "quotas-def",
+      "front": "Disk quotas",
+      "meaning": "Limit how much disk a user or group may use; alert an admin before someone fills a partition",
+      "example": "cap a user’s mail/home separately from a project group",
+      "notes": "Apply to individual users and user groups."
     },
     {
-      "id": "who",
-      "front": "user vs group quotas",
-      "meaning": "Cap an individual separately from a project group they belong to",
-      "notes": "Both matter on shared /home or multi-tenant hosts"
+      "id": "quota-users-groups",
+      "front": "Who quotas apply to",
+      "meaning": "Individual users and user groups",
+      "example": "person’s home vs project group space",
+      "notes": "You can cap a person’s mail and home separately from a project group they belong to."
     },
     {
-      "id": "blocks",
-      "front": "block quota",
-      "meaning": "Limits disk space consumed — stop one user from filling the partition"
+      "id": "blocks-limit",
+      "front": "Blocks quota",
+      "meaning": "Limits disk space consumed",
+      "example": "stop one user from filling the partition",
+      "notes": "One of two resources you can limit (the other is inodes)."
     },
     {
-      "id": "inodes",
-      "front": "inode quota",
-      "meaning": "Limits number of files/directories — avoid “disk full” with free gigabytes",
-      "notes": "Classic cause: millions of tiny files"
+      "id": "inodes-limit",
+      "front": "Inodes quota",
+      "meaning": "Limits the number of files/directories that can be created",
+      "example": "millions of tiny files → “disk full” with free gigabytes",
+      "notes": "Inodes store file metadata — inode exhaustion is a classic failure mode."
     },
     {
-      "id": "soft-hard",
-      "front": "soft vs hard limit",
-      "meaning": "Soft = warning / grace period; hard = cannot go beyond"
+      "id": "soft-limit",
+      "front": "Soft limit",
+      "meaning": "Warning / grace period — user can temporarily exceed before hard enforcement",
+      "example": "soft limit on blocks or inodes",
+      "notes": "Contrast hard limit = cannot go beyond."
     },
     {
-      "id": "fstab-quota",
-      "front": "usrquota,grpquota",
-      "meaning": "fstab mount options that enable quota accounting on that filesystem",
-      "notes": "Must be on the mount before quotas work"
+      "id": "hard-limit",
+      "front": "Hard limit",
+      "meaning": "Absolute ceiling — cannot go beyond",
+      "example": "writes fail once hard limit is hit",
+      "notes": "Soft = warning/grace; hard = hard stop."
+    },
+    {
+      "id": "fstab-usrquota",
+      "front": "usrquota (fstab)",
+      "meaning": "Enable user quota accounting on that mount",
+      "example": "usrquota in /etc/fstab mount options",
+      "notes": "Often paired with grpquota."
+    },
+    {
+      "id": "fstab-grpquota",
+      "front": "grpquota (fstab)",
+      "meaning": "Enable group quota accounting on that mount",
+      "example": "grpquota in /etc/fstab mount options",
+      "notes": "Often paired with usrquota."
     },
     {
       "id": "quotacheck",
       "front": "quotacheck",
       "meaning": "Scan the filesystem and build/update quota files",
-      "example": "quotacheck"
+      "example": "quotacheck",
+      "notes": "Typical path: enable on mount → quotacheck → quotaon → set limits → report."
     },
     {
       "id": "quotaon",
       "front": "quotaon",
-      "meaning": "Turn quotas on for a filesystem",
-      "example": "quotaon"
+      "meaning": "Turn quotas on",
+      "example": "quotaon",
+      "notes": "After quotacheck has built/updated quota files."
     },
     {
       "id": "edquota",
       "front": "edquota",
-      "meaning": "Interactively edit a user’s or group’s soft/hard limits",
-      "example": "edquota"
+      "meaning": "Edit a user’s or group’s soft/hard limits interactively",
+      "example": "edquota",
+      "notes": "Interactive counterpart to setquota."
     },
     {
       "id": "setquota",
       "front": "setquota",
       "meaning": "Set quota limits non-interactively",
-      "example": "setquota"
+      "example": "setquota",
+      "notes": "Script-friendly alternative to edquota."
     },
     {
       "id": "repquota",
       "front": "repquota",
-      "meaning": "Admin report of usage vs limits",
-      "example": "repquota"
+      "meaning": "Report usage vs limits (admin view)",
+      "example": "repquota",
+      "notes": "Admin reporting; users use quota."
     },
     {
-      "id": "quota",
+      "id": "quota-cmd",
       "front": "quota",
       "meaning": "Show quota for the current (or named) user",
-      "example": "quota"
+      "example": "quota",
+      "notes": "User-facing report; admins also use repquota."
+    },
+    {
+      "id": "quota-workflow",
+      "front": "Typical quota enable path",
+      "meaning": "usrquota/grpquota in fstab → quotacheck → quotaon → edquota/setquota → repquota/quota",
+      "example": "fstab → quotacheck → quotaon → edquota",
+      "notes": "Know the names; flags come with practice."
+    },
+    {
+      "id": "devops-why",
+      "front": "Why DevOps uses quotas",
+      "meaning": "Shared /home or mail, build agents filling /var or /tmp, multi-tenant hosts and inode exhaustion",
+      "example": "one intern’s core dump should not page the whole team",
+      "notes": "Tiny log files can exhaust inodes on jump hosts."
     }
   ]
 }

@@ -1,83 +1,177 @@
 {
-  "title": "Runlevels and targets",
-  "subtitle": "Machine state after boot — flip for meaning, example, and notes",
-  "frontLabel": "Concept",
+  "title": "Runlevels and systemd targets",
+  "subtitle": "Machine state after boot — SysV runlevels mapped to systemd",
+  "frontLabel": "Concept / command",
   "modeForward": "Term → meaning",
   "modeReverse": "Meaning → term",
   "cards": [
     {
-      "id": "runlevel",
-      "front": "runlevel",
-      "meaning": "Classic SysV state after boot: which services, network, GUI, halt/reboot",
-      "notes": "System is in one runlevel at a time"
+      "id": "runlevel-def",
+      "front": "Runlevel",
+      "meaning": "State of the machine after boot: which services are on, networking, GUI, or shutting down",
+      "example": "runlevel 3 = multi-user text + networking",
+      "notes": "Classic SysV: the system is in one runlevel at a time."
     },
     {
       "id": "rl-0",
-      "front": "runlevel 0",
+      "front": "Runlevel 0",
       "meaning": "Halt / power off",
-      "notes": "systemd: poweroff.target (runlevel0.target)"
+      "example": "runlevel0.target → poweroff.target",
+      "notes": "Memory hook: 0 = zero life (halt)."
     },
     {
       "id": "rl-1",
-      "front": "runlevel 1",
-      "meaning": "Single-user / rescue-style maintenance; usually no network services",
-      "notes": "systemd: rescue.target"
+      "front": "Runlevel 1",
+      "meaning": "Single-user / rescue-style maintenance — usually no network services",
+      "example": "runlevel1.target → rescue.target",
+      "notes": "Memory hook: 1 = lonely admin. Lower levels for maintenance/emergency."
     },
     {
       "id": "rl-3",
-      "front": "runlevel 3",
-      "meaning": "Multi-user, text console, networking — typical server",
-      "notes": "systemd: multi-user.target"
+      "front": "Runlevel 3",
+      "meaning": "Multi-user, text, networking — typical server",
+      "example": "runlevel3.target → multi-user.target",
+      "notes": "Memory hook: 3 = server. Emulated by multi-user.target."
+    },
+    {
+      "id": "rl-4",
+      "front": "Runlevel 4",
+      "meaning": "Often unused / custom; some distros treat it like 3",
+      "example": "custom runlevel",
+      "notes": "Default runlevels are typically 3, 4, or 5."
     },
     {
       "id": "rl-5",
-      "front": "runlevel 5",
+      "front": "Runlevel 5",
       "meaning": "Multi-user with graphical desktop",
-      "notes": "systemd: graphical.target"
+      "example": "runlevel5.target → graphical.target",
+      "notes": "Memory hook: 5 = GUI. Emulated by graphical.target."
     },
     {
       "id": "rl-6",
-      "front": "runlevel 6",
+      "front": "Runlevel 6",
       "meaning": "Reboot",
-      "notes": "systemd: reboot.target — 0 = zero life, 6 = full circle"
+      "example": "runlevel6.target → reboot.target",
+      "notes": "Memory hook: 6 = full circle (reboot)."
+    },
+    {
+      "id": "default-runlevels",
+      "front": "Typical default runlevels",
+      "meaning": "Usually 3, 4, or 5",
+      "example": "id:3:initdefault:",
+      "notes": "Lower runlevels are for maintenance because they usually offer no network services."
     },
     {
       "id": "rc-d",
       "front": "/etc/rc[0-6].d/",
-      "meaning": "Per-runlevel start/stop script symlinks (K = kill, S = start + order)",
+      "meaning": "Per-runlevel start/stop scripts (symlinks)",
+      "example": "/etc/rc3.d/",
+      "notes": "Symlinks into ../init.d/ with K/S prefixes."
+    },
+    {
+      "id": "k-script",
+      "front": "K20nfs",
+      "meaning": "Kill (stop) nfs at this runlevel; 20 is the order",
       "example": "K20nfs -> ../init.d/nfs",
-      "notes": "Lower two-digit number runs first"
+      "notes": "K = Kill. Lower number runs first."
+    },
+    {
+      "id": "s-script",
+      "front": "S10network",
+      "meaning": "Start network at this runlevel; 10 is the order",
+      "example": "S10network -> ../init.d/network",
+      "notes": "S = Start. Lower number runs first."
     },
     {
       "id": "inittab",
       "front": "/etc/inittab",
-      "meaning": "Classic default runlevel, e.g. id:3:initdefault:",
-      "notes": "Boot into runlevel 3"
+      "meaning": "Classic SysV file for default runlevel",
+      "example": "id:3:initdefault:",
+      "notes": "Example boots into runlevel 3."
+    },
+    {
+      "id": "systemd-targets",
+      "front": "systemd targets vs runlevels",
+      "meaning": "systemd uses targets, not runlevels; old runlevel names exist as compatibility symlinks",
+      "example": "runlevel3.target → multi-user.target",
+      "notes": "Know the mapping 0→poweroff, 1→rescue, 3→multi-user, 5→graphical, 6→reboot."
+    },
+    {
+      "id": "poweroff-target",
+      "front": "poweroff.target",
+      "meaning": "systemd target for halt/power off (old runlevel 0)",
+      "example": "runlevel0.target → poweroff.target",
+      "notes": "Compatibility symlink: runlevel0.target."
+    },
+    {
+      "id": "rescue-target",
+      "front": "rescue.target",
+      "meaning": "systemd target for single-user/rescue (old runlevel 1)",
+      "example": "runlevel1.target → rescue.target",
+      "notes": "Compatibility symlink: runlevel1.target."
+    },
+    {
+      "id": "multi-user-target",
+      "front": "multi-user.target",
+      "meaning": "Network + text, no GUI — emulates runlevel 3",
+      "example": "systemctl set-default multi-user.target",
+      "notes": "Compatibility symlink: runlevel3.target. Typical server default."
+    },
+    {
+      "id": "graphical-target",
+      "front": "graphical.target",
+      "meaning": "Multi-user with GUI — emulates runlevel 5",
+      "example": "systemctl set-default graphical.target",
+      "notes": "Compatibility symlink: runlevel5.target."
+    },
+    {
+      "id": "reboot-target",
+      "front": "reboot.target",
+      "meaning": "systemd target for reboot (old runlevel 6)",
+      "example": "runlevel6.target → reboot.target",
+      "notes": "Compatibility symlink: runlevel6.target."
+    },
+    {
+      "id": "emergency-target",
+      "front": "emergency.target",
+      "meaning": "Even more minimal than rescue — its own target, not a classic numbered runlevel",
+      "example": "emergency.target",
+      "notes": "No runlevelN.target compatibility entry in the course table."
     },
     {
       "id": "get-default",
       "front": "systemctl get-default",
-      "meaning": "Show which systemd target the machine boots into",
-      "example": "systemctl get-default"
+      "meaning": "Show which target the machine boots into",
+      "example": "systemctl get-default",
+      "notes": "View the default target."
     },
     {
-      "id": "set-default",
-      "front": "systemctl set-default",
-      "meaning": "Change the default boot target (multi-user / graphical / …)",
+      "id": "set-default-multi",
+      "front": "systemctl set-default multi-user.target",
+      "meaning": "Set default boot target to server (text + network, no GUI)",
       "example": "systemctl set-default multi-user.target",
-      "notes": "set-default runlevel0.target = poweroff at boot — do not on a real server"
+      "notes": "Safer everyday example from the notes."
+    },
+    {
+      "id": "set-default-graphical",
+      "front": "systemctl set-default graphical.target",
+      "meaning": "Set default boot target to desktop GUI",
+      "example": "systemctl set-default graphical.target",
+      "notes": "Safer everyday example from the notes."
+    },
+    {
+      "id": "set-default-poweroff",
+      "front": "systemctl set-default runlevel0.target",
+      "meaning": "Would make default boot = poweroff — do not use on a real server",
+      "example": "systemctl set-default runlevel0.target",
+      "notes": "Example from the notes showing a dangerous default."
     },
     {
       "id": "isolate",
       "front": "systemctl isolate",
-      "meaning": "Switch to a target now without changing the default",
-      "example": "systemctl isolate multi-user.target"
-    },
-    {
-      "id": "emergency",
-      "front": "emergency.target",
-      "meaning": "Minimal systemd recovery target — even more minimal than rescue",
-      "notes": "Own target; not a classic runlevel number"
+      "meaning": "Switch to that target now without changing the default",
+      "example": "systemctl isolate multi-user.target",
+      "notes": "Immediate switch; get-default/set-default control what you boot into."
     }
   ]
 }

@@ -1,56 +1,93 @@
 {
   "title": "Boot loaders",
-  "subtitle": "From power-on to kernel — flip for meaning, example, and notes",
-  "frontLabel": "Concept",
+  "subtitle": "From firmware to kernel — LILO, GRUB, and config paths",
+  "frontLabel": "Concept / path",
   "modeForward": "Term → meaning",
   "modeReverse": "Meaning → term",
   "cards": [
     {
-      "id": "boot-loader",
-      "front": "boot loader",
-      "meaning": "Small program that finds and loads the kernel into RAM after firmware runs",
-      "notes": "Also called bootstrap / bootstrap loader"
+      "id": "power-off-storage",
+      "front": "Where the OS lives when the computer is off",
+      "meaning": "Non-volatile storage (disk) — not in RAM",
+      "example": "OS, apps, and data on disk",
+      "notes": "At power-on, RAM is empty — there is no OS in memory yet."
     },
     {
-      "id": "boot-chain",
-      "front": "Power → firmware → loader → kernel → init",
-      "meaning": "Boot sequence: ROM firmware, boot loader, kernel in RAM, then init/systemd and user space",
-      "notes": "Often multi-stage chain loading"
+      "id": "firmware-rom",
+      "front": "Firmware at power-on",
+      "meaning": "CPU runs a small program from ROM (BIOS or UEFI) to find a disk and load something bigger into RAM",
+      "example": "BIOS / UEFI",
+      "notes": "First step after power on in the boot chain."
     },
     {
-      "id": "firmware",
-      "front": "BIOS / UEFI",
-      "meaning": "Firmware in ROM that runs first and hands off to the boot loader",
-      "notes": "RAM is empty at power-on; OS lives on disk until loaded"
+      "id": "boot-loader-def",
+      "front": "Boot loader (bootstrap loader / bootstrap)",
+      "meaning": "Small program that only loads other data and programs, which then run from RAM",
+      "example": "LILO / GRUB",
+      "notes": "First “real” program on disk that knows how to find and load the Linux kernel."
     },
     {
       "id": "chain-loading",
-      "front": "chain loading",
-      "meaning": "Tiny first-stage loader loads a more capable second stage, which loads the kernel"
+      "front": "Chain loading (multi-stage)",
+      "meaning": "Tiny first-stage loader loads a more capable second stage, which loads the kernel, which starts the OS",
+      "example": "stage1 → stage2 → kernel → init/systemd",
+      "notes": "Boot is often multi-stage."
+    },
+    {
+      "id": "boot-chain",
+      "front": "Boot chain order",
+      "meaning": "Power on → Firmware (BIOS/UEFI) → Boot loader → Kernel in RAM → init/systemd → user space",
+      "example": "… → GRUB → kernel → systemd → shell/services",
+      "notes": "User space = your shell and services."
     },
     {
       "id": "lilo",
       "front": "LILO",
-      "meaning": "LInux LOader — older, less powerful historical default; rarely used on new systems",
-      "notes": "Originally no GUI menu for choosing OS/kernel"
+      "meaning": "LInux LOader — historical default on older Linux distributions",
+      "example": "older distros shipped LILO as standard",
+      "notes": "Older and less powerful than GRUB; originally no GUI menu for choosing OS/kernel. Rarely installed on new systems."
+    },
+    {
+      "id": "lilo-vs-grub-power",
+      "front": "LILO vs GRUB (power)",
+      "meaning": "LILO is older and less powerful; GRUB is easier to administer and common on modern servers",
+      "example": "almost every modern Linux server uses GRUB",
+      "notes": "Memory hook: LILO = old, simple, weak. GRUB = admin-friendly."
     },
     {
       "id": "grub",
       "front": "GRUB",
-      "meaning": "GRand Unified Bootloader — modern default; easier to administer",
-      "notes": "CLI, network boot, MD5 passwords"
+      "meaning": "GRand Unified Bootloader — what you see on almost every modern Linux server",
+      "example": "GRUB menu / CLI at boot",
+      "notes": "Easier to administer than LILO."
+    },
+    {
+      "id": "grub-features",
+      "front": "GRUB features (course notes)",
+      "meaning": "Command-line interface, network boot, and MD5 passwords",
+      "example": "CLI, netboot, MD5 passwords",
+      "notes": "Features called out in the topic notes."
     },
     {
       "id": "grub-conf-boot",
       "front": "/boot/grub/grub.conf",
-      "meaning": "Main GRUB config path under /boot (course answer)",
-      "notes": "GRUB2 often uses grub.cfg under /boot/grub2 or EFI paths"
+      "meaning": "Main GRUB config under /boot (course answer)",
+      "example": "/boot/grub/grub.conf",
+      "notes": "If the course asks, answer with this and /etc/grub.conf."
     },
     {
       "id": "grub-conf-etc",
       "front": "/etc/grub.conf",
-      "meaning": "Alternate GRUB config path — often a symlink into /boot",
-      "notes": "Course asks for both /boot/grub/grub.conf and /etc/grub.conf"
+      "meaning": "GRUB config path often a symlink into /boot",
+      "example": "/etc/grub.conf → file under /boot",
+      "notes": "Course wants this path alongside /boot/grub/grub.conf."
+    },
+    {
+      "id": "grub2-paths",
+      "front": "GRUB2 config paths (awareness)",
+      "meaning": "Often /boot/grub2/grub.cfg or /boot/efi/EFI/.../grub.cfg — machine may differ",
+      "example": "/boot/grub2/grub.cfg",
+      "notes": "Course still wants the two grub.conf paths above if asked."
     }
   ]
 }

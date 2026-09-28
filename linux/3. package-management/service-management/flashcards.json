@@ -1,114 +1,429 @@
 {
   "title": "Service management",
-  "subtitle": "init.d scripts and systemd units — flip for meaning, example, and notes",
+  "subtitle": "init.d scripts and systemd units — flip to reveal meaning, example, and notes",
   "frontLabel": "Command / concept",
-  "modeForward": "Form → meaning",
-  "modeReverse": "Meaning → form",
+  "modeForward": "Term → meaning",
+  "modeReverse": "Meaning → term",
   "cards": [
     {
-      "id": "two-worlds",
-      "front": "init.d vs systemd",
-      "meaning": "init.d = a shell script per service; systemd = declarative unit file + systemctl",
-      "example": "/etc/init.d/nginx start  vs  systemctl start nginx.service",
-      "notes": "Modern Linux defaults to systemd; many boxes still accept legacy init.d scripts for compatibility."
+      "id": "systemd-role",
+      "front": "systemd",
+      "meaning": "Default modern init system and service manager; declarative unit files + systemctl",
+      "example": "",
+      "notes": "More than PID 1: suite includes journald (logs), logind (sessions), networkd (network)."
+    },
+    {
+      "id": "initd-role",
+      "front": "init.d",
+      "meaning": "Legacy Unix-style manager: a shell script per service in /etc/init.d/",
+      "example": "",
+      "notes": "Memory hook: init.d = shell script per service. systemd = declarative unit file + systemctl."
+    },
+    {
+      "id": "initd-syntax",
+      "front": "/etc/init.d/<command> <option>",
+      "meaning": "SysV-style: script name plus start|stop|reload|restart|force-reload",
+      "example": "/etc/init.d/nginx start",
+      "notes": "The file is the API — a case on $1. Unknown options print usage and exit 1."
     },
     {
       "id": "initd-start",
-      "front": "/etc/init.d/nginx start|stop|restart",
-      "meaning": "SysV script API: start, stop, or restart that service",
+      "front": "/etc/init.d/nginx start",
+      "meaning": "Start the service via its SysV script",
       "example": "/etc/init.d/nginx start",
-      "notes": "Also reload and force-reload. On some systems service nginx start wraps the same scripts. The file is a case on $1."
+      "notes": "On some systems service nginx start wraps the same scripts."
     },
     {
-      "id": "systemctl-now",
-      "front": "systemctl start|stop|restart name.service",
-      "meaning": "Control the service right now (runtime)",
-      "example": "systemctl restart nginx.service",
-      "notes": "Memory hook: init.d start|stop|restart → systemctl start|stop|restart. Add status, enable, daemon-reload."
+      "id": "initd-stop",
+      "front": "/etc/init.d/nginx stop",
+      "meaning": "Stop the service via its SysV script",
+      "example": "/etc/init.d/nginx stop",
+      "notes": ""
     },
     {
-      "id": "enable",
-      "front": "systemctl enable / disable name.service",
-      "meaning": "enable = start at boot; disable = do not start at boot",
-      "example": "systemctl enable tomcat.service",
-      "notes": "Uses [Install] WantedBy=. start/stop = now; enable/disable = boot."
+      "id": "initd-restart",
+      "front": "/etc/init.d/nginx restart",
+      "meaning": "Restart the service via its SysV script",
+      "example": "/etc/init.d/nginx restart",
+      "notes": ""
     },
     {
-      "id": "daemon-reload",
-      "front": "systemctl daemon-reload",
-      "meaning": "Reload unit files after you edit one",
-      "example": "Edit /etc/systemd/system/tomcat.service → daemon-reload → restart",
-      "notes": "Required so systemd re-reads the changed unit before restart picks up new settings."
+      "id": "initd-reload",
+      "front": "/etc/init.d/nginx reload",
+      "meaning": "Reread config without a full stop",
+      "example": "/etc/init.d/nginx reload",
+      "notes": ""
     },
     {
-      "id": "status",
-      "front": "systemctl status / is-active name.service",
-      "meaning": "status = running? recent logs?; is-active = exit 0 if active",
-      "example": "systemctl status nginx.service",
-      "notes": "Everyday checks before and after start/stop/restart."
+      "id": "initd-force-reload",
+      "front": "/etc/init.d/nginx force-reload",
+      "meaning": "Force-reload option for the SysV script",
+      "example": "/etc/init.d/nginx force-reload",
+      "notes": ""
     },
     {
-      "id": "unit-paths",
-      "front": "/usr/lib vs /etc vs /run systemd/system/",
-      "meaning": "Packages · admin/user units · runtime (volatile)",
+      "id": "system-instance-conf",
+      "front": "systemd system instance config",
+      "meaning": "Reads system.conf and system.conf.d/",
+      "example": "",
+      "notes": ""
+    },
+    {
+      "id": "user-instance-conf",
+      "front": "systemd user instance config",
+      "meaning": "Reads user.conf and user.conf.d/",
+      "example": "",
+      "notes": ""
+    },
+    {
+      "id": "targets",
+      "front": ".target units",
+      "meaning": "Group units and mark boot stages; replace SysV runlevels",
+      "example": "multi-user.target; runlevel3.target still exists for compatibility",
+      "notes": "Servers typically want multi-user.target."
+    },
+    {
+      "id": "path-usr-lib",
+      "front": "/usr/lib/systemd/system/",
+      "meaning": "Unit files shipped by packages (RPM/deb)",
+      "example": "nginx, Apache, MySQL units",
+      "notes": "Memory hook: vendor = /usr/lib/..."
+    },
+    {
+      "id": "path-run",
+      "front": "/run/systemd/system/",
+      "meaning": "Unit files created at runtime (tmp, volatile)",
+      "example": "",
+      "notes": "Memory hook: runtime = /run/..."
+    },
+    {
+      "id": "path-etc",
+      "front": "/etc/systemd/system/",
+      "meaning": "Admin / user-created units",
       "example": "/etc/systemd/system/tomcat.service",
-      "notes": "Vendor = /usr/lib/systemd/system/. You customize or add = /etc/systemd/system/. Runtime = /run/systemd/system/."
+      "notes": "Memory hook: you customize or add = /etc/systemd/system/."
     },
     {
-      "id": "sections",
-      "front": "[Unit] / [Service] / [Install]",
-      "meaning": "Who I wait for · how I run · which target enables me",
-      "example": "WantedBy=multi-user.target under [Install]",
-      "notes": ".ini-like sections. [Unit] = metadata/deps; [Service] = process; [Install] = enable/disable wiring."
+      "id": "suffix-service",
+      "front": ".service",
+      "meaning": "Daemons / long-running programs",
+      "example": "name.service",
+      "notes": ""
     },
     {
-      "id": "wants-requires",
-      "front": "Wants= vs Requires=",
-      "meaning": "Wants = weak dep (start them, need not succeed); Requires = strong (if they fail, this fails)",
-      "example": "Wants=network-online.target",
-      "notes": "Wants is polite; Requires is strict. Also Before=/After= for ordering only."
+      "id": "suffix-socket",
+      "front": ".socket",
+      "meaning": "Socket activation",
+      "example": "",
+      "notes": ""
     },
     {
-      "id": "wantedby",
-      "front": "WantedBy=multi-user.target",
-      "meaning": "When enabled, this unit is pulled in by the normal server boot target",
-      "example": "[Install]\\nWantedBy=multi-user.target",
-      "notes": "Targets (.target) replace SysV runlevels. Servers typically want multi-user.target."
+      "id": "suffix-device",
+      "front": ".device",
+      "meaning": "Devices",
+      "example": "",
+      "notes": ""
     },
     {
-      "id": "forking",
+      "id": "suffix-mount",
+      "front": ".mount / .automount",
+      "meaning": "Filesystem mounts",
+      "example": "",
+      "notes": ""
+    },
+    {
+      "id": "suffix-swap",
+      "front": ".swap",
+      "meaning": "Swap",
+      "example": "",
+      "notes": ""
+    },
+    {
+      "id": "suffix-target",
+      "front": ".target",
+      "meaning": "Groups / boot stages",
+      "example": "multi-user.target",
+      "notes": ""
+    },
+    {
+      "id": "suffix-path",
+      "front": ".path",
+      "meaning": "Path-based activation",
+      "example": "",
+      "notes": ""
+    },
+    {
+      "id": "suffix-timer",
+      "front": ".timer",
+      "meaning": "Scheduled tasks (cron-like)",
+      "example": "",
+      "notes": ""
+    },
+    {
+      "id": "suffix-advanced",
+      "front": ".snapshot / .slice / .scope",
+      "meaning": "Advanced resource management",
+      "example": "",
+      "notes": "Full keys: man systemd.unit."
+    },
+    {
+      "id": "section-unit",
+      "front": "[Unit]",
+      "meaning": "Metadata and dependencies — who I wait for",
+      "example": "",
+      "notes": ""
+    },
+    {
+      "id": "section-service",
+      "front": "[Service]",
+      "meaning": "How the process runs — what systemd supervises",
+      "example": "",
+      "notes": ""
+    },
+    {
+      "id": "section-install",
+      "front": "[Install]",
+      "meaning": "What systemctl enable / disable does — which target pulls this unit in",
+      "example": "WantedBy=multi-user.target",
+      "notes": "WantedBy=multi-user.target = start on a normal server boot."
+    },
+    {
+      "id": "description",
+      "front": "Description=",
+      "meaning": "Human-readable summary",
+      "example": "Description=Tomcat Application server",
+      "notes": "[Unit]"
+    },
+    {
+      "id": "documentation",
+      "front": "Documentation=",
+      "meaning": "man pages or URLs",
+      "example": "",
+      "notes": "[Unit]"
+    },
+    {
+      "id": "requires",
+      "front": "Requires=",
+      "meaning": "Strong dependency — if they fail, this fails",
+      "example": "",
+      "notes": "Requires is strict; Wants is polite."
+    },
+    {
+      "id": "wants",
+      "front": "Wants=",
+      "meaning": "Weak dependency — start them, but they need not succeed",
+      "example": "",
+      "notes": "Wants is polite; Requires is strict."
+    },
+    {
+      "id": "bindsto",
+      "front": "BindsTo=",
+      "meaning": "If the bound unit stops, this stops too",
+      "example": "",
+      "notes": "[Unit]"
+    },
+    {
+      "id": "partof",
+      "front": "PartOf=",
+      "meaning": "Stopping/restarting the listed units also stops/restarts this one",
+      "example": "",
+      "notes": "[Unit]"
+    },
+    {
+      "id": "conflicts",
+      "front": "Conflicts=",
+      "meaning": "Cannot be active at the same time as the listed units",
+      "example": "",
+      "notes": "[Unit]"
+    },
+    {
+      "id": "before-after",
+      "front": "Before= / After=",
+      "meaning": "Ordering — this starts before / after those units",
+      "example": "After=network.target",
+      "notes": "After=network.target = wait until networking is up."
+    },
+    {
+      "id": "onfailure",
+      "front": "OnFailure=",
+      "meaning": "Units to start if this fails",
+      "example": "",
+      "notes": "[Unit]"
+    },
+    {
+      "id": "type",
+      "front": "Type=",
+      "meaning": "Startup style: simple, forking, oneshot, notify, …",
+      "example": "Type=forking",
+      "notes": "[Service]"
+    },
+    {
+      "id": "type-forking",
       "front": "Type=forking",
-      "meaning": "Start script daemonizes: parent exits, child stays",
-      "example": "Type=forking\\nExecStart=/apps/tomcat/bin/startup.sh",
-      "notes": "Often paired with PIDFile=. Other types: simple, oneshot, notify, …"
+      "meaning": "The start script daemonizes — parent exits, child stays",
+      "example": "Type=forking in tomcat.service",
+      "notes": "Often used with PIDFile=."
     },
     {
       "id": "execstart",
-      "front": "ExecStart= / ExecStop=",
-      "meaning": "Command that starts / stops the supervised process",
-      "example": "ExecStart=/apps/tomcat/bin/startup.sh\\nExecStop=/apps/tomcat/bin/shutdown.sh",
-      "notes": "Also ExecStartPre/Post, ExecReload. User=/Group=/WorkingDirectory=/Environment= live in [Service]."
+      "front": "ExecStart=",
+      "meaning": "Command that starts the service",
+      "example": "ExecStart=/apps/tomcat/bin/startup.sh",
+      "notes": "[Service]"
     },
     {
-      "id": "reload",
+      "id": "execstart-pre-post",
+      "front": "ExecStartPre= / ExecStartPost=",
+      "meaning": "Commands run before / after ExecStart",
+      "example": "",
+      "notes": "[Service]"
+    },
+    {
+      "id": "execreload-stop",
+      "front": "ExecReload= / ExecStop=",
+      "meaning": "Reload / stop commands",
+      "example": "ExecStop=/apps/tomcat/bin/shutdown.sh",
+      "notes": "[Service]"
+    },
+    {
+      "id": "restart",
+      "front": "Restart=",
+      "meaning": "What to do if the process fails or exits",
+      "example": "",
+      "notes": "[Service]"
+    },
+    {
+      "id": "pidfile",
+      "front": "PIDFile=",
+      "meaning": "File holding the daemon PID (typical with forking)",
+      "example": "",
+      "notes": "[Service]"
+    },
+    {
+      "id": "user-group",
+      "front": "User= / Group=",
+      "meaning": "Run the process as this user/group",
+      "example": "User=tomcat55\nGroup=staff",
+      "notes": "[Service]"
+    },
+    {
+      "id": "workingdirectory",
+      "front": "WorkingDirectory=",
+      "meaning": "cwd of the process",
+      "example": "",
+      "notes": "[Service]"
+    },
+    {
+      "id": "environment",
+      "front": "Environment=",
+      "meaning": "Inline environment variables",
+      "example": "",
+      "notes": "[Service]"
+    },
+    {
+      "id": "environmentfile",
+      "front": "EnvironmentFile=",
+      "meaning": "File of KEY=value lines",
+      "example": "",
+      "notes": "[Service]"
+    },
+    {
+      "id": "wantedby",
+      "front": "WantedBy=",
+      "meaning": "Targets that should pull this unit in when enabled",
+      "example": "WantedBy=multi-user.target",
+      "notes": "[Install]"
+    },
+    {
+      "id": "requiredby",
+      "front": "RequiredBy=",
+      "meaning": "Targets that require this unit",
+      "example": "",
+      "notes": "[Install]"
+    },
+    {
+      "id": "alias",
+      "front": "Alias=",
+      "meaning": "Extra names for the unit",
+      "example": "",
+      "notes": "[Install]"
+    },
+    {
+      "id": "also",
+      "front": "Also=",
+      "meaning": "Other units to install/uninstall together",
+      "example": "",
+      "notes": "[Install]"
+    },
+    {
+      "id": "systemctl-start",
+      "front": "systemctl start name.service",
+      "meaning": "Start the service now",
+      "example": "systemctl start name.service",
+      "notes": "start/stop control now; enable/disable control boot."
+    },
+    {
+      "id": "systemctl-stop",
+      "front": "systemctl stop name.service",
+      "meaning": "Stop the service now",
+      "example": "systemctl stop name.service",
+      "notes": ""
+    },
+    {
+      "id": "systemctl-restart",
+      "front": "systemctl restart name.service",
+      "meaning": "Restart the service now",
+      "example": "systemctl restart name.service",
+      "notes": ""
+    },
+    {
+      "id": "systemctl-reload",
       "front": "systemctl reload name.service",
-      "meaning": "Reload config if the unit supports it (without a full stop)",
-      "example": "systemctl reload nginx.service",
-      "notes": "Parallel to /etc/init.d/nginx reload. Not every unit implements reload."
+      "meaning": "Reload config if the unit supports it",
+      "example": "systemctl reload name.service",
+      "notes": ""
     },
     {
-      "id": "list-units",
+      "id": "systemctl-status",
+      "front": "systemctl status name.service",
+      "meaning": "Is it running? Recent logs?",
+      "example": "systemctl status name.service",
+      "notes": ""
+    },
+    {
+      "id": "systemctl-is-active",
+      "front": "systemctl is-active name.service",
+      "meaning": "Exit 0 if the unit is active",
+      "example": "systemctl is-active name.service",
+      "notes": ""
+    },
+    {
+      "id": "systemctl-enable",
+      "front": "systemctl enable name.service",
+      "meaning": "Start at boot (uses [Install] WantedBy)",
+      "example": "systemctl enable name.service",
+      "notes": "enable/disable = boot; start/stop = now."
+    },
+    {
+      "id": "systemctl-disable",
+      "front": "systemctl disable name.service",
+      "meaning": "Do not start at boot",
+      "example": "systemctl disable name.service",
+      "notes": ""
+    },
+    {
+      "id": "systemctl-daemon-reload",
+      "front": "systemctl daemon-reload",
+      "meaning": "Reread unit files after you edit one; then restart",
+      "example": "systemctl daemon-reload",
+      "notes": ""
+    },
+    {
+      "id": "systemctl-list-units",
       "front": "systemctl list-units --type service --all",
-      "meaning": "List all service units, even inactive ones",
+      "meaning": "List all service units, even inactive",
       "example": "systemctl list-units --type service --all",
-      "notes": "Useful inventory when hunting what is installed vs running."
-    },
-    {
-      "id": "unit-suffixes",
-      "front": ".service / .timer / .target / .socket",
-      "meaning": "Daemons · cron-like schedules · boot stages · socket activation",
-      "example": "crond.service, multi-user.target",
-      "notes": "Also device, mount, path, slice, scope. Full keys: man systemd.unit."
+      "notes": ""
     }
   ]
 }

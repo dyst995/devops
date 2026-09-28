@@ -1,80 +1,114 @@
 {
   "title": "File system",
-  "subtitle": "How Linux organizes storage — flip for meaning, example, and notes",
-  "frontLabel": "Concept",
+  "subtitle": "How Linux and Windows organize storage — flip for meaning, example, and notes",
+  "frontLabel": "Concept / command",
   "modeForward": "Term → meaning",
   "modeReverse": "Meaning → term",
   "cards": [
     {
-      "id": "filesystem",
+      "id": "filesystem-def",
       "front": "file system",
-      "meaning": "How the OS organizes, names, and stores data on disk"
+      "meaning": "How the OS organizes, names, and stores data on disk",
+      "example": "ext4 on Linux; NTFS on Windows",
+      "notes": "Unix/Linux and Windows do this in very different ways."
     },
     {
-      "id": "linux-tree",
-      "front": "single hierarchy / tree",
-      "meaning": "Linux has one root directory /; every file lives under it",
-      "notes": "Even files on a second disk sit somewhere under /"
+      "id": "linux-fs-types",
+      "front": "Common Linux local FS types",
+      "meaning": "ext2, ext3, ext4, ReiserFS, XFS, Btrfs, and others",
+      "example": "ext4, XFS, Btrfs",
+      "notes": "Linux supports many file system types."
     },
     {
-      "id": "mount",
-      "front": "mount",
-      "meaning": "Attach a disk/partition onto a directory in the single tree (no drive letters)",
-      "example": "mount /dev/sdb1 /mnt/data"
+      "id": "linux-single-tree",
+      "front": "Linux single hierarchy",
+      "meaning": "One tree starting at / — every file lives somewhere under it",
+      "example": "/home/nika/notes",
+      "notes": "Even files on a second disk appear under the same root; there is no drive letter."
     },
     {
-      "id": "no-extension",
-      "front": "no required extension",
-      "meaning": "Linux does not decide file type from the name; extension is optional",
-      "notes": "Executable = execute bit (+ shebang for scripts), not .sh"
+      "id": "linux-mount",
+      "front": "Mounting a disk on Linux",
+      "meaning": "Extra disks or partitions attach onto a directory in the single tree",
+      "example": "mount /dev/sdb1 /mnt/data",
+      "notes": "You do not get a new drive letter — e.g. /mnt/data or /home."
+    },
+    {
+      "id": "linux-no-required-ext",
+      "front": "filename.extension on Linux",
+      "meaning": "Not required — the kernel does not decide file type from the name",
+      "example": "notes (no extension) can be text",
+      "notes": "run.sh is a script only if it has execute permission and a shebang (or you pass it to a shell)."
+    },
+    {
+      "id": "linux-executable",
+      "front": "What makes a file executable on Linux",
+      "meaning": "The execute bit (chmod +x) and, for scripts, the interpreter in the shebang",
+      "example": "chmod +x script.sh; #!/bin/bash",
+      "notes": "Extensions like .conf, .service, .log are for humans and tools; the OS does not require them."
+    },
+    {
+      "id": "windows-fs-types",
+      "front": "Classic Windows local FS types (course)",
+      "meaning": "NTFS, FAT16, and FAT32",
+      "example": "NTFS",
+      "notes": "Modern Windows also has ReFS; this course sticks to the classic three."
+    },
+    {
+      "id": "windows-drive-letters",
+      "front": "Windows drive letters",
+      "meaning": "Storage shown as A: through Z: — each disk/partition can be a new root",
+      "example": "C:\\Users\\nika\\notes.txt",
+      "notes": "A second disk is often a new letter (D:), not a mount under one tree."
+    },
+    {
+      "id": "windows-extension",
+      "front": "File type on Windows",
+      "meaning": "System behavior depends on the extension",
+      "example": ".exe executable, .txt text, .dll library",
+      "notes": "Contrast with Linux: content + permissions, not the name."
+    },
+    {
+      "id": "side-by-side-storage",
+      "front": "How storage is shown: Linux vs Windows",
+      "meaning": "Linux: one tree at /. Windows: drive letters A:–Z:",
+      "example": "/home/nika/notes vs C:\\Users\\nika\\notes.txt",
+      "notes": "Interview-ready comparison for mounting Windows shares too."
     },
     {
       "id": "chmod-x",
       "front": "chmod +x",
-      "meaning": "Turn on the execute bit — what makes a file runnable on Linux",
-      "example": "chmod +x script.sh"
+      "meaning": "Turn on the execute bit — Linux does not care about .sh",
+      "example": "chmod +x script.sh",
+      "notes": "Extension alone does not make a file runnable."
     },
     {
-      "id": "linux-fs-types",
-      "front": "ext4 / XFS / Btrfs",
-      "meaning": "Common local Linux file system types",
-      "notes": "Also ext2, ext3, ReiserFS, and others"
-    },
-    {
-      "id": "windows-letters",
-      "front": "drive letters A:–Z:",
-      "meaning": "Windows shows disks/partitions as separate roots (C:\\, D:\\, …)",
-      "notes": "Second disk often becomes a new letter"
-    },
-    {
-      "id": "windows-extension",
-      "front": ".exe / .txt / .dll",
-      "meaning": "Windows system behavior often depends on the file extension",
-      "notes": "Linux *can* use extensions for humans/tools, but OS does not require them"
-    },
-    {
-      "id": "windows-fs",
-      "front": "NTFS / FAT16 / FAT32",
-      "meaning": "Classic main local Windows file systems",
-      "notes": "Modern Windows also has ReFS"
+      "id": "mount",
+      "front": "mount",
+      "meaning": "Attach a disk/partition onto a directory in the single tree",
+      "example": "mount /dev/sdb1 /mnt/data",
+      "notes": "Second disk becomes a directory under /, not a new letter."
     },
     {
       "id": "lsblk",
       "front": "lsblk",
-      "meaning": "List block devices and their mount points",
-      "example": "lsblk"
+      "meaning": "Show block devices and their mount points",
+      "example": "lsblk",
+      "notes": "Quick view of disks, partitions, and where they are mounted."
     },
     {
       "id": "df-h",
       "front": "df -h",
-      "meaning": "Disk space used/free on mounted filesystems, human-readable",
-      "example": "df -h"
+      "meaning": "Disk space used/free, human-readable",
+      "example": "df -h",
+      "notes": "Space on mounted filesystems."
     },
     {
       "id": "findmnt",
       "front": "findmnt",
       "meaning": "Show what is mounted where",
-      "example": "findmnt"
+      "example": "findmnt",
+      "notes": "Mount table view."
     }
   ]
 }

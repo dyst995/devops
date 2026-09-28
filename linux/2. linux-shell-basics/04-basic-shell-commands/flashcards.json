@@ -1,121 +1,436 @@
 {
-  "title": "Basic shell commands",
-  "subtitle": "man, navigation, files, env, and pagers — flip for meaning and flags",
-  "frontLabel": "Command",
-  "modeForward": "Command → meaning",
-  "modeReverse": "Meaning → command",
+  "title": "Basic Shell Commands",
+  "subtitle": "man, navigation, files, env, and pagers — flip to reveal meaning",
+  "frontLabel": "Command / flag",
+  "modeForward": "Term → meaning",
+  "modeReverse": "Meaning → term",
   "cards": [
     {
       "id": "man",
-      "front": "man cat",
-      "meaning": "Full manual page for a command (Unix default help)",
-      "example": "man man; man 1 ls; man 5 passwd",
-      "notes": "Sections: 1 user cmds, 5 file formats, 8 admin. Inside: j/k, /pattern, q like less."
+      "front": "man",
+      "meaning": "Main UNIX help; argument is normally a program, utility, or function",
+      "example": "man cat",
+      "notes": "Default searches all available sections. Prefer man on a server over a browser"
+    },
+    {
+      "id": "man-man",
+      "front": "man man",
+      "meaning": "Options and description of man itself",
+      "example": "man man",
+      "notes": ""
     },
     {
       "id": "man-k",
       "front": "man -k list",
-      "meaning": "Keyword search in descriptions (like apropos)",
-      "example": "man -k directory",
-      "notes": "-k = keyword (many hits). man -f ls = one-line whatis."
+      "meaning": "Keyword search — commands whose description contains the word (like apropos)",
+      "example": "man -k list",
+      "notes": "-k = keyword (many hits)"
     },
     {
-      "id": "ls",
-      "front": "ls -la / ls -lh / ls -lt / ls -lSh",
-      "meaning": "Long+all / long+human sizes / newest first / largest first + human",
-      "example": "ls -lSh",
-      "notes": "-a shows dotfiles. -S is Size (capital); -s is a different flag. Ops almost always wants -la."
+      "id": "man-f",
+      "front": "man -f ls",
+      "meaning": "Short one-line description of ls (like whatis)",
+      "example": "man -f ls",
+      "notes": "-f = fingerprint / what is this"
     },
     {
-      "id": "pwd-cd",
-      "front": "pwd / cd - / cd ~ / cd ..",
-      "meaning": "Print cwd / previous dir / home / parent",
-      "example": "cd /tmp; cd -",
-      "notes": "Bare cd goes $HOME. cd - also prints the path it landed on. / is filesystem root."
+      "id": "man-section-1",
+      "front": "man section 1",
+      "meaning": "User commands (ls, cat)",
+      "example": "man 1 ls",
+      "notes": "Headings look like ls(1)"
     },
     {
-      "id": "touch",
-      "front": "touch file / touch -d STRING",
-      "meaning": "Create empty file or update timestamp / set date from a string",
-      "example": "touch -d \"next Friday\" newfile.txt",
-      "notes": "No file → create empty. File exists → poke its time."
+      "id": "man-section-2",
+      "front": "man section 2",
+      "meaning": "System calls",
+      "example": "",
+      "notes": ""
     },
     {
-      "id": "mkdir",
-      "front": "mkdir -p path",
-      "meaning": "Make parents as needed; no error if they already exist",
-      "example": "mkdir -p dir/test{1..3}/empty",
-      "notes": "Brace expansion test{1..3} → test1 test2 test3. -m MODE sets permissions."
+      "id": "man-section-3",
+      "front": "man section 3",
+      "meaning": "Library functions (printf)",
+      "example": "printf(3)",
+      "notes": ""
     },
     {
-      "id": "cp",
-      "front": "cp -r / cp -rp",
-      "meaning": "Copy directory tree / recursive and preserve mode, owner, timestamps",
-      "example": "cp -rp src dest",
-      "notes": "File copy = cp src dest. Directory needs -r/-R. -p = --preserve=mode,ownership,timestamps."
+      "id": "man-section-5",
+      "front": "man section 5",
+      "meaning": "File formats (fstab, passwd file format)",
+      "example": "man 5 passwd",
+      "notes": "man 5 passwd ≠ man 1 passwd (command)"
     },
     {
-      "id": "mv",
-      "front": "mv / mv -b -S \".old\" / mv -u",
-      "meaning": "Move or rename / backup overwritten dest with suffix / move only if newer or missing",
-      "example": "mv -b -S \".old\" newfile dir/",
-      "notes": "Rename is a move in the same parent. -i prompts before overwrite."
+      "id": "man-section-8",
+      "front": "man section 8",
+      "meaning": "Admin commands (useradd)",
+      "example": "",
+      "notes": ""
     },
     {
-      "id": "cat",
-      "front": "cat a b > c",
-      "meaning": "Concatenate files into one (or print a single file)",
-      "example": "cat 1.txt 2.txt > 3.txt",
-      "notes": "Memory hook: cat a b > c glues a then b into c. cat file just prints."
-    },
-    {
-      "id": "rm",
-      "front": "rmdir / rm -rfv",
-      "meaning": "Remove empty directory only / recursive force verbose delete",
-      "example": "rm -rfv dir/",
-      "notes": "rm -rf ignores missing and never prompts — think before / or $HOME. shred overwrites for harder recovery."
-    },
-    {
-      "id": "printenv-env",
-      "front": "printenv / env",
-      "meaning": "Print exported environment (all or named) / dump env or run a command in a custom env",
-      "example": "printenv PATH; env VAR=tmp ./myscript",
-      "notes": "env VAR=tmp ./script sets VAR for the child only — current shell unchanged."
-    },
-    {
-      "id": "export-unset",
-      "front": "export NAME=value / unset NAME",
-      "meaning": "Make a variable visible to children / delete shell and environment variable",
-      "example": "export EDITOR=vim; unset EDITOR",
-      "notes": "export is how ~/.bash_profile values reach vim, python, etc. set | less dumps everything."
-    },
-    {
-      "id": "less-more",
-      "front": "less / more",
-      "meaning": "Pager both ways (prefer) / page forward only (old/small systems)",
-      "example": "less /var/log/syslog",
-      "notes": "less exists because more could not scroll back. /pattern ?pattern n N like Vim. q quits."
-    },
-    {
-      "id": "head",
-      "front": "head / head -n K / head -n -K",
-      "meaning": "First 10 lines / first K lines / all but the last K lines",
-      "example": "head -n 5 /etc/passwd; head -n -2 file.txt",
-      "notes": "Default is 10. Negative -n means drop the last K lines."
-    },
-    {
-      "id": "tail",
-      "front": "tail / tail -n K / tail -n +K / tail -f",
-      "meaning": "Last 10 lines / last K / from line K to end / follow growing file",
-      "example": "tail -f /var/log/syslog",
-      "notes": "tail -f is the live-log tool; Ctrl-C to stop. Memory hook: head = top, tail = bottom."
+      "id": "man-nav",
+      "front": "inside man",
+      "meaning": "Same ideas as less — arrows/j k to move, /pattern to search, q to quit",
+      "example": "",
+      "notes": ""
     },
     {
       "id": "info",
-      "front": "info cat",
-      "meaning": "GNU info pages — often longer and hyperlinked",
+      "front": "info",
+      "meaning": "GNU information pages — often longer and hyperlinked; man is the Unix default to try first",
+      "example": "info cat",
+      "notes": "DevOps default: man, then -k if you forgot the name"
+    },
+    {
+      "id": "info-info",
+      "front": "info info",
+      "meaning": "Full description of info itself",
       "example": "info info",
-      "notes": "DevOps default: try man first, then man -k if you forgot the name, info for GNU depth."
+      "notes": ""
+    },
+    {
+      "id": "ls-la",
+      "front": "ls -la",
+      "meaning": "Long format + all entries (do not skip names starting with .)",
+      "example": "ls -la",
+      "notes": "-l = long; -a = all (dotfiles). Ops almost always wants this"
+    },
+    {
+      "id": "ls-lh",
+      "front": "ls -lh",
+      "meaning": "Long format + human-readable sizes (1K, 234M, 2G)",
+      "example": "ls -lh",
+      "notes": "-h = human"
+    },
+    {
+      "id": "ls-lt",
+      "front": "ls -lt",
+      "meaning": "Long format, sort by time, newest first",
+      "example": "ls -lt",
+      "notes": "-t = time"
+    },
+    {
+      "id": "ls-lSh",
+      "front": "ls -lSh",
+      "meaning": "Long format, sort by Size (largest first), human-readable sizes",
+      "example": "ls -lSh",
+      "notes": "Capital -S — not -s (different flag)"
+    },
+    {
+      "id": "pwd",
+      "front": "pwd",
+      "meaning": "Print working directory — full path of the current directory",
+      "example": "pwd",
+      "notes": "Where am I?"
+    },
+    {
+      "id": "cd-default",
+      "front": "cd (bare)",
+      "meaning": "Default destination is $HOME — goes home",
+      "example": "cd",
+      "notes": ""
+    },
+    {
+      "id": "cdpath",
+      "front": "$CDPATH",
+      "meaning": "Search path for cd (like PATH for directories); : -separated; null entry means .; ignored if dest begins with /",
+      "example": "",
+      "notes": ""
+    },
+    {
+      "id": "cd-root",
+      "front": "cd /",
+      "meaning": "Go to filesystem root",
+      "example": "cd /",
+      "notes": ""
+    },
+    {
+      "id": "cd-dotdot",
+      "front": "cd ..",
+      "meaning": "Go to parent of the current directory",
+      "example": "cd ..",
+      "notes": ""
+    },
+    {
+      "id": "cd-tilde",
+      "front": "cd ~",
+      "meaning": "Go to user’s home directory (same idea as $HOME)",
+      "example": "cd ~",
+      "notes": ""
+    },
+    {
+      "id": "cd-dash",
+      "front": "cd -",
+      "meaning": "Previous directory (toggles back); also prints the path it landed on",
+      "example": "cd -",
+      "notes": ""
+    },
+    {
+      "id": "touch",
+      "front": "touch file",
+      "meaning": "Create an empty file, or update the timestamp of an existing file",
+      "example": "touch newfile.txt",
+      "notes": "No file → create empty. File exists → poke its time"
+    },
+    {
+      "id": "touch-d",
+      "front": "touch -d STRING",
+      "meaning": "Parse a human-readable date and use that instead of now",
+      "example": "touch -d \"next Friday\" newfile.txt",
+      "notes": "Also: --date=STRING. Examples: \"2004-02-29 16:21:42\", \"next Thursday\""
+    },
+    {
+      "id": "mkdir",
+      "front": "mkdir",
+      "meaning": "Create an empty directory",
+      "example": "mkdir empty",
+      "notes": "Fails if parents are missing (without -p)"
+    },
+    {
+      "id": "mkdir-m",
+      "front": "mkdir -m MODE",
+      "meaning": "Set mode as in chmod (not a=rwx minus umask)",
+      "example": "mkdir -m MODE dir",
+      "notes": "Also --mode=MODE"
+    },
+    {
+      "id": "mkdir-p",
+      "front": "mkdir -p",
+      "meaning": "Make parent dirs as needed; no error if they already exist",
+      "example": "mkdir -p dir/test{1..3}/empty",
+      "notes": "-p = parents + please don’t fail if it exists. Brace expansion: test1..3"
+    },
+    {
+      "id": "cp-r",
+      "front": "cp -r",
+      "meaning": "Copy directories recursively (with all subdirectories)",
+      "example": "cp -r dir dir2/",
+      "notes": "Also -R / --recursive. File copy = cp src dest"
+    },
+    {
+      "id": "cp-p",
+      "front": "cp -p",
+      "meaning": "Same as --preserve=mode,ownership,timestamps",
+      "example": "cp -rp src dest",
+      "notes": "Keep metadata"
+    },
+    {
+      "id": "cp-preserve",
+      "front": "cp --preserve[=ATTR_LIST]",
+      "meaning": "Keep attributes (default: mode, ownership, timestamps); extra: context, links, xattr, all",
+      "example": "",
+      "notes": ""
+    },
+    {
+      "id": "cp-i",
+      "front": "cp -i",
+      "meaning": "Prompt before overwrite (overrides a previous -n)",
+      "example": "cp -i src dest",
+      "notes": "Also --interactive"
+    },
+    {
+      "id": "mv",
+      "front": "mv",
+      "meaning": "Move or rename a file or directory (rename = move in the same parent)",
+      "example": "mv a b",
+      "notes": ""
+    },
+    {
+      "id": "mv-i",
+      "front": "mv -i",
+      "meaning": "Prompt before overwrite",
+      "example": "mv -i src dest",
+      "notes": ""
+    },
+    {
+      "id": "mv-backup",
+      "front": "mv --backup / -b",
+      "meaning": "Backup each existing destination before overwrite",
+      "example": "mv -b -S \".old\" newfile dir/",
+      "notes": "If dir/newfile existed, it becomes dir/newfile.old"
+    },
+    {
+      "id": "mv-S",
+      "front": "mv -S SUFFIX",
+      "meaning": "Backup suffix instead of the default ~",
+      "example": "mv -b -S \".old\" newfile dir/",
+      "notes": "Also --suffix=SUFFIX"
+    },
+    {
+      "id": "mv-u",
+      "front": "mv -u",
+      "meaning": "Move only if SOURCE is newer than destination, or destination is missing",
+      "example": "mv -u src dest",
+      "notes": "Also --update"
+    },
+    {
+      "id": "cat",
+      "front": "cat",
+      "meaning": "Display a file, or concatenate files into one",
+      "example": "cat 1.txt 2.txt > 3.txt",
+      "notes": "cat a b > c glues a then b into c; cat file just prints"
+    },
+    {
+      "id": "rmdir",
+      "front": "rmdir",
+      "meaning": "Remove an empty directory only",
+      "example": "rmdir empty",
+      "notes": ""
+    },
+    {
+      "id": "rm",
+      "front": "rm",
+      "meaning": "Remove (unlink) files, or directories with -r",
+      "example": "rm -v ~/1.txt",
+      "notes": "Recovery after rm might still be possible; shred is stronger destruction"
+    },
+    {
+      "id": "rm-f",
+      "front": "rm -f",
+      "meaning": "Ignore missing files; never prompt",
+      "example": "rm -f file",
+      "notes": "Also --force"
+    },
+    {
+      "id": "rm-r",
+      "front": "rm -r",
+      "meaning": "Remove directories and their contents recursively",
+      "example": "rm -rfv dir/",
+      "notes": "Also -R / --recursive. Think before rm -rf on / or $HOME"
+    },
+    {
+      "id": "rm-v",
+      "front": "rm -v",
+      "meaning": "Verbose — show each name removed",
+      "example": "rm -v ~/1.txt",
+      "notes": ""
+    },
+    {
+      "id": "shred",
+      "front": "shred",
+      "meaning": "Overwrite so recovery is harder (stronger destruction than plain rm)",
+      "example": "shred file",
+      "notes": ""
+    },
+    {
+      "id": "env-cmd",
+      "front": "env",
+      "meaning": "No args: print environment. Or run a program in a custom environment without changing the current shell",
+      "example": "env VAR=tmp ./myscript",
+      "notes": "printenv / env → exported environment"
+    },
+    {
+      "id": "printenv",
+      "front": "printenv",
+      "meaning": "Print all or named environment variables",
+      "example": "printenv PATH",
+      "notes": ""
+    },
+    {
+      "id": "set-cmd",
+      "front": "set (no args)",
+      "meaning": "Print everything — environment, shell variables, and shell functions",
+      "example": "set | less",
+      "notes": "Noisy. Can also set/unset shell variables"
+    },
+    {
+      "id": "unset",
+      "front": "unset",
+      "meaning": "Delete shell and environment variables",
+      "example": "unset EDITOR",
+      "notes": ""
+    },
+    {
+      "id": "export",
+      "front": "export",
+      "meaning": "Turn a name into an environment variable inherited by children",
+      "example": "export EDITOR=vim",
+      "notes": "How a value in ~/.bash_profile becomes visible to vim, python, …"
+    },
+    {
+      "id": "more",
+      "front": "more",
+      "meaning": "Old pager — can scroll down but not up",
+      "example": "more file",
+      "notes": "Some small embedded systems have more but not less"
+    },
+    {
+      "id": "less",
+      "front": "less",
+      "meaning": "Pager that can scroll both ways (written because more could not go backwards); prefer on a normal server",
+      "example": "less /var/log/syslog",
+      "notes": "less is more. q to quit"
+    },
+    {
+      "id": "less-search-forward",
+      "front": "less /pattern",
+      "meaning": "Search forward (regex); starts at the first displayed line; N defaults to 1",
+      "example": "/error",
+      "notes": "Same / ? n N idea as Vim"
+    },
+    {
+      "id": "less-search-backward",
+      "front": "less ?pattern",
+      "meaning": "Search backward; starts at the line immediately before the top displayed line",
+      "example": "?error",
+      "notes": ""
+    },
+    {
+      "id": "less-n-N",
+      "front": "less n / N",
+      "meaning": "Repeat previous search same direction / reverse direction",
+      "example": "n",
+      "notes": ""
+    },
+    {
+      "id": "head",
+      "front": "head",
+      "meaning": "Print the first 10 lines of a file by default",
+      "example": "head /etc/passwd",
+      "notes": "head = top of the file"
+    },
+    {
+      "id": "head-n-k",
+      "front": "head -n K",
+      "meaning": "First K lines instead of 10",
+      "example": "head -n 5 /etc/passwd",
+      "notes": "Also --lines=K"
+    },
+    {
+      "id": "head-n-minus",
+      "front": "head -n -K",
+      "meaning": "All but the last K lines of each file",
+      "example": "head -n -2 file.txt",
+      "notes": ""
+    },
+    {
+      "id": "tail",
+      "front": "tail",
+      "meaning": "Print the last 10 lines by default",
+      "example": "tail /var/log/syslog",
+      "notes": "tail = bottom of the file"
+    },
+    {
+      "id": "tail-n-k",
+      "front": "tail -n K",
+      "meaning": "Last K lines instead of 10",
+      "example": "tail -n 50 /var/log/syslog",
+      "notes": ""
+    },
+    {
+      "id": "tail-n-plus",
+      "front": "tail -n +K",
+      "meaning": "Output starting at line K through the end",
+      "example": "tail -n +20 file.txt",
+      "notes": ""
+    },
+    {
+      "id": "tail-f",
+      "front": "tail -f",
+      "meaning": "Keep printing appended data as the file grows (follow a live log); Ctrl-C to stop",
+      "example": "tail -f /var/log/syslog",
+      "notes": "Also --follow"
     }
   ]
 }

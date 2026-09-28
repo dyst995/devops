@@ -1,84 +1,198 @@
 {
   "title": "Swap and swappiness",
-  "subtitle": "Disk overflow for RAM — flip for meaning, example, and notes",
-  "frontLabel": "Command",
-  "modeForward": "Command → meaning",
-  "modeReverse": "Meaning → command",
+  "subtitle": "Overflow RAM to disk; sizing and activation — flip for meaning, example, and notes",
+  "frontLabel": "Concept / command",
+  "modeForward": "Term → meaning",
+  "modeReverse": "Meaning → term",
   "cards": [
     {
-      "id": "swap",
-      "front": "swap",
-      "meaning": "Disk space used as overflow when RAM is full; inactive pages move there",
-      "notes": "Helps low-RAM machines; not a replacement for more RAM. Btrfs does not support swap."
+      "id": "swap-def",
+      "front": "Swap",
+      "meaning": "Disk space used as overflow when RAM is full — inactive pages are moved to swap",
+      "example": "cat /proc/swaps; free -h",
+      "notes": "Helps machines with little RAM. Not a replacement for more RAM — disk (even SSD) is slower than memory."
+    },
+    {
+      "id": "btrfs-no-swap",
+      "front": "Btrfs and swap",
+      "meaning": "Btrfs does not support swap space",
+      "example": "do not put swap on Btrfs",
+      "notes": "Use another filesystem or a dedicated partition/file elsewhere."
     },
     {
       "id": "swap-forms",
-      "front": "swap partition vs file",
-      "meaning": "Partition recommended (contiguous); file more flexible without repartitioning",
-      "notes": "Can combine both. Kernel 2.6+ swap files nearly as fast if contiguous."
+      "front": "Forms of swap",
+      "meaning": "Dedicated swap partition, swap file, or a combination of both",
+      "example": "partition and/or /swapfile",
+      "notes": "From the OS’s point of view all are just swap devices/files."
+    },
+    {
+      "id": "swap-partition",
+      "front": "Swap partition (recommended)",
+      "meaning": "Red Hat recommends swap partitions — contiguous area on HDD for better throughput/seek",
+      "example": "dedicated swap partition",
+      "notes": "Partition = recommended / simpler for the kernel. File = flexible / no repartitioning."
+    },
+    {
+      "id": "swap-file",
+      "front": "Swap file",
+      "meaning": "Flexible swap: any size, on any mounted filesystem, without repartitioning",
+      "example": "dd … of=/swapfile; mkswap /swapfile; swapon /swapfile",
+      "notes": "From kernel 2.6 onward, virtually as fast as partitions if allocated contiguously — kernel maps blocks and accesses the device directly."
     },
     {
       "id": "proc-swaps",
       "front": "cat /proc/swaps",
       "meaning": "List active swap devices/files",
-      "example": "cat /proc/swaps"
+      "example": "cat /proc/swaps",
+      "notes": "Verify after swapon."
     },
     {
       "id": "free-h",
       "front": "free -h",
       "meaning": "Show RAM and swap usage in human-readable units",
-      "example": "free -h"
+      "example": "free -h",
+      "notes": "Pairs with /proc/swaps for a quick check."
     },
     {
-      "id": "swappiness",
-      "front": "swappiness",
-      "meaning": "Kernel weight: swap cold app pages vs drop page cache (range 0–100, default 60)",
-      "notes": "High = happy to swap; low = protect app RAM, evict cache first"
+      "id": "swappiness-def",
+      "front": "Swappiness",
+      "meaning": "Kernel parameter: relative weight of swapping cold anonymous pages vs dropping page cache when free RAM cannot satisfy an allocation",
+      "example": "default 60 (range 0–100)",
+      "notes": "High = happy to swap. Low = protect application RAM, throw away file cache first."
+    },
+    {
+      "id": "swappiness-range",
+      "front": "Swappiness range",
+      "meaning": "0–100 inclusive",
+      "example": "0 … 100",
+      "notes": "Default is 60 — fine for most workloads."
+    },
+    {
+      "id": "swappiness-default",
+      "front": "Default swappiness",
+      "meaning": "60",
+      "example": "default 60",
+      "notes": "Fine for most workloads."
+    },
+    {
+      "id": "swappiness-low",
+      "front": "Low swappiness (toward 0)",
+      "meaning": "Prefer evicting page cache; keep apps in RAM → more consistent low latency",
+      "example": "desktops, interactive boxes with plenty of RAM",
+      "notes": "Desktops may want it lower."
+    },
+    {
+      "id": "swappiness-high",
+      "front": "High swappiness (toward 100)",
+      "meaning": "Prefer swapping cold app pages → can increase throughput (especially disk I/O) but risk latency spikes",
+      "example": "batch / less interactive systems may want it higher",
+      "notes": "Pages needed again can cause latency spikes."
+    },
+    {
+      "id": "rhel-swap-le2",
+      "front": "RHEL 7 swap size: RAM ≤ 2 GB",
+      "meaning": "Recommended swap = 2 × RAM; with hibernation = 3 × RAM",
+      "example": "1 GB RAM → 2 GB swap (3 GB if hibernating)",
+      "notes": "From RHEL 7 Storage Administration Guide table."
+    },
+    {
+      "id": "rhel-swap-2to8",
+      "front": "RHEL 7 swap size: RAM > 2 GB – 8 GB",
+      "meaning": "Recommended swap = equal to RAM; with hibernation = 2 × RAM",
+      "example": "4 GB RAM → 4 GB swap (8 GB if hibernating)",
+      "notes": "Hibernation needs swap at least as large as RAM (table uses more than 1× as safety)."
+    },
+    {
+      "id": "rhel-swap-8to64",
+      "front": "RHEL 7 swap size: RAM > 8 GB – 64 GB",
+      "meaning": "Recommended swap = at least 4 GB; with hibernation = 1.5 × RAM",
+      "example": "16 GB RAM → ≥ 4 GB swap (24 GB if hibernating)",
+      "notes": "Know the table for this course."
+    },
+    {
+      "id": "rhel-swap-gt64",
+      "front": "RHEL 7 swap size: RAM > 64 GB",
+      "meaning": "Recommended swap = at least 4 GB; hibernation not recommended",
+      "example": "128 GB RAM → ≥ 4 GB swap",
+      "notes": "Modern huge-RAM systems may size by workload (~20% of RAM as a later rule of thumb)."
+    },
+    {
+      "id": "hibernation-swap",
+      "front": "Hibernation and swap size",
+      "meaning": "Hibernation writes RAM out to swap — swap must be at least as large as RAM",
+      "example": "table uses more than 1× as a safety margin",
+      "notes": "Above 64 GB RAM, hibernation is not recommended in the RHEL 7 table."
+    },
+    {
+      "id": "lv-swap-steps",
+      "front": "Add swap as LVM LV (order)",
+      "meaning": "lvcreate → mkswap → fstab → systemctl daemon-reload → swapon",
+      "example": "lvcreate VolGroup00 -n LogVol02 -L 2G",
+      "notes": "Never mkfs.ext4 on a swap LV."
+    },
+    {
+      "id": "lvcreate-swap",
+      "front": "lvcreate … for swap",
+      "meaning": "Create the LV that will hold swap",
+      "example": "lvcreate VolGroup00 -n LogVol02 -L 2G",
+      "notes": "Example path: /dev/VolGroup00/LogVol02."
     },
     {
       "id": "mkswap",
       "front": "mkswap",
-      "meaning": "Format a device or file as swap (never mkfs.ext4 on a swap LV)",
-      "example": "mkswap /dev/VolGroup00/LogVol02"
+      "meaning": "Format a device or file as swap (not mkfs)",
+      "example": "mkswap /dev/VolGroup00/LogVol02",
+      "notes": "Puts a swap signature on the LV or file."
+    },
+    {
+      "id": "fstab-swap",
+      "front": "fstab swap line",
+      "meaning": "Enable swap at boot: device/file, type swap, defaults 0 0",
+      "example": "/dev/VolGroup00/LogVol02 swap swap defaults 0 0",
+      "notes": "Same pattern for /swapfile swap swap defaults 0 0."
+    },
+    {
+      "id": "daemon-reload",
+      "front": "systemctl daemon-reload (swap)",
+      "meaning": "Reread fstab into systemd after adding or removing a swap line",
+      "example": "systemctl daemon-reload",
+      "notes": "Used after fstab changes for both add and remove flows."
     },
     {
       "id": "swapon",
       "front": "swapon",
       "meaning": "Activate a swap device or file now",
-      "example": "swapon -v /dev/VolGroup00/LogVol02"
+      "example": "swapon -v /dev/VolGroup00/LogVol02",
+      "notes": "swapon /swapfile for a file. -v is verbose in the LV example."
+    },
+    {
+      "id": "dd-swapfile",
+      "front": "dd for a 64 MB swap file",
+      "meaning": "Create an empty file: bs=1024, count = size_in_MB × 1024",
+      "example": "dd if=/dev/zero of=/swapfile bs=1024 count=65536",
+      "notes": "64 * 1024 = 65536 blocks."
+    },
+    {
+      "id": "chmod-swapfile",
+      "front": "chmod 0600 /swapfile",
+      "meaning": "Lock down permissions — swap file must not be world-readable",
+      "example": "chmod 0600 /swapfile",
+      "notes": "May hold RAM secrets."
+    },
+    {
+      "id": "remove-swapfile",
+      "front": "Remove a swap file (order)",
+      "meaning": "swapoff → remove fstab line → daemon-reload → rm",
+      "example": "swapoff -v /swapfile; rm /swapfile",
+      "notes": "Never rm an active swap file."
     },
     {
       "id": "swapoff",
       "front": "swapoff",
-      "meaning": "Deactivate swap before removing it — never rm an active swap file",
+      "meaning": "Deactivate a swap device or file before deleting it",
       "example": "swapoff -v /swapfile",
-      "notes": "Order: swapoff → fstab → daemon-reload → rm"
-    },
-    {
-      "id": "lv-swap-flow",
-      "front": "lvcreate → mkswap → fstab → swapon",
-      "meaning": "Add swap as an LVM LV: create LV, format as swap, persist in fstab, activate",
-      "example": "lvcreate VolGroup00 -n LogVol02 -L 2G",
-      "notes": "Also systemctl daemon-reload after fstab"
-    },
-    {
-      "id": "swapfile-dd",
-      "front": "dd if=/dev/zero of=/swapfile …",
-      "meaning": "Create an empty file to use as swap (then mkswap, chmod 0600, fstab, swapon)",
-      "example": "dd if=/dev/zero of=/swapfile bs=1024 count=65536",
-      "notes": "64 MB = 64*1024 blocks; chmod 0600 — may hold RAM secrets"
-    },
-    {
-      "id": "swap-size-rhel",
-      "front": "RHEL swap sizing (≤2 GB RAM)",
-      "meaning": "Recommended swap = 2× RAM; with hibernation = 3× RAM",
-      "notes": "Bigger RAM: table drops toward ≥4 GB; hibernation needs ≥ RAM"
-    },
-    {
-      "id": "fstab-swap",
-      "front": "fstab swap line",
-      "meaning": "Persist swap across reboot: device/file swap swap defaults 0 0",
-      "example": "/swapfile swap swap defaults 0 0"
+      "notes": "Required before rm of an active swap file."
     }
   ]
 }

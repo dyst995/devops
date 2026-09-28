@@ -1,93 +1,128 @@
 {
   "title": "alternatives",
-  "subtitle": "Managed symlinks for one public name, many binaries — flip for meaning, example, and notes",
+  "subtitle": "Managed symlinks that pick which binary a public name points at — flip to reveal meaning, example, and notes",
   "frontLabel": "Command / concept",
-  "modeForward": "Form → meaning",
-  "modeReverse": "Meaning → form",
+  "modeForward": "Term → meaning",
+  "modeReverse": "Meaning → term",
   "cards": [
     {
-      "id": "what",
+      "id": "what-is-alternatives",
       "front": "alternatives",
-      "meaning": "Creates, removes, maintains, and displays the symlinks that pick which implementation a generic name points at",
-      "example": "java → /usr/java/latest/bin/java (not a second JVM copy)",
-      "notes": "Memory hook: a managed symlink farm. One public name, many real binaries, one current choice. Debian/Ubuntu: update-alternatives."
+      "meaning": "Creates, removes, maintains, and displays the symbolic links that pick which implementation a public name (e.g. /usr/bin/java) points at",
+      "example": "",
+      "notes": "Memory hook: a managed symlink farm. One public name, many real binaries, one current choice. You do not delete the other versions."
     },
     {
-      "id": "install",
-      "front": "alternatives --install link name path priority",
-      "meaning": "Register a new path in the alternative group",
-      "example": "alternatives --install /usr/bin/java java /usr/java/latest/bin/java 5",
-      "notes": "link = public symlink users run; name = group; path = real binary; priority = integer (highest wins in --auto)."
+      "id": "update-alternatives",
+      "front": "update-alternatives",
+      "meaning": "Debian/Ubuntu name for the same idea as Red Hat alternatives",
+      "example": "",
+      "notes": "This course uses the Red Hat command alternatives."
     },
     {
-      "id": "config",
-      "front": "alternatives --config name",
-      "meaning": "Interactive menu to pick which path provides the group",
-      "example": "alternatives --config java",
-      "notes": "* = current selection; + = auto-mode winner (highest priority). Enter keeps current; type a number to switch."
+      "id": "link",
+      "front": "link (in --install)",
+      "meaning": "Public symlink users run",
+      "example": "/usr/bin/java",
+      "notes": ""
     },
     {
-      "id": "set",
-      "front": "alternatives --set name path",
-      "meaning": "Pin the group to a specific path (manual mode)",
-      "example": "alternatives --set java /usr/java/latest/bin/java",
-      "notes": "Non-interactive: pick by path instead of typing a menu number."
+      "id": "name",
+      "front": "name (in alternatives)",
+      "meaning": "Group name for this alternative set",
+      "example": "java",
+      "notes": ""
     },
     {
-      "id": "auto",
-      "front": "alternatives --auto name",
-      "meaning": "Let priority choose the current alternative (automatic mode)",
-      "example": "alternatives --auto java",
-      "notes": "Highest priority wins. Opposite of --set (manual pin)."
-    },
-    {
-      "id": "display",
-      "front": "alternatives --display name",
-      "meaning": "Show status, paths, priorities, and current choice",
-      "example": "alternatives --display java",
-      "notes": "Inspect without changing anything."
-    },
-    {
-      "id": "remove",
-      "front": "alternatives --remove name path",
-      "meaning": "Unregister that path from the group",
-      "example": "alternatives --remove java /usr/java/latest/bin/java",
-      "notes": "Does not delete the binary on disk — only drops it from the alternatives group."
+      "id": "path",
+      "front": "path (in alternatives)",
+      "meaning": "Real binary that provides the group",
+      "example": "/usr/java/latest/bin/java",
+      "notes": ""
     },
     {
       "id": "priority",
-      "front": "priority (in --install)",
-      "meaning": "Integer weight; in auto mode the highest priority wins",
-      "example": "... /usr/java/latest/bin/java 5",
-      "notes": "Only matters when the group is in --auto mode. Manual --set ignores priority until you switch back."
+      "front": "priority",
+      "meaning": "Integer; in auto mode the highest priority wins",
+      "example": "5 in alternatives --install ... 5",
+      "notes": ""
     },
     {
       "id": "slave",
-      "front": "--slave link name path",
-      "meaning": "Extra symlinks that must switch together with the master",
-      "example": "alternatives --install ... --slave /usr/bin/javac javac /usr/java/latest/bin/javac",
-      "notes": "Man pages, javac, and similar companions flip when the master alternative flips."
+      "front": "--slave",
+      "meaning": "Extra symlinks that must switch with the master (man page, javac, …)",
+      "example": "alternatives ... --slave link name path",
+      "notes": ""
     },
     {
-      "id": "parts",
-      "front": "link / name / path",
-      "meaning": "Public symlink · group name · real binary",
-      "example": "/usr/bin/java · java · /usr/java/latest/bin/java",
-      "notes": "Users run link; alternatives manages which path it points at under name."
+      "id": "install",
+      "front": "alternatives --install",
+      "meaning": "Register a new path in the group",
+      "example": "alternatives --install /usr/bin/java java /usr/java/latest/bin/java 5",
+      "notes": "Order: public link, group name, real path, priority (higher wins in --auto)."
     },
     {
-      "id": "markers",
-      "front": "* and + in --config menu",
-      "meaning": "* = current selection; + = would win in auto mode",
-      "example": "*+ 4  /usr/lib/jvm/.../java",
-      "notes": "Both markers on one line means current choice is also the auto winner."
+      "id": "remove",
+      "front": "alternatives --remove",
+      "meaning": "Unregister that path from the group",
+      "example": "alternatives --remove java /usr/java/latest/bin/java",
+      "notes": ""
     },
     {
-      "id": "verify",
+      "id": "set",
+      "front": "alternatives --set",
+      "meaning": "Pin the group to a specific path (manual mode)",
+      "example": "alternatives --set java /usr/java/latest/bin/java",
+      "notes": ""
+    },
+    {
+      "id": "auto",
+      "front": "alternatives --auto",
+      "meaning": "Let priority choose (automatic mode)",
+      "example": "alternatives --auto java",
+      "notes": "Highest priority wins."
+    },
+    {
+      "id": "display",
+      "front": "alternatives --display",
+      "meaning": "Show status, paths, priorities, and current choice",
+      "example": "alternatives --display java",
+      "notes": ""
+    },
+    {
+      "id": "config",
+      "front": "alternatives --config",
+      "meaning": "Interactive menu to pick a provider by number",
+      "example": "alternatives --config java",
+      "notes": "Type a number to switch; Enter keeps the current selection."
+    },
+    {
+      "id": "config-star",
+      "front": "* in --config menu",
+      "meaning": "Current selection",
+      "example": "*+ 4  /usr/lib/jvm/jre-1.6.0-openjdk...",
+      "notes": ""
+    },
+    {
+      "id": "config-plus",
+      "front": "+ in --config menu",
+      "meaning": "The one that would be chosen in auto mode (highest priority)",
+      "example": "*+ 4  ...",
+      "notes": "Enter keeps current ([+])."
+    },
+    {
+      "id": "java-version",
       "front": "java -version",
-      "meaning": "Confirm which JVM /usr/bin/java now resolves to",
+      "meaning": "Confirm which JVM /usr/bin/java now is after switching",
       "example": "java -version → java version \"1.6.0_26\"",
-      "notes": "After --config or --set, the PATH name is the symlink target you selected — not a second copy of the JVM."
+      "notes": "java on PATH is the symlink target you selected — not a second copy of the JVM. After --config, version must match the path you picked."
+    },
+    {
+      "id": "action-memory-hook",
+      "front": "alternatives action memory hook",
+      "meaning": "--install to add, --config to pick by menu, --set to pick by path, --auto to follow priority, --display to inspect, --remove to drop",
+      "example": "",
+      "notes": ""
     }
   ]
 }

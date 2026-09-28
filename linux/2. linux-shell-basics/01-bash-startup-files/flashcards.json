@@ -1,86 +1,205 @@
 {
-  "title": "Bash startup files",
-  "subtitle": "Login vs non-login — which files run and how to source them",
-  "frontLabel": "Command",
-  "modeForward": "Command → meaning",
-  "modeReverse": "Meaning → command",
+  "title": "Bash Startup Files",
+  "subtitle": "Which files Bash reads — by interactive vs login — flip to reveal meaning",
+  "frontLabel": "Form / path",
+  "modeForward": "Term → meaning",
+  "modeReverse": "Meaning → term",
   "cards": [
     {
-      "id": "login-files",
-      "front": "interactive login shell",
-      "meaning": "Reads /etc/profile, then the first readable of ~/.bash_profile, ~/.bash_login, ~/.profile",
-      "example": "SSH / console login, or bash --login",
-      "notes": "Only one of the three personal files is read — first existing readable wins. On logout: ~/.bash_logout."
+      "id": "startup-files",
+      "front": "startup files",
+      "meaning": "Scripts Bash reads and executes when it starts; which ones depend on how the shell was started",
+      "example": "",
+      "notes": "Not which machine — interactive? and login?"
     },
     {
-      "id": "nonlogin",
-      "front": "interactive non-login shell",
-      "meaning": "Reads ~/.bashrc only",
-      "example": "Terminal opened from a desktop icon/menu",
-      "notes": "/etc/profile and the ~/.bash_profile trio are not read. Memory hook: non-login = rc only."
+      "id": "interactive-shell",
+      "front": "interactive shell",
+      "meaning": "You can type commands; the shell is not running only because a script launched it",
+      "example": "",
+      "notes": ""
+    },
+    {
+      "id": "login-shell",
+      "front": "login shell",
+      "meaning": "Shell after authenticating (SSH, TTY/console), or Bash started with bash --login / bash -l",
+      "example": "SSH, console login, or bash --login",
+      "notes": "Follows the profile-file path"
+    },
+    {
+      "id": "interactive-login-path",
+      "front": "interactive + login startup path",
+      "meaning": "/etc/profile, then first readable of ~/.bash_profile ~/.bash_login ~/.profile; on logout ~/.bash_logout",
+      "example": "SSH / console, or bash --login",
+      "notes": "Memory: login = profile family"
+    },
+    {
+      "id": "interactive-nonlogin-path",
+      "front": "interactive + non-login startup path",
+      "meaning": "~/.bashrc only",
+      "example": "Terminal icon/menu on a graphical desktop",
+      "notes": "Memory: non-login = rc only. /etc/profile and profile trio are not read"
+    },
+    {
+      "id": "etc-profile",
+      "front": "/etc/profile",
+      "meaning": "System-wide; runs for every login shell on the box",
+      "example": "",
+      "notes": "First file in the login path"
+    },
+    {
+      "id": "bash-profile",
+      "front": "~/.bash_profile",
+      "meaning": "First of the personal login trio tried; if readable, ~/.bash_login and ~/.profile are skipped",
+      "example": "",
+      "notes": "Only one of the three personal files is read"
     },
     {
       "id": "bash-login",
-      "front": "bash --login / bash -l",
-      "meaning": "Start a login shell as you (read profile files) — does not become root",
-      "example": "bash --login",
-      "notes": "Same UID, no password. Use to test /etc/profile and ~/.bash_profile without a new SSH."
+      "front": "~/.bash_login",
+      "meaning": "Second personal login-file candidate; used only if ~/.bash_profile is missing/unreadable",
+      "example": "",
+      "notes": "Tried after ~/.bash_profile, before ~/.profile"
     },
     {
-      "id": "su",
-      "front": "su",
-      "meaning": "Switch to root (or another user) — not a startup-file switch",
-      "example": "su; su user",
-      "notes": "Needs root’s (or that user’s) password. Changes UID. Job is substitute user, not “start a login shell as me.”"
-    },
-    {
-      "id": "su-dash",
-      "front": "su - / su -l",
-      "meaning": "Switch to root with root’s clean login environment",
-      "example": "su -; su - user",
-      "notes": "Still becomes root (or that user). The - only gives their home/PATH — not “the other way to start your login shell.”"
+      "id": "dot-profile",
+      "front": "~/.profile",
+      "meaning": "Third personal login-file candidate; used only if the first two are missing/unreadable",
+      "example": "",
+      "notes": "Often portable; prefer . (dot) over source here"
     },
     {
       "id": "bash-logout",
       "front": "~/.bash_logout",
-      "meaning": "Runs when an interactive login shell exits",
-      "example": "logout from SSH session",
-      "notes": "Per-user. Only for that login shell’s exit — not every terminal close."
+      "meaning": "Per-user; runs when that login shell exits",
+      "example": "",
+      "notes": "Logout has its own file"
     },
     {
-      "id": "source-bashrc",
-      "front": ". ~/.bashrc",
-      "meaning": "Source ~/.bashrc in the current shell (POSIX)",
+      "id": "bashrc",
+      "front": "~/.bashrc",
+      "meaning": "Per-user file for interactive non-login shells: aliases, functions, PS1, umask for that window, completion",
+      "example": "",
+      "notes": "rc = run commands for this interactive session"
+    },
+    {
+      "id": "personal-trio-order",
+      "front": "personal login trio order",
+      "meaning": "~/.bash_profile, then ~/.bash_login, then ~/.profile — only the first existing readable one runs",
+      "example": "",
+      "notes": "If ~/.bash_profile exists and is readable, the other two are skipped"
+    },
+    {
+      "id": "login-profile-contents",
+      "front": "typical login profile contents",
+      "meaning": "PATH, umask, environment variables that child processes should inherit",
+      "example": "",
+      "notes": ""
+    },
+    {
+      "id": "bash-login-flag",
+      "front": "bash --login",
+      "meaning": "Start a login shell as you — reads your profile files; no password, no user switch, not root",
+      "example": "bash --login",
+      "notes": "Same as bash -l. Use to test /etc/profile and ~/.bash_profile without a new SSH"
+    },
+    {
+      "id": "bash-l",
+      "front": "bash -l",
+      "meaning": "Same as bash --login — login shell as you",
+      "example": "bash -l",
+      "notes": ""
+    },
+    {
+      "id": "su",
+      "front": "su",
+      "meaning": "Substitute user — switch to another account (default root); needs that user’s password; changes UID",
+      "example": "su",
+      "notes": "Not a startup-file switch. Job is become root (or su user)"
+    },
+    {
+      "id": "su-dash",
+      "front": "su -",
+      "meaning": "Still switch to root; - gives root a clean login environment (their home, their PATH)",
+      "example": "su -",
+      "notes": "Same as su -l. Without - you still become root but keep more of your env and cwd"
+    },
+    {
+      "id": "su-user",
+      "front": "su user",
+      "meaning": "Switch to that named user (their password)",
+      "example": "su user",
+      "notes": ""
+    },
+    {
+      "id": "su-dash-user",
+      "front": "su - user",
+      "meaning": "Switch to that user with their login environment",
+      "example": "su - user",
+      "notes": ""
+    },
+    {
+      "id": "su-vs-bash-login",
+      "front": "su vs bash --login",
+      "meaning": "su becomes root/other UID (password); bash --login starts a login shell as you (your profile files, no password)",
+      "example": "",
+      "notes": "Do not treat them as two login-shell commands"
+    },
+    {
+      "id": "why-source-bashrc",
+      "front": "why ~/.bash_profile sources ~/.bashrc",
+      "meaning": "Login shells do not read ~/.bashrc alone; GUI terminals often skip ~/.bash_profile — one file sources the other so aliases and PATH both apply",
       "example": "if [ -f ~/.bashrc ]; then . ~/.bashrc; fi",
-      "notes": "Typical line in ~/.bash_profile so login shells get aliases too. Space required after the dot."
+      "notes": "Door (.bash_profile) should open onto the furnished room (.bashrc)"
     },
     {
-      "id": "source-cmd",
-      "front": "source ~/.bashrc",
-      "meaning": "Same as . — read and run the file here (Bash-specific)",
+      "id": "sourcing-meaning",
+      "front": "sourcing a file",
+      "meaning": "Runs the file in the current shell (not a subshell), so export, aliases, and functions stay",
+      "example": ". ~/.bashrc",
+      "notes": "“Referred to” means sourced, not merely mentioned"
+    },
+    {
+      "id": "dot-command",
+      "front": ". (dot) command",
+      "meaning": "POSIX: read and run a file in the current shell; required in sh",
+      "example": ". ~/.bashrc",
+      "notes": "Need a space: . ~/.bashrc. Prefer . in ~/.profile, /etc/profile, portable scripts"
+    },
+    {
+      "id": "source-command",
+      "front": "source",
+      "meaning": "Same effect as . in Bash, but Bash-specific — not required by POSIX; dash/sh may say source: not found",
       "example": "source ~/.bashrc",
-      "notes": "Not required by POSIX; dash/sh may say “source: not found.” Prefer . in portable profiles."
+      "notes": "Fine in Bash-only files; use . for portability"
     },
     {
-      "id": "echo-0",
+      "id": "posix",
+      "front": "POSIX",
+      "meaning": "Portable Operating System Interface (IEEE Std 1003) — shared Unix contract for shell language, utilities, and C APIs",
+      "example": "",
+      "notes": "Bash = POSIX plus extras. /bin/sh is often dash, not Bash"
+    },
+    {
+      "id": "bin-sh",
+      "front": "/bin/sh",
+      "meaning": "The POSIX shell on the box — on many Linux systems dash, not Bash, so Bash extras are missing",
+      "example": "",
+      "notes": ""
+    },
+    {
+      "id": "echo-dollar-zero",
       "front": "echo $0",
-      "meaning": "Print current shell name; leading - often means login",
-      "example": "echo $0  →  -bash",
-      "notes": "-bash (or -su) is a common login-shell clue. Pair with shopt login_shell."
+      "meaning": "Current shell name; a leading - often means login (e.g. -bash)",
+      "example": "echo $0",
+      "notes": ""
     },
     {
-      "id": "shopt-login",
+      "id": "shopt-login-shell",
       "front": "shopt login_shell",
-      "meaning": "Print on/off — is this a login shell?",
+      "meaning": "Prints on or off — whether this is a login shell",
       "example": "shopt login_shell",
-      "notes": "Definitive check while studying. on = login path; off = typically ~/.bashrc only if interactive."
-    },
-    {
-      "id": "profile-order",
-      "front": "~/.bash_profile vs ~/.bash_login vs ~/.profile",
-      "meaning": "Tried in that order; only the first readable one is used",
-      "example": "If ~/.bash_profile exists, the other two are skipped",
-      "notes": "Memory hook: login = profile family. System first (/etc/profile), then one personal file."
+      "notes": ""
     }
   ]
 }

@@ -1,65 +1,296 @@
 {
   "title": "Users and groups",
-  "subtitle": "passwd, shadow, su/sudo, and account tools — flip to reveal meaning, example, and notes",
-  "frontLabel": "Topic",
-  "modeForward": "Topic → meaning",
-  "modeReverse": "Meaning → topic",
+  "subtitle": "passwd, shadow, group files, and account tools — flip to reveal meaning, example, and notes",
+  "frontLabel": "Term",
+  "modeForward": "Term → meaning",
+  "modeReverse": "Meaning → term",
   "cards": [
     {
-      "id": "passwd-fields",
-      "front": "/etc/passwd fields",
-      "meaning": "name:password:UID:GID:comment:home:shell — who the account is",
+      "id": "uid-gid-vs-name",
+      "front": "UID / GID vs name",
+      "meaning": "Kernel, files, sudo, and services key off numbers — not the pretty login or group name",
+      "example": "",
+      "notes": "Every process runs as a user in one or more groups."
+    },
+    {
+      "id": "passwd-field-order",
+      "front": "/etc/passwd field order",
+      "meaning": "name : password : UID : GID : comment : home : shell",
       "example": "root:x:0:1:Super-User:/:/sbin/sh",
-      "notes": "Kernel cares about UID/GID numbers, not the pretty name. Expiration is not on this line."
+      "notes": "passwd = who. Expiration is not on this line."
+    },
+    {
+      "id": "user-name",
+      "front": "User name",
+      "meaning": "Login label you type at SSH or su; unique on the box; only a label",
+      "example": "root, nika, www-data",
+      "notes": "Typical: short, lowercase, no spaces. Renaming does not change file ownership."
+    },
+    {
+      "id": "usermod-l",
+      "front": "usermod -l newname oldname",
+      "meaning": "Rename the login name; UID and file ownership stay the same",
+      "example": "usermod -l newname oldname",
+      "notes": "Ownership is stored as UID, not the string name."
     },
     {
       "id": "passwd-x",
       "front": "x in /etc/passwd password field",
-      "meaning": "Hash lives in /etc/shadow (root-only), not in world-readable passwd",
+      "meaning": "Hash is in /etc/shadow (root-only), not in world-readable passwd",
       "example": "nika:x:1000:1000:Nika:/home/nika:/bin/bash",
       "notes": "Stops ordinary users from copying hashes out of passwd and cracking them."
     },
     {
-      "id": "shadow",
-      "front": "/etc/shadow",
-      "meaning": "Password hash, lock markers, aging, and account expiration",
-      "example": "cat /etc/shadow",
-      "notes": "Secret and time. Memory hook: passwd = who; shadow = secret and time."
+      "id": "shadow-lock",
+      "front": "* or ! in /etc/shadow",
+      "meaning": "Password login is locked",
+      "example": "",
+      "notes": "Empty password field (rare, dangerous) means no password required."
+    },
+    {
+      "id": "uid",
+      "front": "UID",
+      "meaning": "Integer the kernel uses as “who is this”; every file has an owner UID",
+      "example": "id -u",
+      "notes": "Two passwd lines with the same UID are the same identity to the kernel."
     },
     {
       "id": "uid-0",
       "front": "UID 0",
       "meaning": "root — unlimited privileges",
-      "example": "id -u",
-      "notes": "Prefer sudo for one command. Do not use root without necessity. Low UIDs are often system accounts."
+      "example": "",
+      "notes": "Do not use root without necessity. Prefer sudo for one command."
+    },
+    {
+      "id": "system-uids",
+      "front": "Low UIDs (system accounts)",
+      "meaning": "Daemons and system accounts (daemon, bin, nobody) — not humans",
+      "example": "",
+      "notes": "Regular people often start at 1000 (sometimes 500 on older Red Hat)."
+    },
+    {
+      "id": "primary-gid",
+      "front": "Primary GID (passwd field)",
+      "meaning": "User’s required primary group number; new files usually get this GID",
+      "example": "id shows gid= (primary) and groups= (all)",
+      "notes": "Extra groups are not this field — they live in /etc/group."
+    },
+    {
+      "id": "gecos",
+      "front": "GECOS / comment field",
+      "meaning": "Free-text description (full name, Super-User); optional for login",
+      "example": "Super-User, Nika Beroshvili",
+      "notes": "finger and some mail tools display it. Extra comma-separated subfields exist; most servers use the first part."
+    },
+    {
+      "id": "home-directory",
+      "front": "Home directory",
+      "meaning": "User’s directory for configs, .ssh, files; login sets $HOME and cds here",
+      "example": "Root often /root; sample passwd uses /",
+      "notes": "Missing/unreadable home may still allow login; shell starts elsewhere and dotfiles are skipped."
+    },
+    {
+      "id": "login-shell",
+      "front": "User’s shell (passwd field)",
+      "meaning": "Program started at interactive login ($SHELL)",
+      "example": "/bin/bash, /sbin/sh, /bin/zsh",
+      "notes": "User can still type bash after they are in. Set with useradd -s / usermod -s."
+    },
+    {
+      "id": "nologin",
+      "front": "/usr/sbin/nologin or /bin/false",
+      "meaning": "Account exists for daemons/files but must not get a login shell",
+      "example": "usermod -s /usr/sbin/nologin daemonuser",
+      "notes": "chsh lets a user change their own shell if it is listed in /etc/shells."
+    },
+    {
+      "id": "expiration",
+      "front": "Account / password expiration",
+      "meaning": "Stored in /etc/shadow (not passwd): aging, warn, inactive, expire",
+      "example": "Expire often as days since 1970-01-01",
+      "notes": "After expiry, login is refused even if the password is correct."
+    },
+    {
+      "id": "passwd-vs-shadow",
+      "front": "passwd vs shadow",
+      "meaning": "passwd = who (name, UID, GID, home, shell, comment); shadow = secret and time",
+      "example": "",
+      "notes": "x means the secret is next door in shadow."
+    },
+    {
+      "id": "etc-passwd",
+      "front": "/etc/passwd",
+      "meaning": "All users including system accounts: name, UID, GID, comment, home, shell",
+      "example": "cat /etc/passwd",
+      "notes": "World-readable. Hashes are not here when the second field is x."
+    },
+    {
+      "id": "etc-shadow",
+      "front": "/etc/shadow",
+      "meaning": "Password hash, lock markers, aging, and account expiration (root only)",
+      "example": "cat /etc/shadow",
+      "notes": "passwd writes the hash; you never type the hash yourself."
+    },
+    {
+      "id": "group-field-order",
+      "front": "/etc/group field order",
+      "meaning": "name : password : GID : user1,user2,...",
+      "example": "bin::2:root,bin,daemon",
+      "notes": "group line = name + GID + extra people."
+    },
+    {
+      "id": "group-name",
+      "front": "Group name",
+      "meaning": "Label for chgrp, usermod -G, ls -l; ownership is stored as GID",
+      "example": "staff, adm, docker, wheel",
+      "notes": "groupmod -n renames; existing files still show the new name because the number did not change."
+    },
+    {
+      "id": "group-password",
+      "front": "Group password field",
+      "meaning": "Old newgrp secret; almost always empty or x; hash (if any) in /etc/gshadow",
+      "example": "",
+      "notes": "You almost never set this — access is membership, not a group secret."
+    },
+    {
+      "id": "gid",
+      "front": "GID",
+      "meaning": "Integer the kernel uses as “which group”",
+      "example": "id -g (primary); id -G (all)",
+      "notes": "GID 0 is typically the root group. Two names with the same GID are the same group — avoid that."
     },
     {
       "id": "primary-vs-supp",
       "front": "Primary vs supplementary group",
-      "meaning": "Primary = GID in passwd; supplementary = member list in /etc/group",
-      "example": "id   # gid= primary; groups= all",
-      "notes": "Empty /etc/group member list ≠ unused group — users can still have that GID as primary."
+      "meaning": "Primary = GID in /etc/passwd only; supplementary = name on /etc/group member list",
+      "example": "usermod -aG docker nika",
+      "notes": "You may not appear in /etc/group for your primary GID."
     },
     {
-      "id": "group-line",
-      "front": "/etc/group line",
-      "meaning": "name:password:GID:user1,user2 — name, GID, extra members",
-      "example": "bin::2:root,bin,daemon",
-      "notes": "Group password is rare (empty or x). Primary membership is on the user line, not always here."
+      "id": "empty-group-members",
+      "front": "Empty /etc/group member list",
+      "meaning": "Nobody is a supplementary member; users can still have that GID as primary in passwd",
+      "example": "staff::10:",
+      "notes": "Empty list ≠ unused group. Common with useradd private groups."
     },
     {
-      "id": "su",
-      "front": "su",
-      "meaning": "Substitute user — needs the target user’s password (except root switching down)",
+      "id": "etc-group",
+      "front": "/etc/group",
+      "meaning": "Group name, GID, and supplementary member usernames",
+      "example": "cat /etc/group",
+      "notes": "Primary group of a user is the GID field in /etc/passwd."
+    },
+    {
+      "id": "etc-gshadow",
+      "front": "/etc/gshadow",
+      "meaning": "Group password hash if one exists (root-only); rare",
+      "example": "",
+      "notes": "Group counterpart of /etc/shadow."
+    },
+    {
+      "id": "cat-passwd",
+      "front": "cat /etc/passwd",
+      "meaning": "List users: name:x:UID:GID:comment:home:shell",
+      "example": "cat /etc/passwd",
+      "notes": ""
+    },
+    {
+      "id": "cat-group",
+      "front": "cat /etc/group",
+      "meaning": "List groups: name:x:GID:user,user",
+      "example": "cat /etc/group",
+      "notes": ""
+    },
+    {
+      "id": "cat-shadow",
+      "front": "cat /etc/shadow",
+      "meaning": "Show password hashes and expiry (root only)",
+      "example": "cat /etc/shadow",
+      "notes": ""
+    },
+    {
+      "id": "id",
+      "front": "id",
+      "meaning": "Print UID, primary GID, and all groups for the process",
+      "example": "id",
+      "notes": "groups / id merge primary and supplementary sources."
+    },
+    {
+      "id": "id-u",
+      "front": "id -u",
+      "meaning": "Print numeric UID",
+      "example": "id -u",
+      "notes": ""
+    },
+    {
+      "id": "id-g",
+      "front": "id -g",
+      "meaning": "Print primary GID",
+      "example": "id -g",
+      "notes": ""
+    },
+    {
+      "id": "id-G",
+      "front": "id -G",
+      "meaning": "Print every GID the process has",
+      "example": "id -G",
+      "notes": ""
+    },
+    {
+      "id": "groups",
+      "front": "groups",
+      "meaning": "Group names of the current user",
+      "example": "groups",
+      "notes": "Memory hook: groups = who am I in."
+    },
+    {
+      "id": "groups-alice",
+      "front": "groups alice",
+      "meaning": "Group names of alice",
+      "example": "groups alice",
+      "notes": ""
+    },
+    {
+      "id": "chage-l",
+      "front": "chage -l user",
+      "meaning": "Show password aging and account expiry from shadow",
+      "example": "chage -l user",
+      "notes": ""
+    },
+    {
+      "id": "su-dash",
+      "front": "su - user",
+      "meaning": "Switch user with login shell: their home and profile env; needs their password",
       "example": "su - user",
-      "notes": "su - = full login (home + profile). su user keeps more of your environment. su alone → root."
+      "notes": "su = their password. - = full login (home + profile)."
+    },
+    {
+      "id": "su-user",
+      "front": "su user",
+      "meaning": "Switch user but keep most of your environment",
+      "example": "su user",
+      "notes": "Still needs that user’s password (except root switching down)."
+    },
+    {
+      "id": "su-root",
+      "front": "su / su root",
+      "meaning": "Switch to root; asks for root password",
+      "example": "su",
+      "notes": "su alone is the same as su root."
     },
     {
       "id": "sudo",
       "front": "sudo",
-      "meaning": "Run a command with another user’s privileges (usually root); asks for YOUR password if allowed",
+      "meaning": "Run a program with another user’s privileges (usually root); asks for YOUR password if allowed",
       "example": "sudo ifconfig",
-      "notes": "sudo = your password (via sudoers). su = target password. sudo su ≈ root shell without knowing root’s secret."
+      "notes": "sudo = your password via sudoers. su = target password."
+    },
+    {
+      "id": "sudo-su",
+      "front": "sudo su",
+      "meaning": "Root shell without knowing root’s password (if sudoers allows)",
+      "example": "sudo su",
+      "notes": "Root shell via sudoers, not via root’s secret."
     },
     {
       "id": "useradd",
@@ -69,53 +300,95 @@
       "notes": "Needs root. -d home, -s shell."
     },
     {
+      "id": "userdel",
+      "front": "userdel user",
+      "meaning": "Delete the account but leave the home directory",
+      "example": "userdel user",
+      "notes": ""
+    },
+    {
       "id": "userdel-r",
       "front": "userdel -r",
       "meaning": "Delete the account and remove home/files",
       "example": "userdel -r tester",
-      "notes": "userdel without -r leaves the home directory behind."
+      "notes": "-r = also remove the house."
+    },
+    {
+      "id": "usermod-d",
+      "front": "usermod -d",
+      "meaning": "Change the user’s home path",
+      "example": "usermod -d /home/newhome user",
+      "notes": ""
+    },
+    {
+      "id": "usermod-s",
+      "front": "usermod -s",
+      "meaning": "Change the login shell",
+      "example": "usermod -s /bin/bash user",
+      "notes": ""
+    },
+    {
+      "id": "usermod-e",
+      "front": "usermod -e YYYY-MM-DD",
+      "meaning": "Set account expiration date",
+      "example": "usermod -e YYYY-MM-DD user",
+      "notes": ""
     },
     {
       "id": "usermod-ag",
       "front": "usermod -aG",
       "meaning": "Append a supplementary group; without -a, -G replaces the extra-group set",
       "example": "usermod -aG docker nika",
-      "notes": "gpasswd -a user group does the same idea. Renaming with usermod -l does not change UID or file ownership."
+      "notes": "-a = append. Critical: bare -G wipes other extras."
     },
     {
       "id": "passwd-cmd",
       "front": "passwd",
-      "meaning": "Set or change a password hash in shadow",
+      "meaning": "Change your password (old + new twice); writes the hash in shadow",
+      "example": "passwd",
+      "notes": "Root can passwd otheruser without the old password."
+    },
+    {
+      "id": "passwd-otheruser",
+      "front": "passwd otheruser",
+      "meaning": "Root sets another user’s password without knowing the old one",
       "example": "passwd otheruser",
-      "notes": "Root can passwd otheruser without the old password. * or ! in shadow locks password login."
+      "notes": ""
     },
     {
-      "id": "chage",
-      "front": "chage -l",
-      "meaning": "Show password aging and account expiry from shadow",
-      "example": "chage -l user",
-      "notes": "usermod -e YYYY-MM-DD sets account expiration. After expiry, login is refused even with a correct password."
+      "id": "finger",
+      "front": "finger user",
+      "meaning": "Show login name, home directory, and shell",
+      "example": "finger user",
+      "notes": "Also can display the GECOS comment."
     },
     {
-      "id": "nologin",
-      "front": "/usr/sbin/nologin (or /bin/false)",
-      "meaning": "Account exists for daemons/files but must not get a login shell",
-      "example": "usermod -s /usr/sbin/nologin daemonuser",
-      "notes": "Login shell is what starts at interactive login; user can still type bash after they are in if they somehow get a shell."
+      "id": "groupadd",
+      "front": "groupadd",
+      "meaning": "Create a group",
+      "example": "groupadd mytestgroup",
+      "notes": "*add create, *del delete, *mod change."
     },
     {
-      "id": "group-tools",
-      "front": "groupadd / groupdel / groupmod",
-      "meaning": "Create, delete, or rename/change a group",
+      "id": "groupdel",
+      "front": "groupdel",
+      "meaning": "Delete a group",
+      "example": "groupdel mytestgroup",
+      "notes": ""
+    },
+    {
+      "id": "groupmod-n",
+      "front": "groupmod -n newname oldname",
+      "meaning": "Rename a group; GID unchanged",
       "example": "groupmod -n newname oldname",
-      "notes": "Rename keeps the same GID — existing files still show the new name. groups lists membership by name."
+      "notes": "groupmod can also change GID."
     },
     {
-      "id": "id",
-      "front": "id",
-      "meaning": "Print UID, primary GID, and all groups for the process",
-      "example": "id -u; id -g; id -G",
-      "notes": "id -u numeric UID; id -g primary GID; id -G all GIDs. Two passwd lines with the same UID are the same identity to the kernel."
+      "id": "gpasswd-a",
+      "front": "gpasswd -a user group",
+      "meaning": "Add user as a supplementary group member",
+      "example": "gpasswd -a user group",
+      "notes": "Same idea as usermod -aG."
     }
   ]
 }

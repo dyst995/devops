@@ -1,107 +1,184 @@
 {
   "title": "Monitoring CPU",
-  "subtitle": "Hardware inventory and per-core utilization — flip to reveal meaning, example, and notes",
+  "subtitle": "Hardware inventory and per-core utilization",
   "frontLabel": "Command / field",
   "modeForward": "Term → meaning",
   "modeReverse": "Meaning → term",
   "cards": [
     {
+      "id": "tool-roles",
+      "front": "lscpu vs mpstat / sar",
+      "meaning": "lscpu = what chips you have; mpstat / sar = how busy each core is",
+      "example": "",
+      "notes": "Architecture vs utilization"
+    },
+    {
       "id": "lscpu",
       "front": "lscpu",
-      "meaning": "Report CPU architecture: sockets, cores, threads, NUMA, vendor, model",
+      "meaning": "CPU architecture: sockets, cores, threads, NUMA, vendor, model name",
       "example": "lscpu",
-      "notes": "Inventory of what chips you have — not how busy they are right now. Used to size VMs and taskset."
+      "notes": "Inventory for sizing VMs and taskset — not live busyness"
+    },
+    {
+      "id": "lscpu-cpus",
+      "front": "lscpu → CPU(s)",
+      "meaning": "Logical processors the OS sees",
+      "example": "CPU(s): 40",
+      "notes": "The number you check against sockets × cores × threads"
+    },
+    {
+      "id": "lscpu-threads",
+      "front": "lscpu → Thread(s) per core",
+      "meaning": "1 = no extra hyperthread visible; 2 = SMT",
+      "example": "Thread(s) per core: 1",
+      "notes": "Part of the logical-CPU formula"
+    },
+    {
+      "id": "lscpu-cores",
+      "front": "lscpu → Core(s) per socket",
+      "meaning": "Physical cores on one CPU package",
+      "example": "Core(s) per socket: 10",
+      "notes": "Multiply by sockets and threads for logical CPUs"
+    },
+    {
+      "id": "lscpu-sockets",
+      "front": "lscpu → Socket(s)",
+      "meaning": "CPU packages on the board",
+      "example": "Socket(s): 4",
+      "notes": "Part of the inventory math"
+    },
+    {
+      "id": "lscpu-numa",
+      "front": "lscpu → NUMA node(s)",
+      "meaning": "Memory domains — cores are closer to some RAM than other",
+      "example": "NUMA node(s): 4",
+      "notes": "RAM is not equally far from every socket"
     },
     {
       "id": "cpus-formula",
       "front": "sockets × cores × threads",
       "meaning": "Approximately equals logical CPU(s) the OS reports",
       "example": "4 sockets × 10 cores × 1 thread = 40 CPU(s)",
-      "notes": "Check inventory math against the CPU(s) line in lscpu. Thread(s) per core 2 usually means SMT/hyperthreading."
+      "notes": "Check inventory math against the CPU(s) line in lscpu"
     },
     {
-      "id": "numa",
-      "front": "NUMA node(s)",
-      "meaning": "Memory domains — cores are closer to some RAM than other",
-      "example": "NUMA node(s): 4 in lscpu output",
-      "notes": "RAM is not equally far from every socket. Matters for locality and performance on multi-socket hosts."
-    },
-    {
-      "id": "mpstat-all",
-      "front": "mpstat -P ALL",
-      "meaning": "Per-CPU (core) utilization for every logical CPU plus a summary line all",
+      "id": "mpstat",
+      "front": "mpstat",
+      "meaning": "Display CPU statistics of an individual CPU (or core)",
       "example": "mpstat -P ALL",
-      "notes": "Default report is CPU utilization. No interval means stats since system startup (boot) — a long average, not “right now.”"
+      "notes": "Default report is CPU utilization if you do not pick another activity type"
+    },
+    {
+      "id": "mpstat-P-ALL",
+      "front": "mpstat -P ALL",
+      "meaning": "Per-CPU utilization for every logical CPU plus a summary line all",
+      "example": "mpstat -P ALL",
+      "notes": "No interval = stats since system startup (boot) — a long average, not \"right now\""
+    },
+    {
+      "id": "mpstat-no-interval",
+      "front": "mpstat with no interval",
+      "meaning": "Stats since system startup (boot) — long average, not live",
+      "example": "mpstat -P ALL",
+      "notes": "To sample now, give an interval and count"
     },
     {
       "id": "mpstat-live",
       "front": "mpstat -P ALL 1 5",
-      "meaning": "Live samples: every 1 second, 5 times (not only boot average)",
+      "meaning": "Live samples: every 1 second, 5 times",
       "example": "mpstat -P ALL 1 5",
-      "notes": "Same interval/count pattern as sar. Use when you need “busy now,” not since boot."
+      "notes": "Same interval/count pattern as sar"
     },
     {
       "id": "pct-usr",
       "front": "%usr / %user",
-      "meaning": "Time spent in user-space processes",
-      "example": "mpstat or sar column %usr / %user",
-      "notes": "Application CPU. High user on one core vs all tells you imbalance."
+      "meaning": "User-space process CPU time",
+      "example": "mpstat / sar output column",
+      "notes": "Application work, not kernel"
     },
     {
       "id": "pct-nice",
       "front": "%nice",
       "meaning": "Niced (low-priority) user time",
-      "example": "mpstat %nice column",
-      "notes": "Still user-space, but from processes running at a nicer priority."
+      "example": "mpstat / sar output column",
+      "notes": "User time at nice priority"
     },
     {
       "id": "pct-sys",
       "front": "%sys / %system",
-      "meaning": "Time spent in the kernel",
-      "example": "mpstat or sar %sys / %system",
-      "notes": "Syscall-heavy or kernel work. Pair with user and idle to see where time goes."
+      "meaning": "Kernel CPU time",
+      "example": "mpstat / sar output column",
+      "notes": "System/kernel work"
     },
     {
       "id": "pct-iowait",
       "front": "%iowait",
-      "meaning": "CPU idle while waiting for disk/network I/O",
-      "example": "high %iowait in mpstat/sar",
-      "notes": "Points to storage or I/O, not “need more CPU.” Fix disks/network before adding cores."
+      "meaning": "Idle waiting for disk/network I/O",
+      "example": "mpstat / sar output column",
+      "notes": "High %iowait → storage problem, not \"need more CPU\""
+    },
+    {
+      "id": "pct-irq-soft",
+      "front": "%irq / %soft",
+      "meaning": "Hardware / software interrupt CPU time",
+      "example": "mpstat output columns",
+      "notes": "Interrupt handling overhead"
     },
     {
       "id": "pct-steal",
       "front": "%steal",
-      "meaning": "Time a hypervisor took from this VM (stolen cycles)",
-      "example": "high %steal on a cloud VM",
-      "notes": "Noisy neighbor on the hypervisor. Host contention, not your process list alone."
-    },
-    {
-      "id": "pct-idle",
-      "front": "%idle",
-      "meaning": "CPU had nothing to do",
-      "example": "%idle near 99.99 on a quiet host",
-      "notes": "Idle high = bored. Low idle with high iowait still means waiting on I/O, not compute saturation."
+      "meaning": "Time a hypervisor took from this VM",
+      "example": "mpstat / sar output column",
+      "notes": "High %steal → noisy neighbor on the hypervisor"
     },
     {
       "id": "pct-guest",
       "front": "%guest",
-      "meaning": "Time running a guest (typical on a KVM host)",
-      "example": "mpstat %guest column",
-      "notes": "Host-side view of CPU spent inside virtual machines."
+      "meaning": "Time running a guest (KVM host)",
+      "example": "mpstat output column",
+      "notes": "Host side of virtualization"
     },
     {
-      "id": "sar-p",
+      "id": "pct-idle",
+      "front": "%idle",
+      "meaning": "CPU has nothing to do",
+      "example": "mpstat / sar output column",
+      "notes": "Idle high = bored; iowait high = waiting on I/O"
+    },
+    {
+      "id": "sar",
+      "front": "sar",
+      "meaning": "Display per-CPU statistics; often from collected history, can also sample live",
+      "example": "sar -P ALL 1 1",
+      "notes": "Often installed with sysstat; can replay /var/log/sa/ historical data"
+    },
+    {
+      "id": "sar-P-ALL-1-1",
       "front": "sar -P ALL 1 1",
       "meaning": "Per-CPU stats: all processors, interval 1 second, count 1 sample",
       "example": "sar -P ALL 1 1",
-      "notes": "Same utilization story as mpstat. Often from sysstat; can also replay historical data under /var/log/sa/."
+      "notes": "Wait 1s, print once. Same utilization story as mpstat, plus history when collection is enabled"
     },
     {
-      "id": "lscpu-vs-mpstat",
-      "front": "lscpu vs mpstat/sar",
-      "meaning": "lscpu = what chips you have; mpstat/sar = how busy each core is",
-      "example": "lscpu; mpstat -P ALL 1 5",
-      "notes": "Hardware inventory vs utilization. Do not confuse architecture with load."
+      "id": "sar-P-ALL",
+      "front": "sar -P ALL",
+      "meaning": "Report all processors plus the all average line",
+      "example": "sar -P ALL 1 1",
+      "notes": "Same idea as mpstat -P ALL"
+    },
+    {
+      "id": "sar-interval-count",
+      "front": "sar interval and count (e.g. 1 1)",
+      "meaning": "First number = sample interval in seconds; second = how many samples",
+      "example": "sar -P ALL 1 1",
+      "notes": "1 1 means wait 1s, print once"
+    },
+    {
+      "id": "sar-all-vs-core",
+      "front": "sar/mpstat all vs a single CPU line",
+      "meaning": "all is the average; individual CPU lines show per-core busyness",
+      "example": "CPU 0 at 35% user while another core is idle 100%",
+      "notes": "Core 0 can be busier than the all average"
     }
   ]
 }

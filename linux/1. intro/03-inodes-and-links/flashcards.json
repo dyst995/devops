@@ -1,81 +1,142 @@
 {
   "title": "Inodes and links",
-  "subtitle": "Names vs inodes — flip for meaning, example, and notes",
-  "frontLabel": "Concept",
+  "subtitle": "Names vs inodes; hard vs soft links — flip for meaning, example, and notes",
+  "frontLabel": "Concept / command",
   "modeForward": "Term → meaning",
   "modeReverse": "Meaning → term",
   "cards": [
     {
-      "id": "inode",
-      "front": "inode",
-      "meaning": "File-system object ID: metadata, owner/perms, and disk block locations — not the name",
-      "notes": "Names live in directories; inode = ID card + map of data blocks"
+      "id": "name-vs-inode",
+      "front": "File name vs file",
+      "meaning": "A file name is not the file — the file is an inode; the name is a pointer to that inode",
+      "example": "two names can point at the same inode",
+      "notes": "Hard links and soft links are two different kinds of pointer."
     },
     {
-      "id": "directory",
-      "front": "directory",
-      "meaning": "List of names assigned to inodes (., .., and each child)",
-      "notes": "Phone book of names → inode numbers"
+      "id": "inode-def",
+      "front": "inode (index node)",
+      "meaning": "Data structure that describes a file-system object such as a file or directory",
+      "example": "ls -li first column = inode number",
+      "notes": "Memory hook: inode = the file’s ID card + map of its data blocks."
+    },
+    {
+      "id": "inode-stores",
+      "front": "What an inode stores",
+      "meaning": "Attributes/metadata (change, access, modification times), owner and permissions, and disk block location(s)",
+      "example": "owner, mode, mtime, data blocks",
+      "notes": "It does not store the file’s name."
+    },
+    {
+      "id": "inode-no-name",
+      "front": "What an inode does not store",
+      "meaning": "The file’s name — names live in directories",
+      "example": "directory entry: name → inode number",
+      "notes": "Directory = a phone book of names → inode numbers."
+    },
+    {
+      "id": "directory-entries",
+      "front": "Directory contents",
+      "meaning": "Lists of names assigned to inodes: . (itself), .. (parent), and each child",
+      "example": ". and .. plus child entries",
+      "notes": ". and .. are the special directory hard links the system manages."
     },
     {
       "id": "link-count",
-      "front": "link count",
-      "meaning": "How many directory entries point at an inode; data deletable when count is 0 and nothing has it open"
+      "front": "Link count",
+      "meaning": "How many directory entries point at that inode",
+      "example": "link count drops to 0",
+      "notes": "When the count is 0 and no process has the file open, the data can be deleted."
     },
     {
-      "id": "hard-link",
-      "front": "hard link",
-      "meaning": "Direct pointer to an inode — another name for the same file",
+      "id": "hard-link-def",
+      "front": "Hard link",
+      "meaning": "A direct pointer to an inode — another name for the same file",
       "example": "ln original.txt another-name.txt",
-      "notes": "Indistinguishable from original; same inode"
+      "notes": "Indistinguishable from the original at the inode level — no original vs copy, just two names."
     },
     {
-      "id": "ln",
+      "id": "hard-no-cross-fs",
+      "front": "Hard links across file systems?",
+      "meaning": "No — inodes are unique only inside one file system",
+      "example": "cannot hard-link from / on disk A to a file on separately mounted disk B",
+      "notes": "Soft links can cross file systems."
+    },
+    {
+      "id": "hard-shared-data",
+      "front": "Edits through a hard link",
+      "meaning": "Changes through any name reflect in all names (same inode, same data)",
+      "example": "edit another-name.txt → original.txt sees the same data",
+      "notes": "File stays accessible as long as at least one hard link remains (link count > 0)."
+    },
+    {
+      "id": "hard-survive-delete",
+      "front": "Delete one hard-link name",
+      "meaning": "Data remains if another hard link still points at the inode",
+      "example": "rm original.txt; another-name.txt still works",
+      "notes": "Survives if “original” name is deleted — soft links break instead."
+    },
+    {
+      "id": "hard-no-dirs",
+      "front": "Hard-linking directories",
+      "meaning": "Generally forbidden — protects the tree from loops",
+      "example": "ln dir otherdir usually fails",
+      "notes": "Exception: system-managed . and .. directory hard links."
+    },
+    {
+      "id": "ln-hard",
       "front": "ln src dest",
-      "meaning": "Create a hard link (extra name for the same inode)",
-      "example": "ln original.txt another-name.txt"
+      "meaning": "Create a hard link (no options) — extra name for the same inode",
+      "example": "ln original.txt another-name.txt",
+      "notes": "Also available via the link function. Soft link uses ln -s."
     },
     {
-      "id": "hard-no-cross",
-      "front": "hard link + cross FS",
-      "meaning": "Hard links cannot cross file systems (inodes unique per FS)",
-      "notes": "Cannot hard-link from disk A to a file on separately mounted disk B"
-    },
-    {
-      "id": "soft-link",
-      "front": "soft link / symlink",
-      "meaning": "Pointer to a path/file name, not to the inode",
+      "id": "soft-link-def",
+      "front": "Soft link (symlink)",
+      "meaning": "A pointer to a file name (a path), not to the inode",
       "example": "ln -s /var/www/html/current /srv/app",
-      "notes": "Its own inode, type symlink; can dangle"
+      "notes": "Own inode, type symlink — sticky note with a path."
+    },
+    {
+      "id": "soft-dangle-move",
+      "front": "Move or rename a symlink’s target",
+      "meaning": "The link usually becomes invalid (dangling symlink)",
+      "example": "mv /var/www/html/current elsewhere → /srv/app breaks",
+      "notes": "Hard links still valid (same inode)."
+    },
+    {
+      "id": "soft-delete-link",
+      "front": "Delete a symlink",
+      "meaning": "Does not delete the original/target file",
+      "example": "rm /srv/app — target remains",
+      "notes": "If the original is removed, the symlink remains but is broken."
+    },
+    {
+      "id": "soft-delete-target",
+      "front": "Delete a symlink’s target",
+      "meaning": "The link remains but is broken; the original is gone",
+      "example": "rm the target → dangling symlink",
+      "notes": "Contrast hard link: data remains while link count > 0."
+    },
+    {
+      "id": "soft-cross-fs",
+      "front": "Soft links across file systems?",
+      "meaning": "Yes — they point at a path, so they can cross mounts",
+      "example": "symlink from one mount to a path on another",
+      "notes": "Typical use: shortcuts, especially to directories."
     },
     {
       "id": "ln-s",
       "front": "ln -s src dest",
-      "meaning": "Create a symbolic (soft) link",
-      "example": "ln -s /var/www/html/current /srv/app"
-    },
-    {
-      "id": "soft-breaks",
-      "front": "move/rename target of symlink",
-      "meaning": "Soft link usually becomes invalid (dangling); hard link still works",
-      "notes": "Hard = same inode; soft = sticky note with a path"
-    },
-    {
-      "id": "delete-original",
-      "front": "delete original name",
-      "meaning": "Hard link: data remains if link count > 0. Soft link: link breaks; original gone",
-      "notes": "Deleting the soft link itself does not delete the original"
-    },
-    {
-      "id": "soft-cross-fs",
-      "front": "symlink across file systems",
-      "meaning": "Allowed — soft links can cross file systems; hard links cannot"
+      "meaning": "Create a symbolic link — pointer to a path (can dangle)",
+      "example": "ln -s /var/www/html/current /srv/app",
+      "notes": "Also available via the symlink function."
     },
     {
       "id": "ls-li",
       "front": "ls -li",
-      "meaning": "List with inode numbers; same number = hard links to the same file",
-      "example": "ls -li"
+      "meaning": "List files with inode numbers in the first column",
+      "example": "ls -li",
+      "notes": "Same inode number on two names = hard link to the same file."
     }
   ]
 }

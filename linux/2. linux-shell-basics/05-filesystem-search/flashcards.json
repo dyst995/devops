@@ -1,79 +1,135 @@
 {
-  "title": "Filesystem search",
-  "subtitle": "find, locate, and grep — which tool for which job",
-  "frontLabel": "Command",
-  "modeForward": "Command → meaning",
-  "modeReverse": "Meaning → command",
+  "title": "Filesystem Search",
+  "subtitle": "find, locate, and grep — flip to reveal meaning",
+  "frontLabel": "Command / concept",
+  "modeForward": "Term → meaning",
+  "modeReverse": "Meaning → term",
   "cards": [
     {
       "id": "three-tools",
       "front": "find vs locate vs grep",
-      "meaning": "Live tree by criteria / fast name DB / lines inside files",
-      "example": "find . -name '*.log'; locate passwd; grep -r pattern /etc",
-      "notes": "Memory hook: find = walk the tree. locate = phone book (update it). grep = search inside."
+      "meaning": "find = files matching criteria on the live tree; locate = fast name search via DB (can be stale); grep = lines inside files",
+      "example": "",
+      "notes": "find walks the tree; locate is a phone book of names; grep searches inside files"
+    },
+    {
+      "id": "find",
+      "front": "find",
+      "meaning": "Look for files and directories that match criteria on the live directory tree",
+      "example": "find PATH TESTS ACTIONS",
+      "notes": "You almost always care about path (where to start) and expression (match/do). Start narrow — find / walks the whole machine"
     },
     {
       "id": "find-name",
-      "front": "find / -name hosts",
-      "meaning": "Walk from / for basename exactly hosts",
-      "example": "find . -name '*.log'",
-      "notes": "-name matches basename, not full path. Quote globs so the shell does not expand them."
+      "front": "find … -name",
+      "meaning": "Match the basename (not the whole path)",
+      "example": "find / -name hosts",
+      "notes": "hosts matches /etc/hosts, not hosting"
     },
     {
-      "id": "find-user-type",
-      "front": "find /home -user user / -type f / -type d",
-      "meaning": "Owned by user / regular file / directory",
+      "id": "find-name-glob",
+      "front": "find . -name '*.log'",
+      "meaning": "Quote globs so the shell does not expand them before find sees them",
+      "example": "find . -name '*.log'",
+      "notes": ""
+    },
+    {
+      "id": "find-user",
+      "front": "find … -user",
+      "meaning": "Match by owner",
+      "example": "find /home -user user",
+      "notes": ""
+    },
+    {
+      "id": "find-type-f",
+      "front": "find … -type f",
+      "meaning": "Match regular files",
       "example": "find /tmp -name core -type f",
-      "notes": "Start narrow (/home, /var/log) — find / walks the whole machine."
+      "notes": ""
+    },
+    {
+      "id": "find-type-d",
+      "front": "find … -type d",
+      "meaning": "Match directories",
+      "example": "",
+      "notes": ""
     },
     {
       "id": "find-exec",
       "front": "find … -exec rm {} \\;",
-      "meaning": "For each match, run rm with that path substituted for {}",
+      "meaning": "For each match, run rm with that path substituted for {}; \\; ends the -exec",
       "example": "find /tmp -name core -type f -exec rm {} \\;",
-      "notes": "\\; ends -exec. One rm process per match."
+      "notes": "One rm process per match"
     },
     {
-      "id": "find-xargs",
+      "id": "find-print-xargs",
       "front": "find … -print | xargs rm",
-      "meaning": "Print paths; xargs batches them as args to rm (fewer process starts)",
+      "meaning": "Print paths, then xargs batches them as arguments to rm (fewer process starts)",
       "example": "find /tmp -name core -type f -print | xargs /bin/rm -",
-      "notes": "Equal job to -exec for this course. Spaces in names need -print0 | xargs -0."
+      "notes": "Presented as equal to -exec rm {} \\; for deleting core files under /tmp"
     },
     {
-      "id": "find-print0",
-      "front": "find … -print0 | xargs -0 rm",
+      "id": "find-print0-xargs0",
+      "front": "find … -print0 | xargs -0",
       "meaning": "Null-separated paths — safe if names have spaces",
       "example": "find /tmp -name core -type f -print0 | xargs -0 rm",
-      "notes": "Default whitespace split breaks on spaces/quotes. Pair -print0 with xargs -0."
+      "notes": ""
+    },
+    {
+      "id": "find-more-tests",
+      "front": "more find tests",
+      "meaning": "-mtime, -size, -perm, -maxdepth, and more — learn with man find",
+      "example": "man find",
+      "notes": ""
     },
     {
       "id": "locate",
-      "front": "locate passwd",
-      "meaning": "Fast name search via database (can be stale)",
+      "front": "locate",
+      "meaning": "Find files/directories by name using its database — not a live walk; fast but can be stale",
       "example": "locate passwd",
-      "notes": "Default DB: /var/lib/mlocate/mlocate.db. Does not crawl the live disk."
+      "notes": "Fast because it does not crawl the disk"
+    },
+    {
+      "id": "mlocate-db",
+      "front": "/var/lib/mlocate/mlocate.db",
+      "meaning": "Default locate database path",
+      "example": "",
+      "notes": ""
     },
     {
       "id": "updatedb",
       "front": "updatedb",
-      "meaning": "Rebuild the locate database (usually as root)",
-      "example": "sudo updatedb && locate myfile",
-      "notes": "New file missing from locate? updatedb then locate, or use find."
+      "meaning": "Rebuild the locate database (usually as root) so locate sees current names",
+      "example": "updatedb",
+      "notes": "New file missing? updatedb then locate, or use find"
     },
     {
       "id": "grep",
-      "front": "grep pattern file",
-      "meaning": "Print lines that match a pattern (regex)",
+      "front": "grep",
+      "meaning": "Print lines that match a pattern (can be a regular expression)",
       "example": "grep pattern file.txt",
-      "notes": "find/locate = which files. grep = which lines."
+      "notes": "find/locate = which files; grep = which lines"
     },
     {
-      "id": "grep-flags",
-      "front": "grep -i / -n / -r",
-      "meaning": "Ignore case / show line numbers / recurse a tree",
+      "id": "grep-r",
+      "front": "grep -r",
+      "meaning": "Recursive — descend directories",
       "example": "grep -r \"fun\" ~",
-      "notes": "Pattern can be a regex. Combine later: find … | xargs grep or grep -r."
+      "notes": "Also: grep -r pattern /etc"
+    },
+    {
+      "id": "grep-i",
+      "front": "grep -i",
+      "meaning": "Ignore case",
+      "example": "grep -i pattern file.txt",
+      "notes": ""
+    },
+    {
+      "id": "grep-n",
+      "front": "grep -n",
+      "meaning": "Show line numbers",
+      "example": "grep -n pattern file.txt",
+      "notes": ""
     }
   ]
 }

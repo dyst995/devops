@@ -1,121 +1,303 @@
 {
   "title": "Remote access",
-  "subtitle": "SSH, keys, scp, bastion, config, SFTP — flip for meaning and notes",
+  "subtitle": "SSH, keys, scp, bastion, config, and SFTP",
   "frontLabel": "Topic",
   "modeForward": "Topic → meaning",
   "modeReverse": "Meaning → topic",
   "cards": [
     {
-      "id": "telnet-vs-ssh",
-      "front": "Telnet vs SSH",
-      "meaning": "Telnet = unencrypted session; SSH = encrypted shell, forwarding, file transfer",
-      "example": "ssh user@host",
-      "notes": "Telnet = postcard; SSH = sealed envelope. Prefer SSH; Telnet is legacy only."
+      "id": "console",
+      "front": "Physical console",
+      "meaning": "Keyboard and screen on the machine; still needed when network/SSH is down",
+      "example": "",
+      "notes": "Daily admin is usually remote, not at the console."
     },
     {
-      "id": "x-vs-vnc",
-      "front": "X11 vs VNC",
-      "meaning": "X = one GUI app over the network; VNC = full remote desktop",
-      "example": "ssh -X … vs vncviewer",
-      "notes": "X is network-transparent (client on remote, display local). VNC is server + client for the whole desktop."
+      "id": "telnet",
+      "front": "Telnet",
+      "meaning": "Unencrypted remote login — credentials and session travel in the clear",
+      "example": "",
+      "notes": "Legacy only. Do not use on a real network. Postcard vs SSH sealed envelope."
+    },
+    {
+      "id": "ssh-protocol",
+      "front": "SSH (protocol)",
+      "meaning": "Encrypted shell, remote commands, port forwarding, and file transfer (SCP/SFTP)",
+      "example": "",
+      "notes": "Default for Linux remote access."
+    },
+    {
+      "id": "ssh-client",
+      "front": "ssh client",
+      "meaning": "Program for login and remote commands (OpenSSH on Linux/macOS; PuTTY on Windows)",
+      "example": "",
+      "notes": ""
+    },
+    {
+      "id": "winscp",
+      "front": "WinSCP",
+      "meaning": "Windows GUI file manager for remote copying over SSH (SFTP/SCP)",
+      "example": "",
+      "notes": "Browse/drag files without remembering scp syntax."
+    },
+    {
+      "id": "x11",
+      "front": "X Window System (X11)",
+      "meaning": "Network-transparent GUI: app (X client) can run remote; display (X server) on your laptop",
+      "example": "",
+      "notes": "Often tunneled through SSH with X11 forwarding. One GUI program over the network."
+    },
+    {
+      "id": "vnc",
+      "front": "VNC",
+      "meaning": "Full remote desktop: VNC server on the machine, VNC client on yours",
+      "example": "",
+      "notes": "Whole desktop, not one application window."
     },
     {
       "id": "ssh-keygen",
       "front": "ssh-keygen -t rsa",
-      "meaning": "Create RSA key pair: id_rsa (private) and id_rsa.pub (public)",
-      "example": "cd ~ && ssh-keygen -t rsa",
-      "notes": "Default path ~/.ssh/id_rsa. Passphrase can be empty (convenient, weaker if laptop stolen)."
+      "meaning": "Generate an RSA key pair on your machine",
+      "example": "cd ~\nssh-keygen -t rsa",
+      "notes": "-t rsa = RSA key type. Creates ~/.ssh if missing."
     },
     {
-      "id": "priv-pub",
-      "front": "id_rsa vs id_rsa.pub",
-      "meaning": "Private key never leaves your control; public key goes on servers",
+      "id": "id-rsa",
+      "front": "~/.ssh/id_rsa",
+      "meaning": "Private identification key — never distribute",
+      "example": "/home/user/.ssh/id_rsa",
+      "notes": "Default path from ssh-keygen. OpenSSH refuses group/world-readable keys."
+    },
+    {
+      "id": "id-rsa-pub",
+      "front": "~/.ssh/id_rsa.pub",
+      "meaning": "Public key — copy this to servers",
+      "example": "",
+      "notes": ".pub travels; id_rsa never leaves your control."
+    },
+    {
+      "id": "passphrase-empty",
+      "front": "Empty SSH key passphrase",
+      "meaning": "Private key usable without typing a phrase — convenient, weaker if laptop is stolen",
+      "example": "Enter passphrase (empty for no passphrase):",
+      "notes": "Non-empty = extra decrypt step before SSH can use the key."
+    },
+    {
+      "id": "fingerprint",
+      "front": "SSH key fingerprint",
+      "meaning": "Short hash so you can recognize this key later (known_hosts, audit)",
+      "example": "7e:f5:7e:51:ec:3d:2c:36:02:9d:5b:89:4a:3a:b7:b5",
+      "notes": ""
+    },
+    {
+      "id": "chmod-600-key",
+      "front": "chmod 600 ~/.ssh/id_rsa",
+      "meaning": "Owner read/write only; required so OpenSSH will use the private key",
       "example": "chmod 600 ~/.ssh/id_rsa",
-      "notes": ".pub travels into authorized_keys. OpenSSH refuses a group/world-readable private key."
+      "notes": "Same idea for ~/.ssh/config."
+    },
+    {
+      "id": "ssh-i",
+      "front": "ssh -i",
+      "meaning": "Private key file location",
+      "example": "ssh -i ~/.ssh/lab.pem centos@host",
+      "notes": "Cloud images often use *.pem instead of id_rsa."
+    },
+    {
+      "id": "ssh-l",
+      "front": "ssh -l login_name",
+      "meaning": "Remote user to log in as (same idea as user@host)",
+      "example": "ssh -l centos -p 22 host",
+      "notes": ""
+    },
+    {
+      "id": "ssh-p",
+      "front": "ssh -p port",
+      "meaning": "Remote SSH port (default 22)",
+      "example": "ssh -l centos -p 22 host",
+      "notes": "scp uses capital -P for port."
+    },
+    {
+      "id": "ssh-t",
+      "front": "ssh -t",
+      "meaning": "Force pseudo-terminal allocation",
+      "example": "ssh -t centos@host sudo ls /root",
+      "notes": "Needed for screen-based menus and sudo. Multiple -t even if ssh has no local tty."
+    },
+    {
+      "id": "ssh-v",
+      "front": "ssh -v",
+      "meaning": "Verbose mode — debug auth and connection",
+      "example": "ssh -v user@host",
+      "notes": "Repeat for more detail: -vv, -vvv."
+    },
+    {
+      "id": "ssh-n",
+      "front": "ssh -N",
+      "meaning": "Do not execute a remote command — tunnel/port-forward only",
+      "example": "ssh -N -L 8080:localhost:80 user@host",
+      "notes": "Keeps the tunnel open without a shell."
     },
     {
       "id": "authorized-keys",
       "front": "~/.ssh/authorized_keys",
-      "meaning": "Remote account file listing public keys allowed to log in",
-      "example": "Append local id_rsa.pub contents to remote authorized_keys",
-      "notes": "Append if the file already exists — do not overwrite other keys. Match with -i private key."
+      "meaning": "On the remote account: holds public key lines that may log in",
+      "example": "",
+      "notes": "Append contents of local id_rsa.pub — do not overwrite existing keys."
     },
     {
-      "id": "ssh-i",
-      "front": "ssh -i key user@host",
-      "meaning": "Log in using that private key file",
-      "example": "ssh -i ~/.ssh/lab.pem centos@ecsc00a058b0.epam.com",
-      "notes": "-i = key file location. Cloud images often use *.pem instead of id_rsa."
+      "id": "root-ssh-forbidden",
+      "front": "SSH as root (default)",
+      "meaning": "Forbidden by default on most systems",
+      "example": "",
+      "notes": "Allowing it: edit /etc/ssh/sshd_config (e.g. PermitRootLogin) and restart sshd. Prefer user + sudo."
     },
     {
-      "id": "ssh-flags",
-      "front": "ssh -l / -p / -v / -N / -t",
-      "meaning": "-l user, -p port, -v verbose, -N no remote command, -t force tty",
-      "example": "ssh -l centos -p 22 host",
-      "notes": "-N useful for tunnels only. -t needed for sudo/menus; multiple -t if ssh has no local tty."
+      "id": "sshd-config",
+      "front": "/etc/ssh/sshd_config",
+      "meaning": "sshd settings: root login, SFTP jail, ports, Match blocks, …",
+      "example": "",
+      "notes": "Always systemctl restart sshd after edits. Keep a console session open."
     },
     {
       "id": "ssh-remote-cmd",
       "front": "ssh user@host command",
-      "meaning": "Run a one-shot command remotely without an interactive shell",
+      "meaning": "Run one command remotely without an interactive shell",
       "example": "ssh centos@host whoami",
-      "notes": "Quote 'cmd1; cmd2' so the local shell does not run parts locally. Feed a script with < script.sh."
+      "notes": ""
     },
     {
-      "id": "ssh-t-sudo",
-      "front": "ssh -t … sudo …",
-      "meaning": "Force a pseudo-terminal so sudo (and menus) work remotely",
+      "id": "ssh-multi-cmd-quote",
+      "front": "ssh host whoami; pwd; ls (unquoted)",
+      "meaning": "Local shell sees ; — pwd/ls may run locally after ssh finishes whoami",
+      "example": "ssh user@host 'whoami; pwd; ls'",
+      "notes": "Quote the remote string if everything must run on the server."
+    },
+    {
+      "id": "ssh-script-stdin",
+      "front": "ssh host < script.sh",
+      "meaning": "Feed a local script to the remote shell via stdin",
+      "example": "ssh centos@host < script.sh",
+      "notes": ""
+    },
+    {
+      "id": "sudo-needs-t",
+      "front": "ssh … sudo without -t",
+      "meaning": "Often fails: sudo must be run from a terminal",
       "example": "ssh -t centos@host sudo ls /root",
-      "notes": "Without -t, sudo often fails with “must be run from a terminal.”"
-    },
-    {
-      "id": "root-ssh",
-      "front": "SSH as root",
-      "meaning": "Forbidden by default; enable only via sshd_config + restart sshd",
-      "example": "PermitRootLogin … then systemctl restart sshd",
-      "notes": "Prefer normal user + sudo. Editing sshd_config alone is not enough until sshd restarts."
+      "notes": "Enable with -t."
     },
     {
       "id": "scp",
-      "front": "scp source destination",
+      "front": "scp",
       "meaning": "Copy files over SSH (same auth as ssh)",
-      "example": "scp file user@host:/folder",
-      "notes": "Colon after host starts the remote path. . = here. scp uses -P for port (capital P)."
+      "example": "scp examplefile centos@host:/folder",
+      "notes": "Form: scp source destination. Colon after host starts the remote path."
+    },
+    {
+      "id": "scp-port",
+      "front": "scp -P (capital P)",
+      "meaning": "Port for scp — capital P, unlike ssh’s -p",
+      "example": "",
+      "notes": ""
+    },
+    {
+      "id": "scp-local-to-remote",
+      "front": "scp local → remote",
+      "meaning": "Copy local file into a remote directory",
+      "example": "scp examplefile centos@host:/folder",
+      "notes": ""
+    },
+    {
+      "id": "scp-remote-to-local",
+      "front": "scp remote → .",
+      "meaning": "Copy remote file into the current local directory",
+      "example": "scp centos@host:/home/yourusername/examplefile .",
+      "notes": ". = here."
+    },
+    {
+      "id": "scp-remote-to-remote",
+      "front": "scp hostA → hostB",
+      "meaning": "Copy between two remotes; traffic goes through your machine",
+      "example": "scp centos@hostA:/examplefile root@hostB:/home/user/",
+      "notes": ""
     },
     {
       "id": "bastion",
-      "front": "Bastion / ProxyCommand",
-      "meaning": "Jump through a public bastion to reach a private host",
-      "example": "ssh -o \"ProxyCommand ssh -W %h:%p -i jump.pem jump@bastion\" user@private",
-      "notes": "%h:%p = target host:port. Two keys/users: one for jump box, one for private VM."
+      "front": "Bastion / jump host",
+      "meaning": "Public-subnet jump server to reach private instances with no public IP",
+      "example": "",
+      "notes": "Linux: SSH. Windows: RDP. Two keys, two users (bastion + private VM)."
+    },
+    {
+      "id": "proxycommand",
+      "front": "ProxyCommand ssh -W %h:%p …",
+      "meaning": "Instead of direct TCP, jump box forwards stdio to target host (%h) and port (%p)",
+      "example": "ssh -i lab.pem -o \"ProxyCommand ssh -W %h:%p -i key_for_jumpbox.pem jumpbox_user@jump.box.host\" centos@target",
+      "notes": "Outer ssh uses target key; inner ssh uses jumpbox key."
     },
     {
       "id": "ssh-config",
-      "front": "~/.ssh/config Host stanza",
-      "meaning": "Alias with HostName, User, Port, IdentityFile for short ssh names",
-      "example": "Host targaryen\\n    HostName 192.168.1.10\\n    User daenerys",
-      "notes": "ssh targaryen expands the stanza. chmod 600 the config. Can hold ProxyJump/ProxyCommand too."
+      "front": "~/.ssh/config",
+      "meaning": "Per-user SSH aliases: HostName, User, Port, IdentityFile, ProxyJump, …",
+      "example": "touch ~/.ssh/config && chmod 600 ~/.ssh/config",
+      "notes": "chmod 600 — it can list IdentityFile paths."
     },
     {
-      "id": "sftp",
-      "front": "sftp user@host",
-      "meaning": "Interactive secure file transfer over SSH (not plain FTP)",
+      "id": "ssh-config-host",
+      "front": "Host / HostName (ssh config)",
+      "meaning": "Host = alias you type; HostName = real IP/DNS",
+      "example": "Host targaryen\n    HostName 192.168.1.10\n    User daenerys\n    Port 7654\n    IdentityFile ~/.ssh/targaryen.key",
+      "notes": "ssh targaryen equals the long -i/-p/user@ command."
+    },
+    {
+      "id": "ftp-vs-sftp",
+      "front": "FTP vs SFTP",
+      "meaning": "FTP = old unencrypted; SFTP = SSH file protocol (encrypted, usually port 22)",
       "example": "sftp access@192.168.0.14",
-      "notes": "Encrypted on port 22 unless sshd changed. WinSCP is a GUI for the same idea."
+      "notes": ""
     },
     {
-      "id": "sftp-only",
-      "front": "ForceCommand internal-sftp + ChrootDirectory",
-      "meaning": "SFTP-only jail: no shell; user cannot see above the chroot",
-      "example": "Match User access\\nForceCommand internal-sftp\\nChrootDirectory /var/sftp",
-      "notes": "Also disable tunnels/agent/X11 for that user. Apply with systemctl restart sshd."
+      "id": "sftp-client",
+      "front": "sftp",
+      "meaning": "Interactive secure file transfer over SSH",
+      "example": "sftp access@192.168.0.14",
+      "notes": "Clients may also support SCP, plain FTP, batch scripting, editor, directory sync."
+    },
+    {
+      "id": "match-user",
+      "front": "Match User access",
+      "meaning": "Following sshd_config lines apply only to that user",
+      "example": "Match User access",
+      "notes": ""
+    },
+    {
+      "id": "forcecommand-internal-sftp",
+      "front": "ForceCommand internal-sftp",
+      "meaning": "No shell — only the internal SFTP server",
+      "example": "ForceCommand internal-sftp",
+      "notes": "SFTP-only drop-box account."
+    },
+    {
+      "id": "chroot-directory",
+      "front": "ChrootDirectory /var/sftp",
+      "meaning": "After login the user cannot see above this directory",
+      "example": "ChrootDirectory /var/sftp",
+      "notes": ""
+    },
+    {
+      "id": "sftp-disable-forwarding",
+      "front": "PermitTunnel / AllowAgentForwarding / AllowTcpForwarding / X11Forwarding no",
+      "meaning": "Lock down SFTP-only user: not a jump box or X client",
+      "example": "PermitTunnel no\nAllowAgentForwarding no\nAllowTcpForwarding no\nX11Forwarding no",
+      "notes": ""
     },
     {
       "id": "restart-sshd",
       "front": "systemctl restart sshd",
-      "meaning": "Apply /etc/ssh/sshd_config changes (root login, SFTP jail, ports)",
+      "meaning": "Apply /etc/ssh/sshd_config changes",
       "example": "systemctl restart sshd",
-      "notes": "A bad config can lock you out — keep a console session open while testing."
+      "notes": "Needed after root login, SFTP jail, ports, Match blocks, … Bad config can lock you out."
     }
   ]
 }
