@@ -403,6 +403,200 @@ body,
   padding: 2rem;
 }
 
+/* Flashcards */
+.flashcards {
+  max-width: 36rem;
+  margin: 0 auto;
+}
+
+.fc-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.fc-head h1 {
+  margin: 0;
+  font-size: 1.45rem;
+  font-family: var(--sans);
+}
+
+.fc-sub {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-family: var(--serif);
+}
+
+.fc-progress {
+  margin: 0.2rem 0 0;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.fc-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+}
+
+.fc-modes {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.fc-modes button,
+.fc-shuffle,
+.fc-nav button {
+  border: 0;
+  background: var(--bg-raise);
+  color: var(--ink);
+  font: 500 0.82rem var(--sans);
+  padding: 0.4rem 0.7rem;
+  cursor: pointer;
+}
+
+.fc-modes button + button {
+  border-left: 1px solid var(--line);
+}
+
+.fc-modes button.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.fc-shuffle {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.fc-card {
+  position: relative;
+  width: 100%;
+  min-height: 15rem;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--bg-raise);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  overflow: hidden;
+}
+
+.fc-face {
+  padding: 1.6rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 15rem;
+}
+
+.fc-back {
+  display: none;
+  background: linear-gradient(
+    160deg,
+    var(--accent-dim),
+    transparent 55%
+  );
+}
+
+.fc-card.flipped .fc-front {
+  display: none;
+}
+
+.fc-card.flipped .fc-back {
+  display: flex;
+}
+
+.fc-label {
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-family: var(--sans);
+}
+
+.fc-code {
+  font-family: var(--mono);
+  font-size: 2.6rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+}
+
+.fc-meaning,
+.fc-meaning-prompt {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.fc-example {
+  margin: 0.2rem 0 0;
+  font-family: var(--sans);
+  font-size: 0.92rem;
+}
+
+.fc-example span {
+  color: var(--muted);
+  margin-right: 0.35rem;
+}
+
+.fc-example code {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  background: var(--code-bg);
+  padding: 0.12em 0.35em;
+  border-radius: 4px;
+}
+
+.fc-notes {
+  margin: 0.15rem 0 0;
+  color: var(--muted);
+  font-family: var(--serif);
+  font-size: 0.98rem;
+  line-height: 1.45;
+}
+
+.fc-hint {
+  margin: 0.65rem 0 0.9rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.fc-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.fc-nav button {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+}
+
+.fc-nav button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
 @media (max-width: 800px) {
   #root {
     grid-template-columns: 1fr;

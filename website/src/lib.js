@@ -3,6 +3,7 @@ export const TAB_META = [
   { id: "recall", label: "Recall" },
   { id: "theory", label: "Original theory" },
   { id: "commands", label: "Commands" },
+  { id: "flashcards", label: "Flashcards" },
   { id: "questions", label: "Questions" },
   { id: "assignments", label: "Assignments" },
   { id: "tasks", label: "Tasks" },

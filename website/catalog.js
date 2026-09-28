@@ -13,6 +13,7 @@ const DOC_FILES = {
   "tasks.md": "tasks",
   "hands-on-practice.md": "practice",
   "recall.md": "recall",
+  "flashcards.json": "flashcards",
 };
 const SKIP = new Set([".git", "website", "node_modules", "__pycache__", ".cursor"]);
 
@@ -213,12 +214,17 @@ export function buildCatalog() {
 }
 
 export function readNote(rel) {
-  if (!rel || rel.includes("..") || !rel.endsWith(".md")) return null;
+  if (!rel || rel.includes("..")) return null;
+  if (!rel.endsWith(".md") && !rel.endsWith(".json")) return null;
   const root = resolve(REPO);
   const resolved = resolve(root, rel);
   if (!resolved.startsWith(root + sep) && resolved !== root) return null;
   try {
-    return { path: rel, text: readFileSync(resolved, "utf8") };
+    const text = readFileSync(resolved, "utf8");
+    if (rel.endsWith(".json")) {
+      return { path: rel, kind: "json", data: JSON.parse(text) };
+    }
+    return { path: rel, kind: "md", text };
   } catch {
     return null;
   }

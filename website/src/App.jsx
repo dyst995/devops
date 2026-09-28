@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import MarkdownView from "./MarkdownView.jsx";
+import Flashcards from "./Flashcards.jsx";
 import {
   allTopics,
   availableTabs,
@@ -313,6 +314,13 @@ function Page({
   }
 
   if (!note) return <p className="empty">Loading…</p>;
+
+  if (tab === "flashcards") {
+    if (!note.data?.cards?.length) {
+      return <p className="empty">No flashcards in this deck.</p>;
+    }
+    return <Flashcards deck={note.data} />;
+  }
 
   if (tab === "labs" && labPath) {
     return (
