@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "build:pages": "BASE_PATH=/devops/ vite build",
+    "preview": "vite preview",
+    "preview:pages": "BASE_PATH=/devops/ vite preview"
   },
   "dependencies": {
     "react": "^19.1.1",

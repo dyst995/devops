@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import MarkdownView from "./MarkdownView.jsx";
 import Flashcards from "./Flashcards.jsx";
+import { loadCatalog, loadNote } from "./api.js";
 import {
   allTopics,
   availableTabs,
@@ -30,8 +31,7 @@ export default function App() {
   }, [theme]);
 
   useEffect(() => {
-    fetch("/api/catalog")
-      .then((r) => r.json())
+    loadCatalog()
       .then(setCatalog)
       .catch(() => setError("Could not load the notes catalog."));
   }, []);
@@ -64,11 +64,7 @@ export default function App() {
     }
     setNote(null);
     let cancelled = false;
-    fetch(`/api/file?path=${encodeURIComponent(filePath)}`)
-      .then((r) => {
-        if (!r.ok) throw new Error("missing");
-        return r.json();
-      })
+    loadNote(filePath)
       .then((data) => {
         if (!cancelled) setNote(data);
       })

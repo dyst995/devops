@@ -34,7 +34,55 @@ function notesApi() {
   };
 }
 
+/** Collect every note/lab path from the catalog. */
+function allNotePaths(catalog) {
+  const paths = new Set();
+  for (const track of catalog.tracks) {
+    for (const mod of track.modules) {
+      for (const topic of mod.topics) {
+        for (const p of Object.values(topic.files)) paths.add(p);
+        for (const lab of topic.labs) paths.add(lab.path);
+      }
+    }
+  }
+  return [...paths];
+}
+
+/** Emit catalog + note JSON into dist/ so GitHub Pages can serve them statically. */
+function staticNotes() {
+  return {
+    name: "static-notes",
+    apply: "build",
+    generateBundle() {
+      const catalog = buildCatalog();
+      this.emitFile({
+        type: "asset",
+        fileName: "data/catalog.json",
+        source: JSON.stringify(catalog),
+      });
+      this.emitFile({
+        type: "asset",
+        fileName: ".nojekyll",
+        source: "",
+      });
+      for (const rel of allNotePaths(catalog)) {
+        const note = readNote(rel);
+        if (!note) continue;
+        this.emitFile({
+          type: "asset",
+          fileName: `data/files/${rel}.json`,
+          source: JSON.stringify(note),
+        });
+      }
+    },
+  };
+}
+
+// Project Pages URL: https://<user>.github.io/devops/
+const base = process.env.BASE_PATH || "/";
+
 export default defineConfig({
-  plugins: [react(), notesApi()],
+  base,
+  plugins: [react(), notesApi(), staticNotes()],
   server: { host: "127.0.0.1", port: 5173, strictPort: true },
 });
