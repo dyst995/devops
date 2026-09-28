@@ -43,10 +43,9 @@ Close `theory.md`. Throwaway names only (`tasku1`, `taskg1`, …). Prefer read-o
 
 ## Recall (write, then check)
 
-22. Memory hook: `passwd` line = **who**; `shadow` = **secret and time**. Restate it in one sentence.
-23. Empty `/etc/group` member list ≠ unused group — give one concrete example from this machine or the notes.
-24. Write the `useradd` line for home `/home/mydir` and shell `/bin/bash` without looking, then compare to `commands.md`.
+22. Empty `/etc/group` member list ≠ unused group — give one concrete example from this machine or the notes.
+23. Write the `useradd` line for home `/home/mydir` and shell `/bin/bash` without looking, then compare to `commands.md`.
 
 ## Scenario
 
-25. Provision `appuser`: UID **1500**, bash, home, group `appgrp`, 90-day max password age, must change password at next login, in `wheel`. Evidence for each (`id`, `passwd`/`group` lines, `chage -l`). Then remove the account and group cleanly.
+24. Provision `appuser`: UID **1500**, bash, home, group `appgrp`, 90-day max password age, must change password at next login, in `wheel`. Evidence for each (`id`, `passwd`/`group` lines, `chage -l`). Then remove the account and group cleanly.

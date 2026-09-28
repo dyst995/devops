@@ -19,7 +19,7 @@ Close `theory.md`. Prefer **predict / write the commands you would run** for cre
 ## Swappiness
 
 9. Write the swappiness **range** and the **default**. What relative weights does it set (swapping cold anonymous pages vs dropping page cache)?
-10. What does a **low** value prefer to evict? What does a **high** value prefer? Restate the memory hook: high = “happy to swap.”
+10. What does a **low** value prefer to evict? What does a **high** value prefer?
 11. Desktop / interactive box with plenty of RAM vs batch / less interactive — which direction does the notes push swappiness, and why (latency vs throughput)?
 12. Find the current swappiness on this machine (common paths: `/proc/sys/vm/swappiness` or `sysctl vm.swappiness`). Record the value. Do not change it unless this is a disposable lab and you change it back.
 
@@ -34,7 +34,7 @@ Close `theory.md`. Prefer **predict / write the commands you would run** for cre
 
 17. Write the five-step sequence from the notes for a 2G swap LV `/dev/VolGroup00/LogVol02`: `lvcreate` → `mkswap` → fstab line → `systemctl daemon-reload` → `swapon -v …`.
 18. Write the exact `fstab` line from the notes for that LV.
-19. Predict: what goes wrong if you run a normal `mkfs.ext4` on that LV instead of `mkswap`? Memory hook: never `mkfs` on a swap LV.
+19. Predict: what goes wrong if you run a normal `mkfs.ext4` on that LV instead of `mkswap`?
 20. Distinguishing flags: `-n LogVol02` and `-L 2G` on `lvcreate` — what do they set?
 
 ## Swap file (write the sequence)

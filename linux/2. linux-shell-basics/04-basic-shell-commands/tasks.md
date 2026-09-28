@@ -16,42 +16,40 @@ Close `theory.md` / `commands.md`. Work in `/tmp/basic-shell-commands-tasks`. Do
 7. Go to `/`, then parent (`..`), then home (`~` or bare `cd`), then previous directory (`cd -`) and see it printed. Toggle `cd -` twice.
 8. From memory: what is `$CDPATH`? When is it **ignored** (absolute path starting with `/`)?
 9. Long listing **with hidden files** (`ls -la`). Long listing **human sizes** (`ls -lh`). Long listing **newest first** (`ls -lt`). Long listing **largest first** with human sizes (`ls -lSh`).
-10. Recite the memory hook: `-l` `-a` `-h` `-t` `-S` (capital S). What is `-s` not?
 
 ## Create / copy / move / delete
 
-11. Create an empty file with `touch`. Update its timestamp from a date string like `"next Friday"` (`touch -d`). Confirm with `ls -l`.
-12. Create one directory with bare `mkdir` (should fail if parents missing — try a nested path without `-p` and note the error).
-13. Create a tree with parents as needed and brace expansion: `mkdir -p dir/test{1..3}/empty`. Confirm with `tree` or `find`/`ls -R`.
-14. Create a directory with an explicit mode (`mkdir -m MODE …`).
-15. Copy a tree (`cp -r`). Copy a tree **keeping** mode/owner/timestamps (`cp -rp`).
-16. Move a file so an overwritten destination is backed up with suffix `.old` (`mv -b -S ".old" …`). Confirm the `.old` file.
-17. Move only if source is newer or dest missing (`mv -u`). Demonstrate both “moved” and “skipped.”
-18. Concatenate two files into a third (`cat 1.txt 2.txt > 3.txt`). Also `cat` a single file to the terminal.
-19. Remove an **empty** directory only (`rmdir`). Delete a file verbosely (`rm -v`). Recursively force-delete **only** a disposable dir you created under `/tmp/basic-shell-commands-tasks` (`rm -rfv` — never `/` or `$HOME`).
-20. Overwrite a throwaway file so recovery is harder (`shred`). Confirm you only shredded a disposable path.
+10. Create an empty file with `touch`. Update its timestamp from a date string like `"next Friday"` (`touch -d`). Confirm with `ls -l`.
+11. Create one directory with bare `mkdir` (should fail if parents missing — try a nested path without `-p` and note the error).
+12. Create a tree with parents as needed and brace expansion: `mkdir -p dir/test{1..3}/empty`. Confirm with `tree` or `find`/`ls -R`.
+13. Create a directory with an explicit mode (`mkdir -m MODE …`).
+14. Copy a tree (`cp -r`). Copy a tree **keeping** mode/owner/timestamps (`cp -rp`).
+15. Move a file so an overwritten destination is backed up with suffix `.old` (`mv -b -S ".old" …`). Confirm the `.old` file.
+16. Move only if source is newer or dest missing (`mv -u`). Demonstrate both “moved” and “skipped.”
+17. Concatenate two files into a third (`cat 1.txt 2.txt > 3.txt`). Also `cat` a single file to the terminal.
+18. Remove an **empty** directory only (`rmdir`). Delete a file verbosely (`rm -v`). Recursively force-delete **only** a disposable dir you created under `/tmp/basic-shell-commands-tasks` (`rm -rfv` — never `/` or `$HOME`).
+19. Overwrite a throwaway file so recovery is harder (`shred`). Confirm you only shredded a disposable path.
 
 ## Environment variables
 
-21. Dump all exported variables (`printenv` and `env`). Print `PATH` alone (`printenv PATH`).
-22. Run a script (or `true`/`printenv`) with a variable set only for that command (`env VAR=tmp ./myscript` or `VAR=tmp command`). Prove your shell is unchanged.
-23. Export an editor variable so children see it (`export EDITOR=vim`); start a nested shell; print it; `unset` it; confirm the child you start next no longer sees it.
-24. Page through the huge dump of shell vars + env + functions (`set | less`). How does `set` differ from `env`/`printenv` in idea?
+20. Dump all exported variables (`printenv` and `env`). Print `PATH` alone (`printenv PATH`).
+21. Run a script (or `true`/`printenv`) with a variable set only for that command (`env VAR=tmp ./myscript` or `VAR=tmp command`). Prove your shell is unchanged.
+22. Export an editor variable so children see it (`export EDITOR=vim`); start a nested shell; print it; `unset` it; confirm the child you start next no longer sees it.
+23. Page through the huge dump of shell vars + env + functions (`set | less`). How does `set` differ from `env`/`printenv` in idea?
 
 ## Viewing files
 
-25. Page a file **forward only** (`more`). Page both ways with search (`less`); use `/pattern`, `n`/`N`, `q`.
-26. Recite: why does the notes say *less is more*? When might a small embedded system only have `more`?
-27. First 10 lines of `/etc/passwd` (`head`); first 5 (`head -n 5`); all but the last 2 of a file you create (`head -n -2`).
-28. Last 10 lines of a log you can read (`tail`); last 50 (`tail -n 50`); from line 20 to the end of a file (`tail -n +20`).
-29. Follow a growing log (`tail -f`) — append a line in another terminal (or `echo >>` the same file) and stop with Ctrl-C when you have seen a new line.
+24. Page a file **forward only** (`more`). Page both ways with search (`less`); use `/pattern`, `n`/`N`, `q`.
+25. First 10 lines of `/etc/passwd` (`head`); first 5 (`head -n 5`); all but the last 2 of a file you create (`head -n -2`).
+26. Last 10 lines of a log you can read (`tail`); last 50 (`tail -n 50`); from line 20 to the end of a file (`tail -n +20`).
+27. Follow a growing log (`tail -f`) — append a line in another terminal (or `echo >>` the same file) and stop with Ctrl-C when you have seen a new line.
 
 ## Predict-then-run mixtape
 
-30. Predict the full path printed by `pwd` after `cd /tmp && cd -` twice ending where you started — then run it.
-31. Predict whether `ls` alone shows `.bashrc` in home; then prove with `ls -la`.
-32. Create two files, `mv -b -S ".bak"` one over the other — list what remains before looking at the notes again.
+28. Predict the full path printed by `pwd` after `cd /tmp && cd -` twice ending where you started — then run it.
+29. Predict whether `ls` alone shows `.bashrc` in home; then prove with `ls -la`.
+30. Create two files, `mv -b -S ".bak"` one over the other — list what remains before looking at the notes again.
 
 ## Scenario
 
-33. Ticket: “keep a log of an install that fails, both output and errors, while I watch.” Produce `/tmp/basic-shell-commands-tasks/install.log` from a command that writes both streams (e.g. redirect with `tee`, or `cmd >log 2>&1` while still viewing — any working approach). Show the log contains stderr as well as stdout.
+31. Ticket: “keep a log of an install that fails, both output and errors, while I watch.” Produce `/tmp/basic-shell-commands-tasks/install.log` from a command that writes both streams (e.g. redirect with `tee`, or `cmd >log 2>&1` while still viewing — any working approach). Show the log contains stderr as well as stdout.

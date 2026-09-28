@@ -8,7 +8,7 @@ Close `theory.md`. Work in `/tmp/special-chars-tasks` when creating files. Predi
 2. Recite every row of the course table from memory (`#` `;` `;;` `.` `./file` `""` `''` `,` `\` backticks `:` `$`). Check.
 3. `#` vs `#!` — when is `#` a comment? When is it the sha-bang?
 4. One `;` vs two `;;` — jobs in one sentence each.
-5. Space after `.` vs `./name` — two meanings of a dot. Recite the memory hook.
+5. Space after `.` vs `./name` — two meanings of a dot. Explain both.
 
 ## Comments and separators
 
@@ -38,7 +38,7 @@ Close `theory.md`. Work in `/tmp/special-chars-tasks` when creating files. Predi
 17. In `let` / `(( ))`, set `a` to 9 and a second variable to `15 / 3` in **one** arithmetic expression using the comma operator. Show both values after (`a=9`, other=`5`).
 18. Capture today’s date **inside** an `echo` using the table’s backtick substitution form. Confirm the date is in the output.
 19. Run the null command `:`; report status. Compare to `true`. Start a one-iteration stand-in for `while :` that breaks immediately (script) — confirm `:` is always-true.
-20. Print `$HOME` and `$?` after a successful command. Recite: `$` = the **value** of …, not the letters of the name.
+20. Print `$HOME` and `$?` after a successful command.
 
 ## Scenario
 
