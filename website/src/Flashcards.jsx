@@ -57,10 +57,14 @@ export default function Flashcards({ deck }) {
 
   if (!card) return <p className="empty">No cards in this deck.</p>;
 
+  const frontLabel = deck.frontLabel || "Prompt";
+  const modeForward = deck.modeForward || "Front → back";
+  const modeReverse = deck.modeReverse || "Back → front";
+
   const prompt =
     mode === "code" ? (
       <>
-        <span className="fc-label">Exit code</span>
+        <span className="fc-label">{frontLabel}</span>
         <strong className="fc-code">{card.front}</strong>
       </>
     ) : (
@@ -83,7 +87,7 @@ export default function Flashcards({ deck }) {
       </>
     ) : (
       <>
-        <span className="fc-label">Exit code</span>
+        <span className="fc-label">{frontLabel}</span>
         <strong className="fc-code">{card.front}</strong>
         {card.example && (
           <p className="fc-example">
@@ -116,7 +120,7 @@ export default function Flashcards({ deck }) {
               setFlipped(false);
             }}
           >
-            Code → meaning
+            {modeForward}
           </button>
           <button
             type="button"
@@ -126,7 +130,7 @@ export default function Flashcards({ deck }) {
               setFlipped(false);
             }}
           >
-            Meaning → code
+            {modeReverse}
           </button>
         </div>
         <button type="button" className="fc-shuffle" onClick={reshuffle}>

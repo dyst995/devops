@@ -1,0 +1,93 @@
+{
+  "title": "Special characters",
+  "subtitle": "Bash meta-characters — flip to reveal meaning and how they differ",
+  "frontLabel": "Character",
+  "modeForward": "Char → meaning",
+  "modeReverse": "Meaning → char",
+  "cards": [
+    {
+      "id": "hash",
+      "front": "#",
+      "meaning": "Comments",
+      "example": "echo hello  # this is ignored",
+      "notes": "From # to end of line is not executed. Exception: #! on line 1 is the sha-bang, not a comment."
+    },
+    {
+      "id": "semi",
+      "front": ";",
+      "meaning": "Command separator",
+      "example": "echo one; echo two; echo three",
+      "notes": "Runs commands in sequence on one line. Status of the line = last command. Not the same as &&."
+    },
+    {
+      "id": "dsemi",
+      "front": ";;",
+      "meaning": "Terminator in a case option",
+      "example": "case \"$1\" in start) echo starting ;; esac",
+      "notes": "One ; separates commands. Two ;; close a case arm."
+    },
+    {
+      "id": "dot",
+      "front": ".",
+      "meaning": "Dot command (source)",
+      "example": ". ./lib.sh",
+      "notes": "Runs a file in the current shell (same idea as source). Space required after the dot. Variables stay."
+    },
+    {
+      "id": "dotslash",
+      "front": "./file",
+      "meaning": "Dot as a path component",
+      "example": "./deploy.sh",
+      "notes": "No space: path in the current directory. Contrast with \". file\" (source). Also .hidden and .. (parent)."
+    },
+    {
+      "id": "dquote",
+      "front": "\"\"",
+      "meaning": "Partial quoting",
+      "example": "echo \"hello $name\"",
+      "notes": "Groups into one word. $, backticks, and \\ still work inside."
+    },
+    {
+      "id": "squote",
+      "front": "''",
+      "meaning": "Full quoting",
+      "example": "echo 'hello $name'",
+      "notes": "Everything literal — no $ expansion, no backticks."
+    },
+    {
+      "id": "comma",
+      "front": ",",
+      "meaning": "Comma operator (arithmetic)",
+      "example": "let \"t2 = ((a = 9, 15 / 3))\"",
+      "notes": "All expressions run; the value is the last one (here a=9, t2=5)."
+    },
+    {
+      "id": "backslash",
+      "front": "\\",
+      "meaning": "Escape (backslash)",
+      "example": "echo \\$HOME",
+      "notes": "Next character is literal, or join lines if \\ is last on the line."
+    },
+    {
+      "id": "backticks",
+      "front": "` `",
+      "meaning": "Backticks — command substitution",
+      "example": "echo \"today is `date`\"",
+      "notes": "Runs the command and is replaced by its output. Same job as $(…)."
+    },
+    {
+      "id": "colon",
+      "front": ":",
+      "meaning": "Null command",
+      "example": ":",
+      "notes": "Does nothing, status 0 (like true). Not a semicolon. Useful as always-true while : ; do …; done."
+    },
+    {
+      "id": "dollar",
+      "front": "$",
+      "meaning": "Dollar sign — expansion",
+      "example": "echo \"$HOME\"; echo $?",
+      "notes": "Starts parameter/variable expansion (and $?, $1, $(…), …). The value of …, not the letters of the name."
+    }
+  ]
+}

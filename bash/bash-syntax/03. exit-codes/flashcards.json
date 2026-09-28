@@ -1,6 +1,9 @@
 {
   "title": "Exit codes",
   "subtitle": "Bash status numbers — flip to reveal meaning, example, and notes",
+  "frontLabel": "Exit code",
+  "modeForward": "Code → meaning",
+  "modeReverse": "Meaning → code",
   "cards": [
     {
       "id": "1",
