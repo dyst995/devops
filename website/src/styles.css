@@ -67,6 +67,7 @@ body,
 
 .brand {
   padding: 1.1rem 1.1rem 0.4rem;
+  position: relative;
 }
 
 .brand strong {
@@ -78,6 +79,32 @@ body,
 .brand span {
   color: var(--muted);
   font-size: 0.78rem;
+}
+
+#nav-toggle,
+#nav-close,
+#nav-backdrop {
+  display: none;
+}
+
+#theme-btn,
+#nav-toggle,
+#nav-close {
+  border: 1px solid var(--line);
+  background: var(--bg-raise);
+  color: var(--ink);
+  border-radius: 8px;
+  padding: 0.3rem 0.65rem;
+  font: 500 0.8rem var(--sans);
+  cursor: pointer;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+  flex: 1;
 }
 
 .search-wrap {
@@ -190,13 +217,7 @@ body,
 }
 
 #theme-btn {
-  border: 1px solid var(--line);
-  background: var(--bg-raise);
-  color: var(--ink);
-  border-radius: 8px;
-  padding: 0.3rem 0.65rem;
-  font: 500 0.8rem var(--sans);
-  cursor: pointer;
+  flex-shrink: 0;
 }
 
 #tabs {
@@ -598,14 +619,72 @@ body,
 }
 
 @media (max-width: 800px) {
+  body.nav-lock {
+    overflow: hidden;
+  }
+
   #root {
-    grid-template-columns: 1fr;
+    display: block;
+  }
+
+  #nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  #nav-close {
+    display: inline-flex;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+
+  #nav-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    background: rgba(0, 0, 0, 0.45);
+    cursor: pointer;
+  }
+
+  #nav-backdrop[hidden] {
+    display: none;
   }
 
   #sidebar {
-    height: auto;
-    position: relative;
-    max-height: 42vh;
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(320px, 88vw);
+    height: 100%;
+    max-height: none;
+    z-index: 50;
+    transform: translateX(-105%);
+    transition: transform 0.2s ease;
+    box-shadow: none;
+  }
+
+  #sidebar.open {
+    transform: translateX(0);
+    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.35);
+  }
+
+  #topbar {
+    padding: 0.75rem 1rem 0.4rem;
+  }
+
+  #crumbs {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  #tabs {
+    padding: 0.65rem 1rem 0;
   }
 
   #content {

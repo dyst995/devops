@@ -21,6 +21,7 @@ export default function App() {
   const [note, setNote] = useState(null);
   const [labPath, setLabPath] = useState(null);
   const [answersOpen, setAnswersOpen] = useState(false);
+  const [navOpen, setNavOpen] = useState(false);
   const [theme, setTheme] = useState(
     () => localStorage.getItem(THEME_KEY) || "dark",
   );
@@ -40,11 +41,26 @@ export default function App() {
     const onHash = () => {
       setLabPath(null);
       setAnswersOpen(false);
+      setNavOpen(false);
       setRoute(parseHash());
     };
     window.addEventListener("hashchange", onHash);
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
+
+  useEffect(() => {
+    if (!navOpen) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") setNavOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [navOpen]);
+
+  useEffect(() => {
+    document.body.classList.toggle("nav-lock", navOpen);
+    return () => document.body.classList.remove("nav-lock");
+  }, [navOpen]);
 
   const found = catalog && route.topicDir ? findTopic(catalog, route.topicDir) : null;
   const topic = found?.topic;
@@ -77,7 +93,13 @@ export default function App() {
   }, [filePath]);
 
   const openTopic = useCallback((trackId, topicObj, nextTab) => {
+    setNavOpen(false);
     setHash(trackId, topicObj.dir, nextTab || defaultTab(topicObj));
+  }, []);
+
+  const goHome = useCallback((id) => {
+    setNavOpen(false);
+    setHash(id);
   }, []);
 
   if (error) return <p className="empty">{error}</p>;
@@ -85,10 +107,25 @@ export default function App() {
 
   return (
     <>
-      <aside id="sidebar">
+      <button
+        type="button"
+        id="nav-backdrop"
+        aria-label="Close menu"
+        hidden={!navOpen}
+        onClick={() => setNavOpen(false)}
+      />
+      <aside id="sidebar" className={navOpen ? "open" : ""}>
         <div className="brand">
           <strong>DevOps notes</strong>
           <span>Study pack reader</span>
+          <button
+            type="button"
+            id="nav-close"
+            aria-label="Close menu"
+            onClick={() => setNavOpen(false)}
+          >
+            Close
+          </button>
         </div>
         <label className="search-wrap">
           <input
@@ -105,13 +142,24 @@ export default function App() {
           query={query}
           activeDir={route.topicDir}
           activeTrack={route.trackId}
-          onHome={(id) => setHash(id)}
+          onHome={goHome}
           onTopic={openTopic}
         />
       </aside>
       <main id="main">
         <header id="topbar">
-          <Crumbs catalog={catalog} route={route} found={found} />
+          <div className="topbar-left">
+            <button
+              type="button"
+              id="nav-toggle"
+              aria-expanded={navOpen}
+              aria-controls="sidebar"
+              onClick={() => setNavOpen((v) => !v)}
+            >
+              Menu
+            </button>
+            <Crumbs catalog={catalog} route={route} found={found} />
+          </div>
           <button
             type="button"
             id="theme-btn"
@@ -150,7 +198,7 @@ export default function App() {
             answersOpen={answersOpen}
             setAnswersOpen={setAnswersOpen}
             onOpenTopic={openTopic}
-            onHome={(id) => setHash(id)}
+            onHome={goHome}
           />
         </article>
       </main>
