@@ -1,65 +1,121 @@
 {
   "title": "Exit codes",
-  "subtitle": "Bash status numbers — flip to reveal meaning, example, and notes",
-  "frontLabel": "Exit code",
+  "subtitle": "Bash status numbers, $?, and what each code means",
+  "frontLabel": "Code / topic",
   "modeForward": "Code → meaning",
   "modeReverse": "Meaning → code",
   "cards": [
+    {
+      "id": "exit-status",
+      "front": "exit status",
+      "meaning": "Integer 0–255 that every command (and every script) finishes with",
+      "example": "echo $?",
+      "notes": "By convention 0 means success; non-zero means failure."
+    },
+    {
+      "id": "zero-ok",
+      "front": "0",
+      "meaning": "Success (OK)",
+      "example": "true; echo $?",
+      "notes": "Memory hook: 0 = OK. Anything else = look up why."
+    },
+    {
+      "id": "nonzero-fail",
+      "front": "non-zero exit status",
+      "meaning": "Failure (by convention)",
+      "example": "false; echo $?",
+      "notes": "Any status other than 0 signals failure; specific numbers carry more detail."
+    },
+    {
+      "id": "dollar-question",
+      "front": "$?",
+      "meaning": "Exit status of the last command",
+      "example": "echo $?",
+      "notes": "The shell stores the previous command’s status here. Range 0–255."
+    },
+    {
+      "id": "echo-question",
+      "front": "echo $?",
+      "meaning": "Print the exit status of the previous command",
+      "example": "Illegal_command; echo $?",
+      "notes": "Read it right after the command — the next command overwrites $?."
+    },
+    {
+      "id": "exit-range",
+      "front": "exit argument range",
+      "meaning": "exit takes only integer args in the range 0–255",
+      "example": "exit 0",
+      "notes": "exit is a byte. Negative values and fractions are not legal arguments."
+    },
     {
       "id": "1",
       "front": "1",
       "meaning": "Catchall for general errors",
       "example": "let \"var1 = 1/0\"",
-      "notes": "Miscellaneous errors, such as “divide by zero” and other impermissible operations"
+      "notes": "Miscellaneous errors, such as divide by zero and other impermissible operations. If notes give no more specific number, think 1."
     },
     {
       "id": "2",
       "front": "2",
       "meaning": "Misuse of shell builtins",
       "example": "empty_function() {",
-      "notes": "Missing keyword or command, or permission problem (and diff return code on a failed binary file comparison)"
+      "notes": "Missing keyword or command, or permission problem (and diff return code on a failed binary file comparison)."
     },
     {
       "id": "126",
       "front": "126",
       "meaning": "Command invoked cannot execute",
       "example": "/dev/null",
-      "notes": "Permission problem or command is not an executable. Found the file — cannot run it."
+      "notes": "Permission problem or command is not an executable. Name resolved — kernel will not run it. Memory hook: 126 = found it, cannot run it."
     },
     {
       "id": "127",
       "front": "127",
       "meaning": "Command not found",
       "example": "Illegal_command",
-      "notes": "Possible problem with $PATH or a typo. Never found a command."
+      "notes": "Possible problem with $PATH or a typo. Memory hook: 127 = never found it."
+    },
+    {
+      "id": "126-vs-127",
+      "front": "126 vs 127",
+      "meaning": "126 = found a file but cannot run it; 127 = no command was found",
+      "example": "/dev/null → 126; Illegal_command → 127",
+      "notes": "126: name resolved, not executable / permission. 127: typo or $PATH missing the directory."
     },
     {
       "id": "128",
       "front": "128",
       "meaning": "Invalid argument to exit",
       "example": "exit 3.14159",
-      "notes": "exit takes only integer args in the range 0–255"
+      "notes": "exit takes only integer args in the range 0–255 (a fraction is invalid)."
     },
     {
       "id": "128n",
       "front": "128+n",
       "meaning": "Fatal error signal n",
       "example": "kill -9 $PPID of script",
-      "notes": "$? returns 137 when n = 9 (128 + 9)"
+      "notes": "$? is 128 plus the signal number. Memory hook: 128+n = killed by signal n."
+    },
+    {
+      "id": "137",
+      "front": "137",
+      "meaning": "Killed by SIGKILL (signal 9) — 128 + 9",
+      "example": "kill -9 …",
+      "notes": "Instance of 128+n with n = 9."
     },
     {
       "id": "130",
       "front": "130",
       "meaning": "Script terminated by Control-C",
-      "example": "Ctrl-C",
-      "notes": "SIGINT is signal 2 → 130 = 128 + 2"
+      "example": "Ctrl-C during a script",
+      "notes": "Control-C is fatal error signal 2 (SIGINT). 130 = 128 + 2. Memory hook: Ctrl-C = SIGINT = signal 2 → 130."
     },
     {
       "id": "255",
       "front": "255",
       "meaning": "Exit status out of range",
       "example": "exit -1",
-      "notes": "exit takes only integer args in the range 0–255"
+      "notes": "exit takes only integer args in the range 0–255. A negative argument produces out-of-range status 255."
     }
   ]
 }

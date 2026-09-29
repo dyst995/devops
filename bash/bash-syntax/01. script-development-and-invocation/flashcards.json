@@ -1,0 +1,128 @@
+{
+  "title": "Script development and invocation",
+  "subtitle": "Sha-bang, interpreters, and how you run a script",
+  "frontLabel": "Topic",
+  "modeForward": "Form → meaning",
+  "modeReverse": "Meaning → form",
+  "cards": [
+    {
+      "id": "script",
+      "front": "script (simplest case)",
+      "meaning": "A list of system commands stored in a file",
+      "example": "commands you would type, saved in a file",
+      "notes": "Saves retyping that sequence each time. Memory hook: a script = commands you would type, saved so you do not type them again."
+    },
+    {
+      "id": "interpret",
+      "front": "How the shell runs a script",
+      "meaning": "Interprets the file line by line (not compiling a binary)",
+      "example": "bash reads each line and runs it",
+      "notes": "Same idea as interactive shell use — the file is fed to an interpreter."
+    },
+    {
+      "id": "sha-bang",
+      "front": "#! (sha-bang)",
+      "meaning": "At the head of a script: tells the system which command interpreter gets the file",
+      "example": "#!/bin/bash",
+      "notes": "Course spelling is sha-bang (same idea as shebang). Must be the first line. Kernel reads those two characters, then the path."
+    },
+    {
+      "id": "sha-bang-path",
+      "front": "Path after #!",
+      "meaning": "Path to the program that interprets the script (shell, language, or utility)",
+      "example": "#!/bin/bash → Bash; #!/usr/bin/perl → Perl",
+      "notes": "Optional arguments may follow the path (e.g. -f for sed/awk). Prefer an absolute interpreter, or env + a name on PATH."
+    },
+    {
+      "id": "shebang-sh",
+      "front": "#!/bin/sh",
+      "meaning": "Bourne / POSIX sh interprets the file",
+      "example": "#!/bin/sh",
+      "notes": "First line of the script when you want sh."
+    },
+    {
+      "id": "shebang-bash",
+      "front": "#!/bin/bash",
+      "meaning": "Bash interprets the file",
+      "example": "#!/bin/bash",
+      "notes": "First line when you want Bash features."
+    },
+    {
+      "id": "shebang-perl",
+      "front": "#!/usr/bin/perl",
+      "meaning": "Perl interprets the file",
+      "example": "#!/usr/bin/perl",
+      "notes": "Shows sha-bang can name a programming language, not only a shell."
+    },
+    {
+      "id": "shebang-env-python",
+      "front": "#!/usr/bin/env python",
+      "meaning": "Run python found on PATH (env locates it)",
+      "example": "#!/usr/bin/env python",
+      "notes": "Used when python is not always at one fixed path (pyenv, /usr/bin/python3, …). env searches PATH and execs the first python."
+    },
+    {
+      "id": "shebang-sed",
+      "front": "#!/bin/sed -f",
+      "meaning": "sed interprets the file; -f = take the rest of the file as the program",
+      "example": "#!/bin/sed -f",
+      "notes": "Optional argument after the interpreter path."
+    },
+    {
+      "id": "shebang-awk",
+      "front": "#!/bin/awk -f",
+      "meaning": "awk interprets the file; -f = file is the awk program",
+      "example": "#!/bin/awk -f",
+      "notes": "Same idea as sed -f: the script body is the program."
+    },
+    {
+      "id": "no-sha-bang",
+      "front": "No sha-bang + ./scriptname",
+      "meaning": "Often still works on Linux (kernel may fall back to /bin/sh) — do not rely on that",
+      "example": "./scriptname without a #! line",
+      "notes": "Put the sha-bang line in. Do not depend on the fallback."
+    },
+    {
+      "id": "sh-scriptname",
+      "front": "sh scriptname",
+      "meaning": "Run the file with sh; execute bit not required",
+      "example": "sh deploy.sh",
+      "notes": "You pick the interpreter. Sha-bang is ignored in the sense that you already chose sh — even if #! says something else."
+    },
+    {
+      "id": "bash-scriptname",
+      "front": "bash scriptname",
+      "meaning": "Run the file with bash; execute bit not required",
+      "example": "bash deploy.sh",
+      "notes": "Same pattern as sh scriptname: named shell is the interpreter regardless of sha-bang."
+    },
+    {
+      "id": "chmod-x",
+      "front": "chmod +x scriptname",
+      "meaning": "Make the script directly executable",
+      "example": "chmod +x scriptname",
+      "notes": "Needed before ./scriptname so the kernel can treat the file as a program."
+    },
+    {
+      "id": "dot-slash",
+      "front": "./scriptname",
+      "meaning": "Run an executable script; kernel uses the sha-bang interpreter",
+      "example": "chmod +x scriptname; ./scriptname",
+      "notes": "Execute bit required. Who interprets = path after #!."
+    },
+    {
+      "id": "why-dot-slash",
+      "front": "Why write ./scriptname?",
+      "meaning": "./ is required when the directory is not on PATH (current directory usually is not)",
+      "example": "./myscript.sh",
+      "notes": "Without ./ (or another path), the shell looks up the name on PATH and will not find a file only in ."
+    },
+    {
+      "id": "invoke-table",
+      "front": "sh/bash file vs ./file",
+      "meaning": "sh/bash file: no execute bit; you pick the shell. chmod + ./file: execute bit; sha-bang picks the interpreter",
+      "example": "sh scriptname | bash scriptname | chmod +x && ./scriptname",
+      "notes": "Memory hook: sh/bash file = you pick the shell, no execute bit. chmod + ./file = file is a program; sha-bang picks the interpreter."
+    }
+  ]
+}

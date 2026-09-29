@@ -8,86 +8,86 @@
     {
       "id": "hash",
       "front": "#",
-      "meaning": "Comments",
+      "meaning": "Comments — from # to end of line is not executed",
       "example": "echo hello  # this is ignored",
-      "notes": "From # to end of line is not executed. Exception: #! on line 1 is the sha-bang, not a comment."
+      "notes": "Exception: #! on the first line is the sha-bang, not a comment."
     },
     {
       "id": "semi",
       "front": ";",
-      "meaning": "Command separator",
+      "meaning": "Command separator — two or more commands on one line, left to right",
       "example": "echo one; echo two; echo three",
-      "notes": "Runs commands in sequence on one line. Status of the line = last command. Not the same as &&."
+      "notes": "Same idea as a newline. Status of the line = status of the last command. Not && (that is “and if the first succeeded”)."
     },
     {
       "id": "dsemi",
       "front": ";;",
-      "meaning": "Terminator in a case option",
+      "meaning": "Terminator in a case option — ends one branch",
       "example": "case \"$1\" in start) echo starting ;; esac",
-      "notes": "One ; separates commands. Two ;; close a case arm."
+      "notes": "One ; separates commands. Two ;; close a case arm. After a match, Bash leaves that option."
     },
     {
       "id": "dot",
       "front": ".",
-      "meaning": "Dot command (source)",
+      "meaning": "Dot command — run a file in the current shell (same as source)",
       "example": ". ./lib.sh",
-      "notes": "Runs a file in the current shell (same idea as source). Space required after the dot. Variables stay."
+      "notes": "Space required after the dot. Variables and functions stay. Not a new process."
     },
     {
       "id": "dotslash",
       "front": "./file",
-      "meaning": "Dot as a path component",
+      "meaning": "Dot as a path component (not the source command)",
       "example": "./deploy.sh",
-      "notes": "No space: path in the current directory. Contrast with \". file\" (source). Also .hidden and .. (parent)."
+      "notes": "No space: path in the current directory. Also .hidden (name starts with a dot) and .. (parent directory). Space after . → command; no space → path."
     },
     {
       "id": "dquote",
       "front": "\"\"",
-      "meaning": "Partial quoting",
+      "meaning": "Partial quoting — one word; $, backticks, and \\ still work",
       "example": "echo \"hello $name\"",
-      "notes": "Groups into one word. $, backticks, and \\ still work inside."
+      "notes": "Groups into one word. Variables still expand."
     },
     {
       "id": "squote",
       "front": "''",
-      "meaning": "Full quoting",
+      "meaning": "Full quoting — one word, everything literal",
       "example": "echo 'hello $name'",
-      "notes": "Everything literal — no $ expansion, no backticks."
+      "notes": "No $ expansion, no backticks, no escape (except that ' itself cannot appear inside easily)."
     },
     {
       "id": "comma",
       "front": ",",
-      "meaning": "Comma operator (arithmetic)",
+      "meaning": "Comma operator — links arithmetic expressions; value is the last",
       "example": "let \"t2 = ((a = 9, 15 / 3))\"",
-      "notes": "All expressions run; the value is the last one (here a=9, t2=5)."
+      "notes": "All expressions run; the value kept is the last one (here a=9, t2=5). Used in (( )) / let."
     },
     {
       "id": "backslash",
       "front": "\\",
-      "meaning": "Escape (backslash)",
+      "meaning": "Escape — next character is literal, or join lines",
       "example": "echo \\$HOME",
-      "notes": "Next character is literal, or join lines if \\ is last on the line."
+      "notes": "Next character loses its special meaning. If \\ is last on the line, continues onto the next line."
     },
     {
       "id": "backticks",
       "front": "` `",
-      "meaning": "Backticks — command substitution",
+      "meaning": "Backticks — command substitution; replaced by command output",
       "example": "echo \"today is `date`\"",
-      "notes": "Runs the command and is replaced by its output. Same job as $(…)."
+      "notes": "Same job as $(…). Nested backticks are painful."
     },
     {
       "id": "colon",
       "front": ":",
-      "meaning": "Null command",
-      "example": ":",
-      "notes": "Does nothing, status 0 (like true). Not a semicolon. Useful as always-true while : ; do …; done."
+      "meaning": "Null command — does nothing, status 0 (like true)",
+      "example": "while : ; do ...; done",
+      "notes": "A builtin. Placeholder, always-true condition, or no-op after a redirect. Not a semicolon."
     },
     {
       "id": "dollar",
       "front": "$",
-      "meaning": "Dollar sign — expansion",
+      "meaning": "Dollar sign — starts parameter / variable expansion",
       "example": "echo \"$HOME\"; echo $?",
-      "notes": "Starts parameter/variable expansion (and $?, $1, $(…), …). The value of …, not the letters of the name."
+      "notes": "The value of …, not the letters of the name. Also $?, $1, $(…), etc."
     }
   ]
 }

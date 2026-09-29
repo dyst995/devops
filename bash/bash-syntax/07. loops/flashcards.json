@@ -6,60 +6,67 @@
   "modeReverse": "Meaning → form",
   "cards": [
     {
-      "id": "for",
-      "front": "for … in …; do …; done",
-      "meaning": "Loop once per item in a known list",
-      "example": "for arg in one two three; do echo \"$arg\"; done",
-      "notes": "You already have the list. One pass per item."
+      "id": "loop",
+      "front": "loop",
+      "meaning": "A block that iterates a list of commands as long as the loop control condition is true",
+      "example": "while [ \"$a\" -le 10 ]; do …; done",
+      "notes": "Control condition decides whether another pass runs."
     },
     {
-      "id": "for-cmd",
-      "front": "for file in \"$(find …)\"",
-      "meaning": "Build the list from a command’s output",
-      "example": "for file in \"$(find . -type l)\"; do echo \"$file\"; done | sort",
-      "notes": "Quoting matters; piping the whole loop’s output is allowed."
+      "id": "for",
+      "front": "for arg in [list]; do …; done",
+      "meaning": "On each pass, arg takes the value of the next item in the list",
+      "example": "for arg in one two three; do echo \"$arg\"; done",
+      "notes": "One pass per list item. Use when you already have the list."
+    },
+    {
+      "id": "for-find",
+      "front": "for file in \"$(find . -type l)\"; do …; done | sort",
+      "meaning": "Build the for-list from command output (here: symlinks under .), then sort the loop’s output",
+      "example": "for file in \"$( find . -type l )\"; do\n  echo \"$file\"\ndone | sort",
+      "notes": "find . -type l lists symbolic links. The pipe applies to the whole loop’s stdout."
     },
     {
       "id": "brace",
       "front": "{1..5}",
-      "meaning": "Brace expansion — generate a list 1 2 3 4 5",
+      "meaning": "Brace expansion — list 1 2 3 4 5",
       "example": "for i in {1..5}; do echo $i; done",
       "notes": "Common list source for for-loops."
     },
     {
       "id": "while",
-      "front": "while …; do …; done",
-      "meaning": "Loop while the test at the top is true (status 0)",
-      "example": "while [ \"$a\" -le 10 ]; do …; let \"a+=1\"; done",
-      "notes": "Count unknown beforehand. Give counters a starting value."
+      "front": "while [ condition ]; do …; done",
+      "meaning": "Test at the top; keep looping while the condition is true (exit status 0)",
+      "example": "LIMIT=10\nwhile [ \"$a\" -le $LIMIT ]; do\n  echo -n \"$a \"\n  let \"a+=1\"\ndone",
+      "notes": "Use when the number of repetitions is not known beforehand. Give counters a starting value (empty \"$a\" is not a number)."
     },
     {
       "id": "until",
-      "front": "until …; do …; done",
-      "meaning": "Opposite of while — body while false; stop when true",
-      "example": "until [ condition-is-true ]; do …; done",
-      "notes": "Runs until the condition succeeds."
+      "front": "until [ condition-is-true ]; do …; done",
+      "meaning": "Opposite of while — test at the top; loop while the condition is false; stop when true (status 0)",
+      "example": "until [ condition-is-true ]; do\n  command(s)…\ndone",
+      "notes": "while = repeat while true. until = repeat until true (while false). Same do / done."
+    },
+    {
+      "id": "for-vs-while",
+      "front": "for vs while",
+      "meaning": "for = known list, one pass per item; while = condition-driven when the count is unknown",
+      "example": "for x in list · while [ cond ]",
+      "notes": "until is the false-side twin of while."
     },
     {
       "id": "break",
       "front": "break",
-      "meaning": "Leave the loop entirely",
-      "example": "[[ $i -eq 3 ]] && break",
-      "notes": "With for i in {1..5} and break at 3, prints 1 2 3."
+      "meaning": "Terminate the loop — break out of it",
+      "example": "for i in {1..5}; do\n  echo $i\n  [[ $i -eq 3 ]] && break\ndone\n# prints 1 2 3",
+      "notes": "echo runs before break, so 3 prints; 4 and 5 never run."
     },
     {
       "id": "continue",
       "front": "continue",
-      "meaning": "Skip the rest of this pass; go to the next item",
+      "meaning": "Jump to the next iteration — skip the remaining commands in this cycle",
       "example": "continue",
-      "notes": "Does not exit the loop — only this iteration."
-    },
-    {
-      "id": "when-for-while",
-      "front": "for vs while",
-      "meaning": "Known list vs unknown count / condition-driven",
-      "example": "for x in list · while [ cond ]",
-      "notes": "for = you have the items. while/until = keep going based on a test."
+      "notes": "Does not leave the loop. In the {1..5} break example, continue in that same spot would still print 1–5 (nothing follows the [[ … ]] line)."
     }
   ]
 }

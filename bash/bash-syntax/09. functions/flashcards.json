@@ -6,60 +6,67 @@
   "modeReverse": "Meaning → form",
   "cards": [
     {
+      "id": "what",
+      "front": "function (idea)",
+      "meaning": "A subroutine / black box that performs a specified task",
+      "example": "Use when repetitive code repeats with only slight variations",
+      "notes": "Implements a set of operations; call it wherever that task is needed."
+    },
+    {
       "id": "define",
-      "front": "name () { … }",
-      "meaning": "Define a function (subroutine)",
+      "front": "function_name () { … }",
+      "meaning": "Define a function",
       "example": "function_name () { command...; }",
-      "notes": "A black box for a repeating task. Parentheses required after the name."
+      "notes": "name () { … } = black box."
     },
     {
       "id": "call",
-      "front": "name arg1 arg2",
-      "meaning": "Call a function; args become $1 $2 … inside",
+      "front": "function_name $arg1 $arg2",
+      "meaning": "Call a function with arguments",
       "example": "print_args /tmp hello",
-      "notes": "Same positional rules as a script inside the function body."
+      "notes": "Arguments are passed on the command line after the function name."
+    },
+    {
+      "id": "positionals",
+      "front": "$1 / $2 / …",
+      "meaning": "Inside a function, arguments are positional parameters",
+      "example": "print_args /tmp hello → $1 is /tmp, $2 is hello",
+      "notes": "Same idea as a script’s positional parameters."
     },
     {
       "id": "local",
       "front": "local var=$1",
-      "meaning": "Variable visible only inside the function",
+      "meaning": "Keep the variable inside the function",
       "example": "local var1=$1; local var2=$2",
-      "notes": "Without local, assignments leak into the global shell."
+      "notes": "local keeps var1 / var2 inside the function (variables topic)."
     },
     {
-      "id": "status",
+      "id": "exit-status",
       "front": "Function exit status",
-      "meaning": "return N, or the status of the last command",
-      "example": "retfunc; echo $?",
-      "notes": "The caller reads $? after the function returns."
+      "meaning": "Explicit return N, otherwise the exit status of the last command in the function",
+      "example": "0 if successful, non-zero error code if not",
+      "notes": "Analogous to a command’s exit status. Caller reads it as $?."
+    },
+    {
+      "id": "question",
+      "front": "$?",
+      "meaning": "Exit status of the function (or last command) for further processing in the script",
+      "example": "After return 1, $? is 1",
+      "notes": "Same as reading any command’s status."
     },
     {
       "id": "return",
-      "front": "return",
-      "meaning": "End the function; script continues",
-      "example": "return 1",
-      "notes": "Sets the function’s status. Does not kill the whole script."
+      "front": "return [N]",
+      "meaning": "Terminate the function; optional integer becomes the function’s exit status in $?",
+      "example": "retfunc() { echo \"this is retfunc()\"; return 1; }",
+      "notes": "Ends the function only — the script continues. After return 1, the next line still runs."
     },
     {
       "id": "exit",
-      "front": "exit",
-      "meaning": "End the whole script",
-      "example": "exit 1",
-      "notes": "Unlike return — nothing after this runs in the script."
-    },
-    {
-      "id": "return-vs-exit",
-      "front": "return vs exit",
-      "meaning": "Leave function vs leave script",
-      "example": "retfunc uses return 1; exitfunc uses exit 1",
-      "notes": "return → script keeps going. exit → process ends."
-    },
-    {
-      "id": "last-cmd",
-      "front": "No explicit return",
-      "meaning": "Status is the last command in the function",
-      "example": "fn() { false; }",
-      "notes": "Caller still sees that status in $?."
+      "front": "exit [N]",
+      "meaning": "Terminate the whole script",
+      "example": "exitfunc() { echo \"this is exitfunc()\"; exit 1; }",
+      "notes": "Unlike return: nothing after exit runs in the script (\"We will never see this\" does not print). return = leave the function; exit = leave the script."
     }
   ]
 }

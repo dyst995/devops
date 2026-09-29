@@ -8,135 +8,373 @@
     {
       "id": "assign",
       "front": "var=value",
-      "meaning": "Assign a value to a variable",
-      "example": "var2=\"one two three\"",
-      "notes": "No spaces around =. Quote or backslash-escape if the value has spaces."
+      "meaning": "Assign a value to a variable (no spaces around =)",
+      "example": "var2=\"one two three\"; var3=one\\ two\\ three",
+      "notes": "Quote or backslash-escape if the value has spaces. Partial quoting keeps spaces as one word."
     },
     {
       "id": "ref",
       "front": "$var / ${var}",
       "meaning": "Expand to the variable’s value",
       "example": "echo ${var}s",
-      "notes": "Braces required when glued to other text or for ${10}."
+      "notes": "Both mean the value. Braces required when the name would run into other characters (${var}s) or for ${10}."
     },
     {
       "id": "indirect",
       "front": "eval b=\\$$var",
-      "meaning": "Indirect referencing",
+      "meaning": "Indirect referencing — the variable named by $var",
       "example": "var=value; value=hello; eval b=\\$$var",
-      "notes": "$b becomes the variable named by $var (hello)."
+      "notes": "var holds the name value; value holds hello; $b becomes hello. Extra $ so Bash takes the variable named by $var."
+    },
+    {
+      "id": "declare-typeset",
+      "front": "declare / typeset",
+      "meaning": "Exact synonyms — modify properties of variables",
+      "example": "declare -i n",
+      "notes": "Bash does not segregate variables by type by default; declare/typeset change properties."
     },
     {
       "id": "declare-i",
       "front": "declare -i",
       "meaning": "Treat the variable as an integer",
       "example": "declare -i n; n=6/3",
-      "notes": "Same as typeset -i. Without it, n=6/3 stays the string 6/3; with it, n is 2. Values are otherwise strings."
+      "notes": "Same as typeset -i. Without it, n=6/3 stays the string 6/3; with it, n is 2. Default Bash variables are character strings."
     },
     {
       "id": "len",
       "front": "${#var}",
-      "meaning": "Length of the string (characters)",
+      "meaning": "Length of the string in characters",
       "example": "stringZ=abcABC123ABCabc → ${#stringZ} is 15",
-      "notes": "On an array name without [@], this is the length of element 0, not the element count."
+      "notes": "# inside ${} = how many characters."
+    },
+    {
+      "id": "len-array-el0",
+      "front": "${#array} (no [@])",
+      "meaning": "Length of the first array element — not the element count",
+      "example": "arrayX=(a ab abc); echo ${#arrayX}",
+      "notes": "Result is 1 (length of a), not 3. Element count is ${#array[@]}."
     },
     {
       "id": "substr",
-      "front": "${var:pos:len}",
-      "meaning": "Substring — 0-based position and length",
-      "example": "${stringZ:2:5}",
-      "notes": "Extracts len characters starting at pos."
+      "front": "${var:position:length}",
+      "meaning": "Substring — extract length characters at position (0-based)",
+      "example": "stringZ=abcABC123ABCabc; ${stringZ:2:5}",
+      "notes": "Position 2 is c; five characters → cABC1."
     },
     {
-      "id": "hash",
-      "front": "${var#Pat} / ${var##Pat}",
-      "meaning": "Strip pattern from the front",
-      "example": "${var#a*C} vs ${var##a*C}",
-      "notes": "# = shortest match; ## = longest match."
+      "id": "strip-front-short",
+      "front": "${var#Pattern}",
+      "meaning": "Strip shortest match of Pattern from the front",
+      "example": "stringZ=abcABC123ABCabc; ${stringZ#a*C}",
+      "notes": "→ 123ABCabc. # eats the head; one # = shortest."
     },
     {
-      "id": "percent",
-      "front": "${var%Pat} / ${var%%Pat}",
-      "meaning": "Strip pattern from the back",
-      "example": "${var%a*c} vs ${var%%b*c}",
-      "notes": "% = shortest; %% = longest."
+      "id": "strip-front-long",
+      "front": "${var##Pattern}",
+      "meaning": "Strip longest match of Pattern from the front",
+      "example": "stringZ=abcABC123ABCabc; ${stringZ##a*C}",
+      "notes": "→ abc. Two ## = greedy prefix strip."
     },
     {
-      "id": "replace",
-      "front": "${var/Pat/Rep} / ${var//Pat/Rep}",
-      "meaning": "Replace pattern with replacement",
-      "example": "${var/abc/xyz} vs ${var//abc/xyz}",
-      "notes": "One slash = first only; two = all. Omit Rep to delete."
+      "id": "strip-back-short",
+      "front": "${var%Pattern}",
+      "meaning": "Strip shortest match of Pattern from the back",
+      "example": "stringZ=abcABC123ABCabc; ${stringZ%a*c}",
+      "notes": "→ abcABC123ABC. % eats the tail; one % = shortest."
     },
     {
-      "id": "prefix-suffix",
-      "front": "${var/#Pat/Rep} / ${var/%Pat/Rep}",
-      "meaning": "Replace only as prefix / only as suffix",
-      "example": "${var/#abc/XYZ}",
-      "notes": "/# = front only; /% = end only."
+      "id": "strip-back-long",
+      "front": "${var%%Pattern}",
+      "meaning": "Strip longest match of Pattern from the back",
+      "example": "stringZ=abcABC123ABCabc; ${stringZ%%b*c}",
+      "notes": "→ a. Two %% = greedy suffix strip."
+    },
+    {
+      "id": "replace-first",
+      "front": "${var/Pattern/Replacement}",
+      "meaning": "Replace the first match of Pattern with Replacement",
+      "example": "stringZ=abcABC123ABCabc; ${stringZ/abc/xyz}",
+      "notes": "→ xyzABC123ABCabc. Omit Replacement to delete the first match (${stringZ/abc} → ABC123ABCabc). Case-sensitive (ABC ≠ abc)."
+    },
+    {
+      "id": "replace-all",
+      "front": "${var//Pattern/Replacement}",
+      "meaning": "Replace all matches of Pattern with Replacement",
+      "example": "stringZ=abcABC123ABCabc; ${stringZ//abc/xyz}",
+      "notes": "→ xyzABC123ABCxyz. Omit Replacement to delete all matches (${stringZ//abc} → ABC123ABC)."
+    },
+    {
+      "id": "replace-prefix",
+      "front": "${var/#Pattern/Replacement}",
+      "meaning": "Replace only if Pattern matches the prefix",
+      "example": "stringZ=abcABC123ABCabc; ${stringZ/#abc/XYZ}",
+      "notes": "→ XYZABC123ABCabc. /# = front only (# = head)."
+    },
+    {
+      "id": "replace-suffix",
+      "front": "${var/%Pattern/Replacement}",
+      "meaning": "Replace only if Pattern matches the suffix",
+      "example": "stringZ=abcABC123ABCabc; ${stringZ/%abc/XYZ}",
+      "notes": "→ abcABC123ABCXYZ. /% = end only (% = tail)."
     },
     {
       "id": "default-use",
-      "front": "${p-default} / ${p:-default}",
-      "meaning": "Use a default (do not assign)",
-      "example": "filename=${1:-generic.data}",
-      "notes": "Without : = only if unset. With : = unset or null."
+      "front": "${parameter-default}",
+      "meaning": "If parameter unset, use default (do not assign)",
+      "example": "echo ${var3-$var2}",
+      "notes": "Unset → default. Declared-but-null does not use the default (empty stays empty)."
+    },
+    {
+      "id": "default-use-colon",
+      "front": "${parameter:-default}",
+      "meaning": "If parameter unset or null, use default (do not assign)",
+      "example": "filename=${1:-$DEFAULT_FILENAME}",
+      "notes": "Extra : = also when declared but empty. Common for missing command-line args (generic.data)."
     },
     {
       "id": "default-assign",
-      "front": "${p=default} / ${p:=default}",
-      "meaning": "Assign a default into the variable",
-      "example": "${parameter:=default}",
-      "notes": "Writes the default when missing (and with : also when null)."
+      "front": "${parameter=default}",
+      "meaning": "If parameter unset, set it to default",
+      "example": "echo ${var=abc}",
+      "notes": "Writes the default into the variable when unset. Declared-but-null does not assign."
+    },
+    {
+      "id": "default-assign-colon",
+      "front": "${parameter:=default}",
+      "meaning": "If parameter unset or null, set it to default",
+      "example": "varZ=; echo ${varZ:=abc}",
+      "notes": "→ abc, and varZ is now abc. Extra : = also when empty."
     },
     {
       "id": "alt",
-      "front": "${p+alt} / ${p:+alt}",
-      "meaning": "Use alternate value if set",
-      "example": "${parameter:+alt_value}",
-      "notes": "+ = set (even empty); :+ = set and not empty."
+      "front": "${parameter+alt_value}",
+      "meaning": "If parameter is set (even empty), use alt_value",
+      "example": "param1=; a=${param1+xyz}",
+      "notes": "Unset → empty. Set-but-empty → xyz. Opposite job from -."
+    },
+    {
+      "id": "alt-colon",
+      "front": "${parameter:+alt_value}",
+      "meaning": "If parameter is set and not empty, use alt_value",
+      "example": "param2=; a=${param2:+xyz}",
+      "notes": "Set-but-empty → empty. Set-and-nonempty → alt. Extra : = must also be non-empty."
     },
     {
       "id": "abort",
-      "front": "${p?} / ${p:?}",
-      "meaning": "Abort if parameter is missing",
+      "front": "${parameter?err_msg}",
+      "meaning": "If parameter unset, print err_msg and abort with status 1",
       "example": ": ${HOSTNAME?} ${USER?} ${MAIL?}",
-      "notes": "Prints an error and exits with status 1. :? also treats null as missing."
+      "notes": "If set, use it. The : null command evaluates substitutions for side effect. Unset → die before later echoes."
     },
     {
-      "id": "local-export",
-      "front": "local / export",
-      "meaning": "Function-only vs environment for children",
-      "example": "local var=$1; export MYVAR=value",
-      "notes": "local is only valid in a function. export makes the variable visible to child processes."
+      "id": "abort-colon",
+      "front": "${parameter:?err_msg}",
+      "meaning": "If parameter unset or null, print err_msg and abort with status 1",
+      "example": "${parameter:?err_msg}",
+      "notes": "Extra : = empty counts as missing too."
     },
     {
-      "id": "star-at",
-      "front": "\"$*\" vs \"$@\"",
-      "meaning": "All positionals as one word vs separate words",
-      "example": "\"$*\" · \"$@\"",
-      "notes": "Prefer \"$@\" so each argument stays its own word (spaces preserved)."
+      "id": "colon-rule",
+      "front": ": in - = + ?",
+      "meaning": "Without : = only unset; with : = unset or null",
+      "example": "${p-d} vs ${p:-d}; ${p=d} vs ${p:=d}; ${p+a} vs ${p:+a}; ${p?} vs ${p:?}",
+      "notes": "Colon cheat sheet for parameter substitution. Declared-but-null differs only when : is present."
     },
     {
-      "id": "builtins",
-      "front": "$? $$ $- $_ $!",
-      "meaning": "Status · PID · set flags · last arg · background PID",
-      "example": "echo $? $$ $- $_ $!",
-      "notes": "Recite what each special means."
+      "id": "local",
+      "front": "local",
+      "meaning": "Variable visible only within a function (or code block)",
+      "example": "func() { local var=$1; echo $var; }",
+      "notes": "Only valid in a function. Without local, a name set inside leaks outside."
     },
     {
-      "id": "env-list",
-      "front": "$EDITOR $HOME $PATH $RANDOM …",
-      "meaning": "Common environment / special env values",
+      "id": "export",
+      "front": "export",
+      "meaning": "Put a variable in the environment for this session and children",
+      "example": "export MYVAR=value",
+      "notes": "Affects the shell and child processes."
+    },
+    {
+      "id": "env-cmd",
+      "front": "env",
+      "meaning": "List current environment variables",
+      "example": "env",
+      "notes": "Shows names like HOSTNAME, PATH, USER, SHELL, …"
+    },
+    {
+      "id": "env-source",
+      "front": ". file / source file",
+      "meaning": "Load environment (or other) settings into the current shell during a script",
+      "example": ". ~/my_env_vars",
+      "notes": "Same idea as source. Variables stay in this shell."
+    },
+    {
+      "id": "env-files",
+      "front": "/etc/environment · ~/.bashrc · ~/.bash_profile",
+      "meaning": "Where environment variables are commonly set",
+      "example": "export MYVAR=value  # current session",
+      "notes": "/etc/environment = system-wide. ~/.bashrc and ~/.bash_profile = all sessions of a user. export = current session."
+    },
+    {
+      "id": "EDITOR",
+      "front": "$EDITOR",
+      "meaning": "Default editor invoked by a script (usually vi or emacs)",
+      "example": "echo $EDITOR",
+      "notes": "Common environment / built-in name from the course table."
+    },
+    {
+      "id": "HOME",
+      "front": "$HOME",
+      "meaning": "Home directory of the user (usually /home/username)",
+      "example": "echo $HOME",
+      "notes": "Common environment variable."
+    },
+    {
+      "id": "HOSTNAME",
+      "front": "$HOSTNAME",
+      "meaning": "System host name (assigned at bootup via hostname in an init script)",
+      "example": "echo $HOSTNAME",
+      "notes": "Machine name from boot / hostname."
+    },
+    {
+      "id": "IFS",
+      "front": "$IFS",
+      "meaning": "Internal field separator — what splits words",
+      "example": "echo \"$IFS\"",
+      "notes": "Affects how the shell splits fields."
+    },
+    {
+      "id": "PATH",
+      "front": "$PATH",
+      "meaning": "Path to binaries — search path for commands",
+      "example": "echo $PATH",
+      "notes": "Where the shell looks for executables."
+    },
+    {
+      "id": "RANDOM",
+      "front": "$RANDOM",
+      "meaning": "Pseudorandom integer in the range 0–32767 (not a constant)",
       "example": "echo $RANDOM; echo $RANDOM",
-      "notes": "RANDOM is 0–32767 and not a constant. PATH = search path for binaries."
+      "notes": "Internal Bash function; a new number each time you expand it."
+    },
+    {
+      "id": "pos0",
+      "front": "$0",
+      "meaning": "Name of the script itself",
+      "example": "bash script.sh 1 apple → $0 is script.sh (or the path used)",
+      "notes": "Not counted among the looped arguments in a typical for arg in $@ loop."
+    },
+    {
+      "id": "posN",
+      "front": "$1 $2 $3 …",
+      "meaning": "Positional parameters — arguments from the command line",
+      "example": "bash script.sh 1 apple hello 4",
+      "notes": "$1 is the first argument, $2 the second, and so on."
+    },
+    {
+      "id": "pos10",
+      "front": "${10}",
+      "meaning": "Tenth (and later) positional — braces required after $9",
+      "example": "echo ${10}; echo ${11}",
+      "notes": "After $9, arguments must be enclosed in brackets: ${10}, ${11}, ${12}."
+    },
+    {
+      "id": "hash-count",
+      "front": "$#",
+      "meaning": "Number of command-line arguments / positional parameters",
+      "example": "bash script.sh 1 apple hello 4 → $# is 4",
+      "notes": "Does not include $0."
+    },
+    {
+      "id": "star",
+      "front": "$* / \"$*\"",
+      "meaning": "All positional parameters as a single word",
+      "example": "\"$*\"",
+      "notes": "Denotes all positionals. Prefer \"$@\" when each argument must stay its own word."
+    },
+    {
+      "id": "at",
+      "front": "$@ / \"$@\"",
+      "meaning": "All positional parameters as separate words",
+      "example": "for arg in \"$@\"; do echo \"$arg\"; done",
+      "notes": "Each argument stays its own word (spaces preserved when quoted)."
+    },
+    {
+      "id": "qmark",
+      "front": "$?",
+      "meaning": "Return value — exit status of the last command",
+      "example": "echo $?",
+      "notes": "Covered further in the exit-codes topic."
+    },
+    {
+      "id": "dollar-dollar",
+      "front": "$$",
+      "meaning": "Process ID (PID) of the script",
+      "example": "echo $$",
+      "notes": "This shell’s PID."
+    },
+    {
+      "id": "dollar-dash",
+      "front": "$-",
+      "meaning": "Flags passed to the script (using set)",
+      "example": "echo $-",
+      "notes": "Current set flags."
+    },
+    {
+      "id": "dollar-uscore",
+      "front": "$_",
+      "meaning": "Last argument of the previous command",
+      "example": "echo $_",
+      "notes": "Special built-in / shell variable."
+    },
+    {
+      "id": "dollar-bang",
+      "front": "$!",
+      "meaning": "PID of the last job run in the background",
+      "example": "echo $!",
+      "notes": "Background job PID — not the script’s own $$."
+    },
+    {
+      "id": "array-init",
+      "front": "arr=( a b c )",
+      "meaning": "Initialize an array with multiple values",
+      "example": "my_array=( zero one two three four five )",
+      "notes": "Zero-based; first element is index 0. No maximum size; members need not be contiguous."
+    },
+    {
+      "id": "array-index-assign",
+      "front": "arr[i]=value",
+      "meaning": "Assign one array element by index",
+      "example": "my_array[6]=six",
+      "notes": "Any variable may be used as an array. Index 6 is the seventh slot."
+    },
+    {
+      "id": "declare-a",
+      "front": "declare -a",
+      "meaning": "Introduce an array by an explicit statement",
+      "example": "declare -a new_array",
+      "notes": "Alternative to compound assignment ( a b c )."
+    },
+    {
+      "id": "array-elem",
+      "front": "${arr[i]}",
+      "meaning": "Dereference one array element (braces required)",
+      "example": "echo ${my_array[6]}",
+      "notes": "→ six. Curly bracket notation is required."
+    },
+    {
+      "id": "array-all",
+      "front": "${arr[@]} / ${arr[*]}",
+      "meaning": "Refer all array elements",
+      "example": "echo ${my_array[@]}",
+      "notes": "Both expand to every element. A session that also did my_array[6]=six includes six in the listing."
     },
     {
       "id": "array-count",
-      "front": "${#arr[@]} vs ${#arr}",
-      "meaning": "Element count vs length of first element",
+      "front": "${#arr[@]} / ${#arr[*]}",
+      "meaning": "Number of elements in the array",
       "example": "echo ${#my_array[@]}",
-      "notes": "Use [@] or [*] for how many elements. Without it you get length of index 0."
+      "notes": "Element count. Contrast ${#arr} without [@] = length of element 0 only."
     }
   ]
 }

@@ -32,18 +32,18 @@ Default = string. `declare -i` / `typeset -i` = treat as integer.
 
 ## Strings (`stringZ=abcABC123ABCabc`, 15 chars)
 
-| Form | Meaning | Demo result |
-| --- | --- | --- |
-| `${#var}` | length (characters). On an **array name without `[@]`** = length of **element 0**, not element count | `15`; `arrayX=(a ab abc)` → `${#arrayX}` is `1` |
-| `${var:position:length}` | substring, **0-based** | `${stringZ:2:5}` → `cABC1` |
-| `${var#Pattern}` | strip **shortest** match from the **front** | `#a*C` → `123ABCabc` |
-| `${var##Pattern}` | strip **longest** match from the **front** | `##a*C` → `abc` |
-| `${var%Pattern}` | strip **shortest** match from the **back** | `%a*c` → `abcABC123ABC` |
-| `${var%%Pattern}` | strip **longest** match from the **back** | `%%b*c` → `a` |
-| `${var/Pattern/Replacement}` | replace **first** match (`ABC` ≠ `abc`). Omit Replacement = **delete** | `/abc/xyz` → `xyzABC123ABCabc`; `/abc` → `ABC123ABCabc` |
-| `${var//Pattern/Replacement}` | replace **all** matches | `//abc/xyz` → `xyzABC123ABCxyz`; `//abc` → `ABC123ABC` |
-| `${var/#Pattern/Replacement}` | replace only if **prefix** matches | `/#abc/XYZ` → `XYZABC123ABCabc` |
-| `${var/%Pattern/Replacement}` | replace only if **suffix** matches | `/%abc/XYZ` → `abcABC123ABCXYZ` |
+| Form                          | Meaning                                                                                              | Demo result                                             |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `${#var}`                     | length (characters). On an **array name without `[@]`** = length of **element 0**, not element count | `15`; `arrayX=(a ab abc)` → `${#arrayX}` is `1`         |
+| `${var:position:length}`      | substring, **0-based**                                                                               | `${stringZ:2:5}` → `cABC1`                              |
+| `${var#Pattern}`              | strip **shortest** match from the **front**                                                          | `#a*C` → `123ABCabc`                                    |
+| `${var##Pattern}`             | strip **longest** match from the **front**                                                           | `##a*C` → `abc`                                         |
+| `${var%Pattern}`              | strip **shortest** match from the **back**                                                           | `%a*c` → `abcABC123ABC`                                 |
+| `${var%%Pattern}`             | strip **longest** match from the **back**                                                            | `%%b*c` → `a`                                           |
+| `${var/Pattern/Replacement}`  | replace **first** match (`ABC` ≠ `abc`). Omit Replacement = **delete**                               | `/abc/xyz` → `xyzABC123ABCabc`; `/abc` → `ABC123ABCabc` |
+| `${var//Pattern/Replacement}` | replace **all** matches                                                                              | `//abc/xyz` → `xyzABC123ABCxyz`; `//abc` → `ABC123ABC`  |
+| `${var/#Pattern/Replacement}` | replace only if **prefix** matches                                                                   | `/#abc/XYZ` → `XYZABC123ABCabc`                         |
+| `${var/%Pattern/Replacement}` | replace only if **suffix** matches                                                                   | `/%abc/XYZ` → `abcABC123ABCXYZ`                         |
 
 `#` = head, `%` = tail. One = shortest, two = greedy. `/#` and `/%` = replace only at start / end.
 
@@ -53,13 +53,13 @@ Element count is `${#array[@]}` (arrays below), not `${#array}`.
 
 Without `:` = only **unset**. With `:` = **unset or null** (declared empty).
 
-| Form | Job |
-| --- | --- |
-| `${parameter-default}` / `${parameter:-default}` | if missing (or empty with `:`), **use** default — does not assign |
+| Form                                             | Job                                                                 |
+| ------------------------------------------------ | ------------------------------------------------------------------- |
+| `${parameter-default}` / `${parameter:-default}` | if missing (or empty with `:`), **use** default — does not assign   |
 | `${parameter=default}` / `${parameter:=default}` | if missing (or empty with `:`), **write** default into the variable |
-| `${parameter+alt_value}` | if **set** (even empty) → alt; unset → empty |
-| `${parameter:+alt_value}` | if **set and not empty** → alt |
-| `${parameter?err_msg}` / `${parameter:?err_msg}` | if set, use it; else print `err_msg` and **abort, status 1** |
+| `${parameter+alt_value}`                         | if **set** (even empty) → alt; unset → empty                        |
+| `${parameter:+alt_value}`                        | if **set and not empty** → alt                                      |
+| `${parameter?err_msg}` / `${parameter:?err_msg}` | if set, use it; else print `err_msg` and **abort, status 1**        |
 
 ```bash
 var1=1; var2=2
@@ -103,23 +103,23 @@ Required-or-die (null command evaluates for side effect):
 
 **Environment** — affect the shell and user interface.
 
-| Where | How |
-| --- | --- |
-| System-wide | `/etc/environment` |
-| This session (and children) | `export MYVAR=value` |
-| All sessions of a user | `~/.bashrc`, `~/.bash_profile` |
-| During a script | `. ~/my_env_vars` or `source ~/my_env_vars` |
+| Where                       | How                                         |
+| --------------------------- | ------------------------------------------- |
+| System-wide                 | `/etc/environment`                          |
+| This session (and children) | `export MYVAR=value`                        |
+| All sessions of a user      | `~/.bashrc`, `~/.bash_profile`              |
+| During a script             | `. ~/my_env_vars` or `source ~/my_env_vars` |
 
 List with `env` (`HOSTNAME`, `USER`, `PATH`, `SHELL`, …).
 
-| Name | Meaning |
-| --- | --- |
-| `$EDITOR` | Default editor a script invokes (usually vi or emacs) |
-| `$HOME` | Home directory, usually `/home/username` |
-| `$HOSTNAME` | Host name from boot / `hostname` (init script) |
-| `$IFS` | Internal field separator (what splits words) |
-| `$PATH` | Path to binaries |
-| `$RANDOM` | New pseudorandom integer **0–32767** each time — not a constant |
+| Name        | Meaning                                                         |
+| ----------- | --------------------------------------------------------------- |
+| `$EDITOR`   | Default editor a script invokes (usually vi or emacs)           |
+| `$HOME`     | Home directory, usually `/home/username`                        |
+| `$HOSTNAME` | Host name from boot / `hostname` (init script)                  |
+| `$IFS`      | Internal field separator (what splits words)                    |
+| `$PATH`     | Path to binaries                                                |
+| `$RANDOM`   | New pseudorandom integer **0–32767** each time — not a constant |
 
 **Positional:** `$0` = script name; `$1`, `$2`, `$3`, … = arguments. After `$9` use **`${10}`**, `${11}`. `$#` = how many arguments. `"$*"` and `"$@"` = all of them.
 
@@ -133,15 +133,15 @@ done
 
 **Built-ins:**
 
-| Variable | Meaning |
-| --- | --- |
-| `$?` | Return value (last status) |
-| `$$` | PID of this script |
-| `$-` | Flags from `set` |
-| `$_` | Last argument of the previous command |
-| `$!` | PID of last **background** job |
-| `$*` | All positional parameters as a **single** word |
-| `$@` | All positional parameters as **separate** words |
+| Variable | Meaning                                         |
+| -------- | ----------------------------------------------- |
+| `$?`     | Return value (last status)                      |
+| `$$`     | PID of this script                              |
+| `$-`     | Flags from `set`                                |
+| `$_`     | Last argument of the previous command           |
+| `$!`     | PID of last **background** job                  |
+| `$*`     | All positional parameters as a **single** word  |
+| `$@`     | All positional parameters as **separate** words |
 
 ## Arrays
 

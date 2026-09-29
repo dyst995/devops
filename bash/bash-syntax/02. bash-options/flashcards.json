@@ -1,0 +1,86 @@
+{
+  "title": "Bash options",
+  "subtitle": "set -/+o, verbose, and errexit (-e)",
+  "frontLabel": "Form",
+  "modeForward": "Form → meaning",
+  "modeReverse": "Meaning → form",
+  "cards": [
+    {
+      "id": "options",
+      "front": "options",
+      "meaning": "Settings that change shell and/or script behavior",
+      "example": "set -e, set -v",
+      "notes": "Turned on or off with set inside a script from the point you enable them."
+    },
+    {
+      "id": "set-o-name",
+      "front": "set -o option-name",
+      "meaning": "Enable an option by long name within a script",
+      "example": "set -o verbose",
+      "notes": "Takes effect from that point in the script onward (until disabled)."
+    },
+    {
+      "id": "set-abbrev",
+      "front": "set -option-abbrev",
+      "meaning": "Enable the same option with the short form",
+      "example": "set -v",
+      "notes": "Equivalent to set -o option-name (e.g. set -v = set -o verbose)."
+    },
+    {
+      "id": "set-plus-o",
+      "front": "set +o option-name / set +abbrev",
+      "meaning": "Disable an option within a script",
+      "example": "set +o verbose; set +v",
+      "notes": "Long and short forms match the enable forms."
+    },
+    {
+      "id": "minus-plus",
+      "front": "- vs + with set",
+      "meaning": "- turns the option on; + turns it off",
+      "example": "set -v (on); set +v (off)",
+      "notes": "Opposite of “plus = more.” Memory hook: - = on, + = off."
+    },
+    {
+      "id": "verbose",
+      "front": "verbose / -v",
+      "meaning": "Prints each command as the script reads it",
+      "example": "set -o verbose  or  set -v",
+      "notes": "Useful while learning; noisy in production. Disable with set +o verbose / set +v."
+    },
+    {
+      "id": "errexit",
+      "front": "errexit / -e",
+      "meaning": "Exit the script when a command fails",
+      "example": "set -o errexit  or  set -e",
+      "notes": "errexit is the long name that matches -e. Same option either way."
+    },
+    {
+      "id": "set-e",
+      "front": "set -e",
+      "meaning": "Turn on errexit: first failed command ends the script; later lines do not run",
+      "example": "set -e; cat missing.txt; echo \"moving on\"",
+      "notes": "In the notes’ exit_on_error.sh, cat fails and moving on is not printed."
+    },
+    {
+      "id": "set-plus-e",
+      "front": "set +e (default)",
+      "meaning": "Do not exit on a failed command; script continues",
+      "example": "cat missing.txt; echo \"moving on\"",
+      "notes": "Default Bash is +e (errexit off). cat still errors, but moving on is printed."
+    },
+    {
+      "id": "set-e-vs-default",
+      "front": "set -e vs default after a failed cat",
+      "meaning": "With -e the script stops (no later echo). Default +e keeps going (later echo runs)",
+      "example": "echo \"moving on\" after cat non-existing-file.txt",
+      "notes": "Memory hook: default Bash = keep going after a failed command. set -e = one failure ends the script. Compare the last line of the two outputs."
+    },
+    {
+      "id": "set-e-block",
+      "front": "set -e then set +e",
+      "meaning": "Turn -e on for a sensitive block, then +e to return to default for the rest of the file",
+      "example": "set -e; …critical…; set +e",
+      "notes": "Options take effect from the set line; you can change them mid-script."
+    }
+  ]
+}

@@ -1,114 +1,212 @@
 {
   "title": "Redirection",
-  "subtitle": "fds, >, >>, pipes, here docs, special files",
+  "subtitle": "fds, operators, pipes, here docs, special files",
   "frontLabel": "Form",
   "modeForward": "Form → meaning",
   "modeReverse": "Meaning → form",
   "cards": [
     {
-      "id": "fds",
-      "front": "0 / 1 / 2",
-      "meaning": "stdin / stdout / stderr",
-      "example": "extras 3–9 to save/restore",
-      "notes": "Default file descriptors for every process."
+      "id": "defaults",
+      "front": "stdin / stdout / stderr",
+      "meaning": "The three default open files — keyboard, screen, error messages to the screen",
+      "example": "Always open; can be redirected",
+      "notes": "Redirection = capture output from a file/command/script and send it as input elsewhere."
+    },
+    {
+      "id": "fds-012",
+      "front": "0 / 1 / 2  (&0 &1 &2)",
+      "meaning": "File descriptors for stdin, stdout, stderr",
+      "example": "Memory hook: 0 keyboard, 1 screen, 2 errors",
+      "notes": "Every open file gets a file descriptor."
+    },
+    {
+      "id": "fds-3-9",
+      "front": "3–9",
+      "meaning": "Extra file descriptors for temporary duplicate links",
+      "example": "exec 5<>/dev/tcp/www.tut.by/80",
+      "notes": "Assign one to stdin/stdout/stderr as a spare copy so you can restore 0/1/2 after complex redirection."
     },
     {
       "id": "in",
-      "front": "<file",
-      "meaning": "Redirect stdin from a file",
+      "front": "<filename",
+      "meaning": "Open filename for reading on stdin (fd 0)",
       "example": "grep search-word <filename",
-      "notes": "Same idea as cat file | grep … for simple cases."
+      "notes": "Same idea as cat filename | grep search-word. Use n< for fd n."
     },
     {
       "id": "out",
-      "front": ">file",
-      "meaning": "Redirect stdout — create or truncate",
+      "front": ">filename",
+      "meaning": "Open filename for writing on stdout (fd 1) — create or truncate",
       "example": "ls -la > list_of_files.txt",
-      "notes": ": > filename truncates to zero length."
+      "notes": "Missing file → create. Existing file → wipe to zero size. Use n> for fd n."
+    },
+    {
+      "id": "truncate-colon",
+      "front": ": > filename",
+      "meaning": "Truncate file to zero length via the null command",
+      "example": ": > filename",
+      "notes": ": is the null command (special characters). Opens for write and truncates."
+    },
+    {
+      "id": "truncate-bare",
+      "front": "> filename",
+      "meaning": "Same truncate as : > filename, but not in every shell",
+      "example": "> filename",
+      "notes": "Works in Bash; other shells may reject bare > filename."
     },
     {
       "id": "append",
-      "front": ">>file",
-      "meaning": "Append stdout (create if missing)",
-      "example": "echo two >> file",
-      "notes": "Does not wipe existing content."
+      "front": ">>filename",
+      "meaning": "Open filename for appending on stdout (fd 1); create if missing",
+      "example": "echo one > file; echo two >> file",
+      "notes": "> replace. >> add to the end. Use n>> for fd n."
     },
     {
-      "id": "both",
-      "front": "&>file",
-      "meaning": "Redirect stdout and stderr together",
+      "id": "both-preferred",
+      "front": "&>filename",
+      "meaning": "Redirect both stdout (1) and stderr (2) to filename — preferred form",
       "example": "java -version &> version",
-      "notes": "Preferred form. Also >&file or >file 2>&1."
+      "notes": "Semantically equivalent to >filename 2>&1."
     },
     {
-      "id": "stderr",
-      "front": "2>file",
-      "meaning": "Redirect stderr only",
-      "example": "java -version 2> version",
-      "notes": "Classic trap: java -version > version leaves the banner on screen and an empty file."
+      "id": "both-alt",
+      "front": ">&filename",
+      "meaning": "Other form of redirecting stdout and stderr together",
+      "example": ">&filename",
+      "notes": "Of the two forms, &>filename is preferred."
     },
     {
       "id": "merge",
       "front": "2>&1",
-      "meaning": "Send fd 2 wherever fd 1 currently goes",
+      "meaning": "Send fd 2 to wherever fd 1 currently goes",
       "example": ">filename 2>&1",
-      "notes": "Order matters: set up stdout first, then merge stderr into it."
+      "notes": "Makes &>filename / >filename 2>&1 equivalent for capturing both streams."
+    },
+    {
+      "id": "stdout-only-trap",
+      "front": "cmd > version  (stderr on screen)",
+      "meaning": "> redirects stdout only — stderr still hits the screen",
+      "example": "java -version > version  → banner on screen, version empty",
+      "notes": "java -version writes its banner on stderr."
+    },
+    {
+      "id": "stderr-only",
+      "front": "2>filename",
+      "meaning": "Redirect stderr only",
+      "example": "java -version 2> version",
+      "notes": "Captures errors (here, the whole java -version banner) into the file."
     },
     {
       "id": "null",
       "front": "&> /dev/null",
-      "meaning": "Throw away all output",
+      "meaning": "Suppress all of a command’s output",
       "example": "ps aux &> /dev/null",
-      "notes": "Silence stdout and stderr."
+      "notes": "Throw everything away."
     },
     {
       "id": "pipe",
       "front": "|",
-      "meaning": "Pipe — stdout of one → stdin of the next",
+      "meaning": "Pipe — stdout of one process becomes stdin of the next",
       "example": "cat *.txt | sort | uniq > result-file",
-      "notes": "Chains processes. Not the same as > to a file."
+      "notes": "Similar to > but chains processes. | = next command’s stdin; > = a file."
     },
     {
       "id": "pipestatus",
-      "front": "$PIPESTATUS",
-      "meaning": "Array of exit status for each pipe stage",
-      "example": "echo ${PIPESTATUS[@]}",
-      "notes": "Overwrite by the next command — copy immediately if you need it."
+      "front": "${PIPESTATUS[@]}",
+      "meaning": "Array of exit codes for each command in a pipe",
+      "example": "cat *.txt | sort | uniq > result-file; echo ${PIPESTATUS[@]}  → 0 0 0",
+      "notes": "Three commands → three statuses. Stored in $PIPESTATUS."
     },
     {
       "id": "tee",
       "front": "tee -a",
-      "meaning": "Write to the screen and append to a file",
+      "meaning": "Append to a file and still print to stdout",
       "example": "cat *.txt | tee -a result-file",
-      "notes": "tee without -a overwrites the file."
+      "notes": "Screen and append to file."
     },
     {
       "id": "heredoc",
       "front": "<<EOF … EOF",
-      "meaning": "Here document — stdin until a line that is only the delimiter",
-      "example": "cat <<EOF > unit.file",
-      "notes": "Delimiter alone, no trailing blanks on that line."
+      "meaning": "Here document — stdin is the lines until a line containing only the delimiter",
+      "example": "cat <<EOF > unit.file …lines… EOF",
+      "notes": "Closer is only the delimiter, no trailing blanks. That delimiter line is not stored in the output."
     },
     {
       "id": "herestring",
-      "front": "<<< \"$word\"",
-      "meaning": "Here string — expanded word as stdin",
+      "front": "<<< $word",
+      "meaning": "Here string — expanded word fed as stdin (stripped-down here document)",
       "example": "grep -q \"txt\" <<< \"$VAR\"",
-      "notes": "Instead of echo \"$VAR\" | grep …"
+      "notes": "Instead of echo \"$VAR\" | grep -q txt. No pipe, no echo."
     },
     {
-      "id": "special",
-      "front": "/dev/stdin · /dev/tcp/host/port",
-      "meaning": "Special filenames usable in redirections",
+      "id": "dev-fd",
+      "front": "/dev/fd/<fd>",
+      "meaning": "If fd is a valid integer, file descriptor fd is duplicated",
+      "example": "Used in redirections",
+      "notes": "Bash handles this filename specially in redirections."
+    },
+    {
+      "id": "dev-stdin",
+      "front": "/dev/stdin",
+      "meaning": "File descriptor 0 is duplicated",
+      "example": "Used in redirections",
+      "notes": "Special filename for stdin."
+    },
+    {
+      "id": "dev-stdout",
+      "front": "/dev/stdout",
+      "meaning": "File descriptor 1 is duplicated",
+      "example": "Used in redirections",
+      "notes": "Special filename for stdout."
+    },
+    {
+      "id": "dev-stderr",
+      "front": "/dev/stderr",
+      "meaning": "File descriptor 2 is duplicated",
+      "example": "Used in redirections",
+      "notes": "Special filename for stderr."
+    },
+    {
+      "id": "dev-tcp",
+      "front": "/dev/tcp/host/port",
+      "meaning": "Open a TCP connection to host:port (Bash special filename)",
       "example": "cat </dev/tcp/time.nist.gov/13",
-      "notes": "Also /dev/stdout, /dev/stderr, /dev/fd/n, /dev/udp/…"
+      "notes": "host = hostname or Internet address; port = integer or service name."
+    },
+    {
+      "id": "dev-udp",
+      "front": "/dev/udp/host/port",
+      "meaning": "Open a UDP connection to host:port (Bash special filename)",
+      "example": "/dev/udp/host/port in a redirection",
+      "notes": "Same host/port rules as /dev/tcp/…"
+    },
+    {
+      "id": "exec-rw",
+      "front": "exec n<>file",
+      "meaning": "Open file for read and write on file descriptor n",
+      "example": "exec 5<>/dev/tcp/www.tut.by/80",
+      "notes": "n<> = read+write on fd n (spare descriptor 3–9)."
+    },
+    {
+      "id": "write-fd",
+      "front": ">&n",
+      "meaning": "Write to file descriptor n",
+      "example": "echo -e \"GET / HTTP/1.0\\n\" >&5",
+      "notes": "Sends the GET request to fd 5 in the TCP example."
+    },
+    {
+      "id": "read-fd",
+      "front": "<&n",
+      "meaning": "Read from file descriptor n",
+      "example": "cat <&5",
+      "notes": "Reads the response from fd 5 in the TCP example."
     },
     {
       "id": "block",
       "front": "done < file",
-      "meaning": "Redirect a whole loop/block from a file",
-      "example": "while read name; do echo $name; done < file",
-      "notes": "The entire loop reads from that file."
+      "meaning": "Redirect a whole code block / loop so its stdin is file",
+      "example": "while [ ... ]; do read name; echo $name; let \"count += 1\"; done < file",
+      "notes": "Each read takes the next line. Same idea as cat file | … but applied to the loop."
     }
   ]
 }

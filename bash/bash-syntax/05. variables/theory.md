@@ -381,15 +381,15 @@ USER=vagrant
 
 Course table of common environment / built-in names (the slide ends with `...` — more exist):
 
-| Variable | Meaning |
-| --- | --- |
-| `$EDITOR` | The default editor invoked by a script, usually vi or emacs |
-| `$HOME` | Home directory of the user, usually `/home/username` |
-| `$HOSTNAME` | The `hostname` command assigns the system host name at bootup in an init script. |
-| `$IFS` | internal field separator |
-| `$PATH` | Path to binaries |
-| `$RANDOM` | Internal Bash function (not a constant) that returns a pseudorandom integer in the range **0–32767** |
-| `...` | `...` |
+| Variable    | Meaning                                                                                              |
+| ----------- | ---------------------------------------------------------------------------------------------------- |
+| `$EDITOR`   | The default editor invoked by a script, usually vi or emacs                                          |
+| `$HOME`     | Home directory of the user, usually `/home/username`                                                 |
+| `$HOSTNAME` | The `hostname` command assigns the system host name at bootup in an init script.                     |
+| `$IFS`      | internal field separator                                                                             |
+| `$PATH`     | Path to binaries                                                                                     |
+| `$RANDOM`   | Internal Bash function (not a constant) that returns a pseudorandom integer in the range **0–32767** |
+| `...`       | `...`                                                                                                |
 
 **Memory hook:** `PATH` = where binaries are. `HOME` = your directory. `RANDOM` = **new** number each time (0–32767), not a fixed constant. `IFS` = what splits words. `EDITOR` = vi/emacs default. `HOSTNAME` = machine name from boot/`hostname`.
 
@@ -430,15 +430,15 @@ argument #4: 4
 
 ### Built-in variables / special shell variables
 
-| Variable | Meaning |
-| --- | --- |
-| `$?` | Return value |
-| `$$` | Process ID (PID) of script |
-| `$-` | Flags passed to script (using `set`) |
-| `$_` | Last argument of previous command |
-| `$!` | Process ID (PID) of last job run in background |
-| `$*` | All the positional parameters, as a **single** word |
-| `$@` | All the positional parameters, as **separate** words |
+| Variable | Meaning                                              |
+| -------- | ---------------------------------------------------- |
+| `$?`     | Return value                                         |
+| `$$`     | Process ID (PID) of script                           |
+| `$-`     | Flags passed to script (using `set`)                 |
+| `$_`     | Last argument of previous command                    |
+| `$!`     | Process ID (PID) of last job run in background       |
+| `$*`     | All the positional parameters, as a **single** word  |
+| `$@`     | All the positional parameters, as **separate** words |
 
 **Memory hook:** `$?` status (exit codes topic). `$$` this PID. `$!` background PID. `$-` current `set` flags. `$_` previous command’s last arg. `"$*"` = one word; `"$@"` = each arg its own word.
 

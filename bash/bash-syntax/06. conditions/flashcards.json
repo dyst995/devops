@@ -7,87 +7,164 @@
   "cards": [
     {
       "id": "test",
-      "front": "test / [ ]",
-      "meaning": "Classic test builtin ( [ is a synonym for test )",
-      "example": "[ -f file.txt ] && echo Indeed",
-      "notes": "Status 0 = true, 1 = false. Need spaces: [ -f file ]. Unquoted spaces can cause “too many arguments”."
+      "front": "test EXPRESSION / [ EXPRESSION ]",
+      "meaning": "[ is a synonym for test (builtin); compares expressions / file tests and returns an exit status",
+      "example": "test -f file.txt && echo \"File exists\"\n[ -f file.txt ] && echo Indeed",
+      "notes": "Status 0 = true, 1 = false. Spaces inside the brackets: [ -f file.txt ]."
     },
     {
-      "id": "n-z",
-      "front": "-n / -z",
-      "meaning": "String length nonzero / zero",
-      "example": "[ -n \"$s\" ]; [ -z \"$s\" ]",
-      "notes": "-n = non-empty. -z = empty."
+      "id": "status-failed",
+      "front": "[ $? -ne 0 ] && …",
+      "meaning": "If the last command failed, do this",
+      "example": "ifup eth0\n[ $? -ne 0 ] && rc=1",
+      "notes": "$? is the exit status of the previous command."
     },
     {
-      "id": "file-tests",
-      "front": "-d / -f / -w",
-      "meaning": "Directory / regular file / writable",
-      "example": "[ -d dir ]; [ -f file ]; [ -w file ]",
-      "notes": "File must exist for these to be true (and have the matching property)."
+      "id": "group",
+      "front": "( EXPRESSION )",
+      "meaning": "EXPRESSION is true (grouping inside test / [ ])",
+      "example": "[ \\( -f a -o -f b \\) ]",
+      "notes": "Often need \\( \\) with [ so the shell does not treat ( ) specially."
     },
     {
-      "id": "a-o",
-      "front": "-a / -o / !",
-      "meaning": "AND / OR / negate inside test / [ ]",
+      "id": "negate",
+      "front": "! EXPRESSION",
+      "meaning": "EXPRESSION is false — negate the test",
+      "example": "[ ! -d /proc/net/vlan ]",
+      "notes": "Works inside test / [ ] (and in [[ ]])."
+    },
+    {
+      "id": "and-a",
+      "front": "EXPRESSION1 -a EXPRESSION2",
+      "meaning": "AND inside test / [ ]",
       "example": "[ -f a -a -w a ]",
-      "notes": "Inside [[ ]] prefer && and || instead of -a / -o."
+      "notes": "Use -a / -o inside [ ]. Prefer && / || inside [[ ]]."
+    },
+    {
+      "id": "or-o",
+      "front": "EXPRESSION1 -o EXPRESSION2",
+      "meaning": "OR inside test / [ ]",
+      "example": "[ -f a -o -f b ]",
+      "notes": "Inside [[ ]] use || instead."
+    },
+    {
+      "id": "n",
+      "front": "-n STRING",
+      "meaning": "The length of STRING is nonzero (non-empty)",
+      "example": "[[ -n $string_with_spaces ]]",
+      "notes": "Opposite of -z."
+    },
+    {
+      "id": "z",
+      "front": "-z STRING",
+      "meaning": "The length of STRING is zero (empty)",
+      "example": "[[ -z \"$@\" ]] && help && exit 1",
+      "notes": "Opposite of -n."
+    },
+    {
+      "id": "d",
+      "front": "-d FILE",
+      "meaning": "FILE exists and is a directory",
+      "example": "[ -d /proc/net/vlan ]",
+      "notes": "File-test family with -f and -w."
+    },
+    {
+      "id": "f",
+      "front": "-f FILE",
+      "meaning": "FILE exists and is a regular file",
+      "example": "[ -f file.txt ] && echo Indeed",
+      "notes": "Missing file → false (status 1)."
+    },
+    {
+      "id": "w",
+      "front": "-w FILE",
+      "meaning": "FILE exists and write permission is granted",
+      "example": "[ -w file.txt ]",
+      "notes": "Must exist and be writable."
     },
     {
       "id": "dbl-bracket",
-      "front": "[[ ]]",
-      "meaning": "Extended test — a keyword, one element",
-      "example": "[[ -n $string_with_spaces ]]",
-      "notes": "&& || < > legal inside. Safer with spaces than [ ]."
+      "front": "[[ … ]]",
+      "meaning": "Extended test — a keyword (not a command); Bash sees it as one element that returns an exit status",
+      "example": "[[ $a -lt $b ]]",
+      "notes": "Bash 2.02+. Safer with spaces than [ ]. Prevents many logic errors."
     },
     {
-      "id": "arith",
-      "front": "(( )) / let",
-      "meaning": "Arithmetic evaluation",
-      "example": "(( 0 && 1 )); echo $?",
-      "notes": "Non-zero value → status 0. Value 0 → status 1 (opposite of C booleans for exit status)."
-    },
-    {
-      "id": "if",
-      "front": "if / then / elif / else / fi",
-      "meaning": "Branch when a command list returns 0",
-      "example": "if [ cond ]; then …; fi",
-      "notes": "Can test any command, not only [. Ends with fi."
-    },
-    {
-      "id": "case",
-      "front": "case / esac / ;;",
-      "meaning": "Pattern match on a value",
-      "example": "case \"$1\" in start) … ;; *) … ;; esac",
-      "notes": "Each arm ends with ;;. Statement ends with esac."
-    },
-    {
-      "id": "and-list",
-      "front": "cmd1 && cmd2",
-      "meaning": "AND list — run next only if previous succeeded (0)",
-      "example": "command-1 && command-2 && command-3",
-      "notes": "Stops at the first failure."
-    },
-    {
-      "id": "or-list",
-      "front": "cmd1 || cmd2",
-      "meaning": "OR list — run next only if previous failed",
-      "example": "[ -f file1.txt ] || echo No such file",
-      "notes": "Stops at the first success."
-    },
-    {
-      "id": "status-check",
-      "front": "[ $? -ne 0 ] && …",
-      "meaning": "Do something if the last command failed",
-      "example": "ifup eth0; [ $? -ne 0 ] && rc=1",
-      "notes": "Read $? immediately — the next command overwrites it."
+      "id": "dbl-ops",
+      "front": "&& || < > inside [[ ]]",
+      "meaning": "These operators work inside [[ ]] but error inside [ ]",
+      "example": "[[ \"$rootfs\" == nfs* || \"$rootopts\" =~ _r?netdev ]]",
+      "notes": "[ ] still wants -a / -o for AND/OR."
     },
     {
       "id": "word-split",
       "front": "[ -n $spaces ] vs [[ -n $spaces ]]",
-      "meaning": "Word-split trap vs safe extended test",
-      "example": "string_with_spaces='some spaces here'",
-      "notes": "[ can become “too many arguments”. [[ treats it as one test."
+      "meaning": "[ word-splits an unquoted value (too many arguments); [[ treats it as one test",
+      "example": "string_with_spaces='some spaces here'\n[ -n $string_with_spaces ]  →  [: too many arguments",
+      "notes": "Classic reason to prefer [[ ]] for string tests."
+    },
+    {
+      "id": "pattern-eq",
+      "front": "[[ \"$x\" == pattern* ]]",
+      "meaning": "String match against a glob pattern inside [[ ]]",
+      "example": "[[ \"$rootfs\" == nfs* ]]",
+      "notes": "From the network init-script example."
+    },
+    {
+      "id": "regex",
+      "front": "[[ \"$x\" =~ regex ]]",
+      "meaning": "Regex match inside [[ ]]",
+      "example": "[[ \"$rootopts\" =~ _r?netdev ]]",
+      "notes": "=~ is the regex operator in extended test."
+    },
+    {
+      "id": "arith",
+      "front": "(( … )) / let …",
+      "meaning": "Arithmetic evaluation that returns an exit status from the numeric value",
+      "example": "(( 0 && 1 )); echo $?\n# → 1\nvar=-2 && (( var+=2 )); echo $?\n# → 1",
+      "notes": "Non-zero value → status 0 (true). Zero value → status 1 (false). See man bash ARITHMETIC EVALUATION."
+    },
+    {
+      "id": "if",
+      "front": "if / then / elif / else / fi",
+      "meaning": "Run the then-branch when a list of commands returns status 0",
+      "example": "if [ condition1 ]; then\n  command1\nelif [ condition2 ]; then\n  command4\nelse\n  default-command\nfi",
+      "notes": "fi is if backwards. Can test any command, not only brackets."
+    },
+    {
+      "id": "if-list",
+      "front": "if cmd1 && cmd2; then …",
+      "meaning": "if tests a command list — not only [ ] / [[ ]]",
+      "example": "if [ ! -d /proc/net/vlan ] && ! modprobe 8021q >/dev/null 2>&1; then\n  net_log …\nfi",
+      "notes": "Status 0 for the whole list → then-branch."
+    },
+    {
+      "id": "case",
+      "front": "case / in / ) / ;; / esac",
+      "meaning": "Match EXPRESSION against patterns; run the matching clause",
+      "example": "case \"$1\" in\n  start) start ;;\n  stop)  stop ;;\n  *)     echo usage; exit 1 ;;\nesac",
+      "notes": "Each clause ends with ;;. esac is case backwards."
+    },
+    {
+      "id": "case-default",
+      "front": "*) … ;;",
+      "meaning": "Default case arm — matches anything not already matched",
+      "example": "*) echo $\"Usage: $0 {start|stop|…}\"; exit 1 ;;",
+      "notes": "Common for wrong/unknown arguments."
+    },
+    {
+      "id": "and-list",
+      "front": "cmd1 && cmd2 && cmd3",
+      "meaning": "AND list — each command runs only if the previous returned true (0)",
+      "example": "command-1 && command-2 && command-3",
+      "notes": "First failure stops the chain. Can replace nested if/then."
+    },
+    {
+      "id": "or-list",
+      "front": "cmd1 || cmd2 || cmd3",
+      "meaning": "OR list — each command runs only while the previous returned false",
+      "example": "[ -f file1.txt ] || echo No such file",
+      "notes": "First success stops the chain."
     }
   ]
 }
